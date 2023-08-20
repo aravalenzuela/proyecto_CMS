@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi CMS</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+
+<header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Inicio</a></li>
+            <li><a href="{% url 'admin:index' %}">Administración</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    {% block content %}
+    <!-- El contenido específico de cada página se insertará aquí -->
+    {% endblock %}
+</main>
+
+<footer>
+    <p>Derechos reservados © 2023 Mi CMS</p>
+</footer>
+
+<script src="{% static 'js/scripts.js' %}"></script>
+</body>
+</html>

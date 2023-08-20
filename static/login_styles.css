@@ -1,0 +1,52 @@
+.login-container {
+    display: flex;
+    justify-content: center;  /* Centra los elementos horizontalmente */
+    align-items: center;      /* Centra los elementos verticalmente */
+    height: 100vh;            /* Altura total de la ventana del navegador */
+    background-color: #f1f1f1;
+}
+
+.login-logo {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.login-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.login-field {
+    margin-bottom: 10px;
+}
+
+.login-field label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.login-field input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-links {
+    margin-top: 10px;
+    text-align: right;
+}
+
+.sso-option {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.sso-option p {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
