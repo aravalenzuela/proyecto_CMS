@@ -49,4 +49,59 @@
     margin-bottom: 10px;
     font-size: 14px;
 }
+.sso-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    margin-right: 5px; /* espacio entre botones */
+    font-weight: bold;
+    outline: none; /* elimina el borde azul al hacer clic */
+}
+
+/* Estilos para el botón de Google */
+.sso-google {
+    background-color: #DB4437;
+}
+
+.sso-google:hover {
+    background-color: #C53929;
+}
+
+/* Estilos para el botón de Facebook */
+.sso-facebook {
+    background-color: #3B5998;
+}
+
+.sso-facebook:hover {
+    background-color: #30487C;
+}
+
+/* Estilos para el botón de Twitter */
+.sso-twitter {
+    background-color: #1DA1F2;
+}
+
+.sso-twitter:hover {
+    background-color: #0C8EDC;
+}
+.password-container {
+    display: flex;
+    align-items: center;
+    width: 100%;  /* Ocupa todo el ancho disponible en su contenedor padre */
+}
+
+.password-input {
+    width: 90%;  /* Ocupa el 90% del ancho de .password-container */
+    padding-right: 10px; /* Espacio adicional en el lado derecho para que el texto no esté demasiado cerca del botón */
+}
+
+.toggle-password {
+    width: 30px;  /* Ancho fijo para el botón */
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
 

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
-    <link rel="stylesheet" href="{% static 'css/login_styles.css' %}">
+    <link rel="stylesheet" href="{% static 'login_styles.css' %}">
 </head>
 <body>
     <div class="login-container">
@@ -22,8 +22,11 @@
                 </div>
                 <div class="login-field">
                     <label for="password">Contraseña</label>
-                    <input type="password" id="password" name="password">
-                </div>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" class="password-input">
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">👁</button>
+                    </div>
+                </div>                
                 <div class="login-links">
                     <a href="#">Olvidé mi contraseña</a>
                 </div>
@@ -31,10 +34,26 @@
             </form>
             <div class="sso-option">
                 <p>O inicia sesión con:</p>
-                <!-- Aquí puedes colocar botones de inicio de sesión con servicios como Google, Facebook, etc. -->
+                <button class="sso-btn sso-google">Google</button>
+                <button class="sso-btn sso-facebook">Facebook</button>
+                <button class="sso-btn sso-twitter">Twitter</button>
             </div>
         </div>
     </div>
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.querySelector('.password-input');
+            const toggleButton = document.querySelector('.toggle-password');
+    
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleButton.textContent = '🙈'; // Cambia al icono que prefieras para "ocultar" la contraseña
+            } else {
+                passwordInput.type = "password";
+                toggleButton.textContent = '👁'; // Cambia al icono que prefieras para "mostrar" la contraseña
+            }
+        }
+    </script>    
 </body>
 </html>
 
