@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views
 from django.views.generic.base import RedirectView
+from django.contrib.auth import views as auth_views
+
 
 
 urlpatterns = [
@@ -28,4 +30,6 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', views.profile_view, name='profile_view'),
     path('accounts/profile/', RedirectView.as_view(url='/'), name='redirect_to_home'),
+    #path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout')
 ]

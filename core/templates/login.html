@@ -34,7 +34,7 @@
             </form>
             <div class="sso-option">
                 <p>O inicia sesión con:</p>
-                <button class="sso-btn sso-google">Google</button>
+                <a href="{% url 'account_login' %}?provider=google" class="sso-btn sso-google">Google</a>
                 <button class="sso-btn sso-facebook">Facebook</button>
                 <button class="sso-btn sso-twitter">Twitter</button>
             </div>
