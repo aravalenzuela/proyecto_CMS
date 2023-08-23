@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Página Web</title>
+    <link rel="stylesheet" href="{% static 'post_sso.css' %}">
+</head>
+
+<body>
+    <!-- Encabezado -->
+    <header>
+        <h1>Bienvenido a Mi Página Web</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/acerca-de">Acerca de</a></li>
+                <li><a href="/contacto">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contenido principal -->
+    <main>
+        <section>
+            <h2>Sección de Introducción</h2>
+            <p>Este es un párrafo introductorio. Aquí puedes escribir sobre el propósito de tu sitio web o sobre lo que desees presentar a tus visitantes.</p>
+        </section>
+        
+        <section>
+            <h2>Otra Sección</h2>
+            <p>Este es otro párrafo. Puedes agregar más secciones según lo necesites.</p>
+        </section>
+    </main>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2023 Mi Página Web. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Enlazar a scripts JS si los tienes -->
+    <!-- <script src="scripts.js"></script> -->
+</body>
+
+</html>

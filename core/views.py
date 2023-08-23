@@ -13,3 +13,5 @@ def inicio(request):
 def login_view(request):
     return render(request, 'login.html')
 
+def profile_view(request):
+    return render(request, 'profile.html')

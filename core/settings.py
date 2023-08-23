@@ -40,6 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Seguridad.apps.SeguridadConfig',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth',
+    'allauth.account'
 ]
 
 MIDDLEWARE = [
@@ -104,6 +108,22 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+    # ... cualquier otro backend que estés usando ...
+)
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '941187616790-p5qrochbmrp5214cbi0vh27nsj00g5sb.apps.googleusercontent.com',
+            'secret': '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',
+            #'key': '737136d2d99fd05a4fcd64e16bcbb17c22219aa6'
+        }
+    }
+}
 
 
 # Internationalization
@@ -129,3 +149,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
