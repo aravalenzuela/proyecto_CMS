@@ -3,7 +3,7 @@
     justify-content: center;  /* Centra los elementos horizontalmente */
     align-items: center;      /* Centra los elementos verticalmente */
     height: 100vh;            /* Altura total de la ventana del navegador */
-    background-color: #f1f1f1;
+    background-color: #4d5257;
 }
 
 .login-logo {

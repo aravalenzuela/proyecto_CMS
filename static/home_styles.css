@@ -3,7 +3,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #007BFF; /* Fondo azul */
+    background-color: #4d5257; /* Fondo azul */
     color: white;
 }
 
@@ -62,9 +62,13 @@ body {
     background-color: #004392; /* Un tono aún más oscuro cuando se pasa el cursor */
 }
 .logo {
-    max-width: 80px;
-    margin-right: 80px;
+    max-width: 100px;
+    margin-right: 100px;
     border-radius: 50%;   /* Esto hace que la imagen sea redonda */
     overflow: hidden;     /* Asegura que cualquier parte de la imagen fuera del círculo esté oculta */
     display: block;       /* Asegura que se aplique correctamente el border-radius */
+}
+.blog img {
+    max-width: 800px;  /* O un valor específico si prefieres */
+    height: auto;
 }
