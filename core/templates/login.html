@@ -25,21 +25,22 @@
                     <label for="password">Contraseña</label>
                     <div class="password-container">
                         <input type="password" id="password" name="password" class="password-input">
-                        <span class="error-message" id="password-error"></span>
                         <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">👁</button>
                     </div>
-                </div>                
+                    <span class="error-message" id="password-error"></span>  <!-- Mueve esta línea aquí -->
+                </div>                       
                 <div class="login-links">
                     <a href="#">Olvidé mi contraseña</a>
                 </div>
                 <button type="submit">Iniciar sesión</button>
             </form>
             <div class="sso-option">
-                <p>O inicia sesión con:</p>
+                <p>O Registrate con:</p>
                 <a href="https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=941187616790-p5qrochbmrp5214cbi0vh27nsj00g5sb.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Faccounts%2Fgoogle%2Flogin%2Fcallback%2F&scope=profile&response_type=code&state=hj1PvthKpKB7IeWR&service=lso&o2v=2&flowName=GeneralOAuthFlow" class="sso-btn sso-google">Google</a>
-                <button class="sso-btn sso-facebook">Facebook</button>
-                <button class="sso-btn sso-twitter">Twitter</button>
             </div>
+                <!-- Otros elementos de tu página... -->
+                <a href="http://localhost:8000/" class="back-button">Volver a Inicio</a>
+                <!-- Otros elementos de tu página... -->
         </div>
     </div>
     <script>

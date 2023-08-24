@@ -1,33 +1,61 @@
-<!DOCTYPE html>
 {% load static %}
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi CMS</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <title>Mi Sitio Web</title>
+    <link rel="stylesheet" href="{% static 'home_styles.css' %}">
 </head>
 <body>
 
-<header>
-    <nav>
-        <ul>
-            <li><a href="{% url 'home' %}">Inicio</a></li>
-            <li><a href="{% url 'admin:index' %}">Administración</a></li>
-        </ul>
-    </nav>
-</header>
+    <header>
+        <div class="container header-content">
+            <img src="{% static 'imagenes/logo.png' %}" alt="Logo de mi sitio" class="logo">
+            <h1>Mi Sitio Web</h1>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'home' %}">Inicio</a></li>
+                    <li><a href="{% url 'admin:index' %}">Administración</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-<main>
-    {% block content %}
-    <!-- El contenido específico de cada página se insertará aquí -->
-    {% endblock %}
-</main>
+    <main>
+        <div class="container">
+            <section class="intro-section">
+                <h2>Bienvenido al Sitio Web del Sistema CMS</h2>
+                <p>Descubre contenido interesante, aprende algo nuevo y sumérgete en nuestro universo.</p>
+            </section>
 
-<footer>
-    <p>Derechos reservados © 2023 Mi CMS</p>
-</footer>
+            <section class="features-section">
+                <div class="feature-box">
+                    <h3>Característica 1</h3>
+                    <p>Descripción breve de esta característica.</p>
+                </div>
+                <div class="feature-box">
+                    <h3>Característica 2</h3>
+                    <p>Descripción breve de esta característica.</p>
+                </div>
+                <div class="feature-box">
+                    <h3>Característica 3</h3>
+                    <p>Descripción breve de esta característica.</p>
+                </div>
+            </section>
 
-<script src="{% static 'js/scripts.js' %}"></script>
+            <section class="cta-section">
+                <a href="{% url 'login' %}" class="btn-login">Iniciar sesión</a>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Mi Sitio Web. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
 </body>
 </html>

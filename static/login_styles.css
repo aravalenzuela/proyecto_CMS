@@ -87,18 +87,22 @@
     background-color: #0C8EDC;
 }
 .password-container {
+    position: relative; /* Esto permite posicionar el botón respecto a este contenedor */
     display: flex;
     align-items: center;
-    width: 100%;  /* Ocupa todo el ancho disponible en su contenedor padre */
+    width: 100%;  
 }
 
 .password-input {
-    width: 90%;  /* Ocupa el 90% del ancho de .password-container */
-    padding-right: 10px; /* Espacio adicional en el lado derecho para que el texto no esté demasiado cerca del botón */
+    width: 100%; /* Ahora ocupará todo el ancho disponible de .password-container */
+    padding-right: 40px; /* Dejamos espacio para el botón, puede ajustar este valor según tus necesidades */
 }
-
 .toggle-password {
-    width: 30px;  /* Ancho fijo para el botón */
+    position: absolute; /* Esto sacará el botón del flujo normal y permitirá posicionarse respecto a .password-container */
+    right: 10px; /* Posicionamos el botón a 10px del borde derecho */
+    top: 50%; /* Centramos el botón verticalmente */
+    transform: translateY(-50%); /* Ajustamos la posición vertical para que quede perfectamente centrado */
+    width: 30px;  
     background: none;
     border: none;
     cursor: pointer;
@@ -108,4 +112,22 @@
     color: red;
     font-size: 15px; /*Corresponde al tamano de la palabra */
 }
+/*Boton de retroceso*/
+.back-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF; /* Color de fondo azul */
+    color: #FFFFFF;            /* Texto blanco */
+    text-decoration: none;     /* Remueve el subrayado del enlace */
+    border-radius: 5px;        /* Esquinas redondeadas */
+    border: none;
+    cursor: pointer;           /* Cambia el cursor al pasar sobre el botón */
+    font-size: 16px;
+}
+
+/* Efecto al pasar el mouse sobre el botón */
+.back-button:hover {
+    background-color: #0056b3; /* Un azul un poco más oscuro */
+}
+
 
