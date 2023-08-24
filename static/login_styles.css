@@ -104,4 +104,8 @@
     cursor: pointer;
     outline: none;
 }
+.error-message {
+    color: red;
+    font-size: 15px; /*Corresponde al tamano de la palabra */
+}
 

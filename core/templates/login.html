@@ -14,16 +14,18 @@
             <div class="login-logo">
                 <img src="{% static 'imagenes/logo.png' %}" alt="Logo de la empresa">
             </div>
-            <form method="post" action=".">
-                {% csrf_token %}
+            <form method="post" action="." onsubmit="return validateForm()">
+            {% csrf_token %}
                 <div class="login-field">
                     <label for="username">Usuario</label>
                     <input type="text" id="username" name="username">
+                    <span class="error-message" id="username-error"></span>
                 </div>
                 <div class="login-field">
                     <label for="password">Contraseña</label>
                     <div class="password-container">
                         <input type="password" id="password" name="password" class="password-input">
+                        <span class="error-message" id="password-error"></span>
                         <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">👁</button>
                     </div>
                 </div>                
@@ -34,13 +36,14 @@
             </form>
             <div class="sso-option">
                 <p>O inicia sesión con:</p>
-                <a href="{% url 'account_login' %}?provider=google" class="sso-btn sso-google">Google</a>
+                <a href="https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=941187616790-p5qrochbmrp5214cbi0vh27nsj00g5sb.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Faccounts%2Fgoogle%2Flogin%2Fcallback%2F&scope=profile&response_type=code&state=hj1PvthKpKB7IeWR&service=lso&o2v=2&flowName=GeneralOAuthFlow" class="sso-btn sso-google">Google</a>
                 <button class="sso-btn sso-facebook">Facebook</button>
                 <button class="sso-btn sso-twitter">Twitter</button>
             </div>
         </div>
     </div>
     <script>
+        //Metodo para observar la contrasena
         function togglePasswordVisibility() {
             const passwordInput = document.querySelector('.password-input');
             const toggleButton = document.querySelector('.toggle-password');
@@ -52,6 +55,31 @@
                 passwordInput.type = "password";
                 toggleButton.textContent = '👁'; // Cambia al icono que prefieras para "mostrar" la contraseña
             }
+        }
+        //Validacion de Login
+        function validateForm() {
+            let valid = true;
+
+            const username = document.getElementById("username");
+            const password = document.getElementById("password");
+            const usernameError = document.getElementById("username-error");
+            const passwordError = document.getElementById("password-error");
+
+            if (username.value.trim() === "") {
+                usernameError.textContent = "El campo usuario no puede estar vacío.";
+                valid = false;
+            } else {
+                usernameError.textContent = "";
+            }
+
+            if (password.value.trim() === "") {
+                passwordError.textContent = "El campo contraseña no puede estar vacío.";
+                valid = false;
+            } else {
+                passwordError.textContent = "";
+            }
+
+            return valid; // Si es true, el formulario se enviará. Si es false, no se enviará.
         }
     </script>    
 </body>
