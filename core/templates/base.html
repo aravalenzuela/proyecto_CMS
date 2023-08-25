@@ -20,7 +20,26 @@
                     <li><a href="{% url 'admin:index' %}">Administración</a></li>
                    
                 </ul>
-            </nav>
+                TemplateDoesNotExist at /
+                base.html
+                Request Method:	GET
+                Request URL:	http://127.0.0.1:8000/
+                Django Version:	4.2.4
+                Exception Type:	TemplateDoesNotExist
+                Exception Value:	
+                base.html
+                Exception Location:	/home/ara/IS2_2023/proyecto_CMS/venv/lib/python3.11/site-packages/django/template/loader.py, line 19, in get_template
+                Raised during:	core.views.inicio
+                Python Executable:	/home/ara/IS2_2023/proyecto_CMS/venv/bin/python
+                Python Version:	3.11.3
+                Python Path:	
+                ['/home/ara/IS2_2023/proyecto_CMS',
+                 '/usr/lib/python311.zip',
+                 '/usr/lib/python3.11',
+                 '/usr/lib/python3.11/lib-dynload',
+                 '/home/ara/IS2_2023/proyecto_CMS/venv/lib/python3.11/site-packages']
+                Server time:	Fri, 25 Aug 2023 15:05:58 +0000
+                       </nav>
         </div>
         <section class="cta-section">
             <a href="{% url 'login' %}" class="btn-login">Iniciar sesión</a>
