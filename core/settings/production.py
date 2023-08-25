@@ -10,6 +10,4 @@ DATABASES = {
     )
 }
 
-CSRF_TRUSTED_ORIGINS = [
-    'cms-is2.onrender.com/'
-]
+CSRF_TRUSTED_ORIGINS = ['https://cms-is2.onrender.com/']
