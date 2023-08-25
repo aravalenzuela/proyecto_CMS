@@ -16,7 +16,7 @@
             </div>
             <form method="post" action="." onsubmit="return validateForm()">
             {% csrf_token %}
-                <div class="login-field">
+                <!--<div class="login-field">
                     <label for="username">Usuario</label>
                     <input type="text" id="username" name="username">
                     <span class="error-message" id="username-error"></span>
@@ -27,20 +27,16 @@
                         <input type="password" id="password" name="password" class="password-input">
                         <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">👁</button>
                     </div>
-                    <span class="error-message" id="password-error"></span>  <!-- Mueve esta línea aquí -->
+                    <span class="error-message" id="password-error"></span> --> <!-- Mueve esta línea aquí -->
                 </div>                       
-                <div class="login-links">
+                <!--<div class="login-links">
                     <a href="#">Olvidé mi contraseña</a>
                 </div>
-                <button type="submit">Iniciar sesión</button>
+                <button type="submit">Iniciar sesión</button>-->
             </form>
             <div class="sso-option">
-                <p>O Registrate con:</p>
-                <a href="{% url "social:begin" "google-oauth2" %}">Google+</a>
-            </div>
-                <!-- Otros elementos de tu página... -->
+                <a href="{% url "social:begin" "google-oauth2" %}" class="back-button">Iniciar Sesión</a>
                 <a href="http://localhost:8000/" class="back-button">Volver a Inicio</a>
-                <!-- Otros elementos de tu página... -->
         </div>
     </div>
     <script>
