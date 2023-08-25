@@ -18,9 +18,13 @@
                 <ul>
                     <li><a href="{% url 'home' %}">Inicio</a></li>
                     <li><a href="{% url 'admin:index' %}">Administración</a></li>
+                   
                 </ul>
             </nav>
         </div>
+        <section class="cta-section">
+            <a href="{% url 'login' %}" class="btn-login">Iniciar sesión</a>
+        </section>
     </header>
 
     <main>
@@ -54,10 +58,6 @@
                         <img src="{% static 'imagenes/juego1.png' %}" alt="Imagen de Ejemplo de Juego">
                     <div>
                 </div>
-            </section>
-
-            <section class="cta-section">
-                <a href="{% url 'login' %}" class="btn-login">Iniciar sesión</a>
             </section>
         </div>
     </main>
