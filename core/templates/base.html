@@ -13,18 +13,18 @@
     <header>
         <div class="container header-content">
             <img src="{% static 'imagenes/logo.png' %}" alt="Logo de mi sitio" class="logo">
-            <h1>PROYECTO INGENIERIA DE SOFTWARE II</h1>
+            <h1>PROYECTO INGENIERIA DE SOFTWARE II</h1> <section class="cta-section">
+                <a href="{% url 'login' %}" class="btn-login">Iniciar sesión</a>
+            </section>
             <nav>
-                <ul>
+                <!--<ul>
                     <li><a href="{% url 'home' %}">Inicio</a></li>
                     <li><a href="{% url 'admin:index' %}">Administración</a></li>
                    
-                </ul>
+                </ul>-->
             </nav>
         </div>
-        <section class="cta-section">
-            <a href="{% url 'login' %}" class="btn-login">Iniciar sesión</a>
-        </section>
+       
     </header>
 
     <main>
@@ -36,7 +36,7 @@
             <section class="features-section">
                 <div class="feature-box">
                     <h3>Blog</h3>
-                    <p>Mba'eteko es un tema de bloques sencillo pensado para blogs personales.</p>
+                    <p>Mbaeteko es un tema de bloques sencillo pensado para blogs personales.</p>
                     <div class="blog">
                         <img src="{% static 'imagenes/blog1.png' %}" alt="Imagen de Ejemplo de Blog">
                     <div>
