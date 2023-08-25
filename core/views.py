@@ -15,3 +15,9 @@ def login_view(request):
 
 def profile_view(request):
     return render(request, 'profile.html')
+
+def login_with_google(oauth_code):
+    # Supongamos que esta función usa oauth_code para obtener un token de Google
+    # y luego inicia sesión al usuario en tu aplicación
+    pass
+
