@@ -11,5 +11,5 @@ DATABASES = {
 }
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://cms-is2.onrender.com/'
+    'cms-is2.onrender.com/'
 ]
