@@ -11,5 +11,5 @@ DATABASES = {
 }
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://gestordeproyec-prod-gestordeproyectosagiles-2cdwsx.mo2.mogenius.io'
+    'https://cms-is2.onrender.com/'
 ]
