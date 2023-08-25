@@ -1,0 +1,72 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Sitio Web</title>
+    <link rel="stylesheet" href="{% static 'home_styles.css' %}">
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <img src="{% static 'imagenes/logo.png' %}" alt="Logo de mi sitio" class="logo">
+            <h1>PROYECTO INGENIERIA DE SOFTWARE II</h1> <section class="cta-section">
+                <a href="{% url 'login' %}" class="btn-login">Iniciar sesión</a>
+            </section>
+            <nav>
+                <!--<ul>
+                    <li><a href="{% url 'home' %}">Inicio</a></li>
+                    <li><a href="{% url 'admin:index' %}">Administración</a></li>
+                   
+                </ul>-->
+            </nav>
+        </div>
+       
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="intro-section">
+                <h2>Bienvenido al Sitio Web del Sistema CMS</h2>
+                <p>Descubre contenido interesante, aprende algo nuevo y sumérgete en nuestro universo.</p>
+            </section>
+            <section class="features-section">
+                <div class="feature-box">
+                    <h3>Blog</h3>
+                    <p>Mbaeteko es un tema de bloques sencillo pensado para blogs personales.</p>
+                    <div class="blog">
+                        <img src="{% static 'imagenes/blog1.png' %}" alt="Imagen de Ejemplo de Blog">
+                    <div>
+                </div>
+                <div class="feature-box">
+                    <h3>Anuncio</h3>
+                    <p>Su diseño responsivo está optimizado para todos los dispositivos y su excelente tipografía mantiene su texto legible y 
+                    elegante. Viene con colores de acento personalizados y compatibilidad con logotipos, para que puedas modificar el diseño a tu gusto. </p>
+                    <div class="blog">
+                        <img src="{% static 'imagenes/anuncio1.png' %}" alt="Imagen de Ejemplo de Anuncio">
+                    <div>
+                </div>
+                <div class="feature-box">
+                    <h3>Juegos</h3>
+                    <p>Makoney es un muy buen tema para crear un sitio web de Juegos o publicaciones en línea profesional. 
+                        Viene con patrones prediseñados que te ahorran el trabajo de crear páginas avanzadas de destino, acerca de, búsqueda y contacto. Además, 
+                        te permite arrastrar y soltar los diseños basados en patrones donde quieras en cualquier página, desde el primer momento</p>
+                    <div class="blog">
+                        <img src="{% static 'imagenes/juego1.png' %}" alt="Imagen de Ejemplo de Juego">
+                    <div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Mi Sitio Web. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
