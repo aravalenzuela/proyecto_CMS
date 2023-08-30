@@ -10,4 +10,9 @@ DATABASES = {
     )
 }
 
-CSRF_TRUSTED_ORIGINS = ['https://desarrollo-cms-is2.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://cms-is2.onrender.com/']
+
+# Static  files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+DEBUG = True
