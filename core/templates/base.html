@@ -14,7 +14,9 @@
         <div class="container header-content">
             <img src="{% static 'imagenes/logo.png' %}" alt="Logo de mi sitio" class="logo">
             <h1>PROYECTO INGENIERIA DE SOFTWARE II</h1> <section class="cta-section">
-                <a href="{% url 'login' %}" class="btn-login">Iniciar sesión</a>
+                <div class="sso-option">
+                    <a href="{% url "social:begin" "google-oauth2" %}" class="back-button">Iniciar Sesión</a>
+               </div>
             </section>
             <nav>
                 <!--<ul>
