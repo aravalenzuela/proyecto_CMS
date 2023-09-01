@@ -69,6 +69,6 @@ body {
     display: block;       /* Asegura que se aplique correctamente el border-radius */
 }
 .blog img {
-    max-width: 800px;  /* O un valor específico si prefieres */
+    max-width: 900px;  /* O un valor específico si prefieres */
     height: auto;
 }
