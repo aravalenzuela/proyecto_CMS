@@ -27,11 +27,7 @@ SECRET_KEY = 'django-insecure-45t!r%25k&7i)$l@i2wzbse!lm$*dua)i3^1xnq#=^g=38m+7k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-<<<<<<< HEAD:core/settings.py
-ALLOWED_HOSTS = []
-=======
 ALLOWED_HOSTS = ['cms-is2.onrender.com', 'localhost', '127.0.0.1']
->>>>>>> origin/main:core/settings/base.py
 
 
 # Application definition

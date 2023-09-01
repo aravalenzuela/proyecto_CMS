@@ -31,8 +31,4 @@ social-auth-core==4.4.2
 sqlparse==0.4.4
 tomli==2.0.1
 typing_extensions==4.7.1
-<<<<<<< HEAD
 urllib3==1.26.16
-=======
-urllib3==1.26.16
->>>>>>> origin/main
