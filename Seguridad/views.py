@@ -1,5 +1,20 @@
 from django.http import HttpResponse
-
+from django.shortcuts import render
+from .models import Permiso
 
 def index(request):
     return HttpResponse("Hello, world. You're at the Seguridad index.")
+
+
+def crear_permiso(request):
+    if request.method == 'POST':
+        nombre = request.POST['nombre']
+        descripcion = request.POST['descripcion']
+        permiso = Permiso(nombre=nombre, descripcion=descripcion)
+        permiso.save()
+        return render(request, 'crear_permiso.html')
+    return render(request, 'crear_permiso.html')
+
+def listar_permisos(request):
+    permisos = Permiso.objects.all()
+    return render(request, 'listar_permisos.html', {'permisos': permisos})
