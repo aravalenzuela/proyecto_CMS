@@ -6,5 +6,6 @@ urlpatterns = [
     path('listar_permisos/', views.listar_permisos, name='listar_permisos'),
     path('list_users/', views.list_users, name='list_users'),
     path('crear_usuario/', views.crear_usuario, name='crear_usuario'),
+    path('asignar_permiso/<int:usuario_id>/', views.asignar_permiso, name='asignar_permiso'),
 
 ]
