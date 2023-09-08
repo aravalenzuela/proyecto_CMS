@@ -16,6 +16,7 @@
         <h1>Panel de Administración</h1>
         <nav>
             <ul>
+                <a href="http://localhost:8000/" class="back-button">Volver a Inicio</a>
                 <a href="{% url 'logout' %}">Cerrar Sesión</a>
             </ul>
         </nav>
@@ -24,8 +25,8 @@
     <section>
         <h2>Usuarios</h2>
         <ul>
-            <li><a href="#list-users">Listar Usuarios</a></li>
-            <li><a href="#create-user">Crear Usuario</a></li>
+            <li><a href="{% url 'list_users' %}">Listar Usuarios</a></li>
+            <li><a href="{% url 'crear_usuario' %}">Crear Usuario</a></li>
             <li><a href="#delete-user">Dar de Baja Usuario</a></li>
         </ul>
     </section>
@@ -45,8 +46,8 @@
     <section>
         <h2>Permisos</h2>
         <ul>
-            <li><a href="#list-permissions">Listar Permisos</a></li>
-            <li><a href="#create-permission">Crear Permiso</a></li>
+            <li><a href="{% url 'listar_permisos' %}">Listar Permisos</a></li>
+            <li><a href="{% url 'crear_permiso' %}">Crear Permiso</a></li>
             <li><a href="#assign-permission">Asignar Permiso</a></li>
         </ul>
     </section>

@@ -69,23 +69,6 @@
     background-color: #C53929;
 }
 
-/* Estilos para el botón de Facebook */
-.sso-facebook {
-    background-color: #3B5998;
-}
-
-.sso-facebook:hover {
-    background-color: #30487C;
-}
-
-/* Estilos para el botón de Twitter */
-.sso-twitter {
-    background-color: #1DA1F2;
-}
-
-.sso-twitter:hover {
-    background-color: #0C8EDC;
-}
 .password-container {
     position: relative; /* Esto permite posicionar el botón respecto a este contenedor */
     display: flex;

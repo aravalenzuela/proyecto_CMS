@@ -29,8 +29,9 @@ urlpatterns = [
     path('accounts/profile/', RedirectView.as_view(url='/'), name='redirect_to_home'),#Funcion retroceso de pantalla
     #COnflictos
     path('logout/', views.logout, name='logout_custom'),
-    path('logout2/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),#Al darle salir redirige a la pantalla de login
+    path('logout2/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),#Al darle salir redirige a la pantalla de login
     #Conflcitos
     path('social-auth/', include('social_django.urls', namespace='social')),  # Añade 
+    path('', include('Seguridad.urls')),
 ]
 
