@@ -16,5 +16,4 @@ CSRF_TRUSTED_ORIGINS = ['https://cms-is2.onrender.com/']
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEBUG = True
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='', cast=Csv())
 
