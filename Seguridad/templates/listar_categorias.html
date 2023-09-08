@@ -1,0 +1,8 @@
+{% block content %}
+    <h1>Listado de Categorías</h1>
+    <ul>
+        {% for categoria in categorias %}
+            <li>{{ categoria.nombre }} - {{ categoria.descripcion }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
