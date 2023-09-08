@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es"> <!-- Cambiado a "es" porque tu aplicación parece ser en español -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Permisos</title>
+    <style>
+        /* Estilos básicos para mejorar la apariencia */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Listar Permisos</h1>
+    <table aria-label="Tabla de permisos">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <!-- Puedes añadir más cabeceras de columna aquí -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for permiso in permisos %}
+            <tr>
+                <td>{{ permiso.nombre }}</td>
+                <td>{{ permiso.descripcion }}</td>
+                <!-- Puedes añadir más celdas aquí -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es"> <!-- Cambiado a "es" porque parece que tu aplicación es en español -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Permiso</title>
+    <style>
+        /* Aquí puedes agregar algún estilo CSS para mejorar la apariencia */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        form {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        label, input, textarea, button {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Crear Permiso</h1>
+    <form method="post" aria-label="Formulario para crear permiso">
+        {% csrf_token %}
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required aria-required="true">
+        </div>
+        <div>
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="4" required aria-required="true"></textarea>
+        </div>
+        <button type="submit">Guardar Permiso</button>
+    </form>
+</body>
+</html>
