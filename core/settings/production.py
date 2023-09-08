@@ -11,3 +11,5 @@ DATABASES = {
 }
 
 CSRF_TRUSTED_ORIGINS = ['https://cms-is2.onrender.com/']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='', cast=Csv())
+
