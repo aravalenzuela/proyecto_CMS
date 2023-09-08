@@ -5,7 +5,8 @@
 
 Welcome to proyecto_CMS's documentation!
 ========================================
-
+.. automodule:: mi_modulo
+   :members:
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
