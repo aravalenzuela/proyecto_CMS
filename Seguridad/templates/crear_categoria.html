@@ -1,0 +1,9 @@
+{% block content %}
+    <h1>Crear Categoría</h1>
+    <form method="post" action="{% url 'crear_categoria' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+    </form>
+{% endblock %}
+

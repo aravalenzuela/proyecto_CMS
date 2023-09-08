@@ -3,6 +3,10 @@ from django.shortcuts import render, redirect
 from .models import Permiso
 from django.contrib.auth.models import User
 from django.contrib import messages
+from .forms import CategoriaForm
+from .models import Categoria  # Importación relativa
+
+
 
 #Codigos para la implementacion de los requerimientos
 def crear_permiso(request):
@@ -39,4 +43,24 @@ def crear_usuario(request):
             messages.error(request, 'Ha ocurrido un error al crear el usuario.')
         
     return render(request, 'crear_usuario.html')
+
+# En tu views.py
+def crear_categoria(request):
+    print("Método de la petición:", request.method)
+    print("La función crear_categoria se ha llamado")
+    if request.method == 'POST':
+        print("Detectada petición POST")
+        form = CategoriaForm(request.POST)
+        if form.is_valid():
+            print("Formulario válido")
+            form.save()
+            return redirect('profile_view')  # Asegúrate de que esta vista existe y está definida en tu urls.py
+    else:
+        print("Petición no es POST, se asume GET y se muestra formulario")
+        form = CategoriaForm()
+    return render(request, 'crear_categoria.html', {'form': form})
+
+def listar_categorias(request):
+    categorias = Categoria.objects.all()
+    return render(request, 'listar_categorias.html', {'categorias': categorias})
 
