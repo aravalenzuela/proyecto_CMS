@@ -8,7 +8,6 @@ from .forms import CategoriaForm
 from .models import Categoria  # Importación relativa
 
 
-
 #Codigos para la implementacion de los requerimientos
 def crear_permiso(request):
     if request.method == 'POST':
@@ -16,7 +15,7 @@ def crear_permiso(request):
         descripcion = request.POST['descripcion']
         permiso = Permiso(nombre=nombre, descripcion=descripcion)
         permiso.save()
-        return render(request, 'crear_permiso.html')
+        return redirect('profile_view')  # Cambia esto al nombre real de la vista a la que deseas redirigir
     return render(request, 'crear_permiso.html')
 
 def listar_permisos(request):
