@@ -19,6 +19,11 @@ Seguridad.apps module
    :members:
    :undoc-members:
    :show-inheritance:
+   :maxdepth: 2
+   :caption: Contents:
+.. autoclass:: test_login.Test_urls
+    :members:
+
 
 
 Seguridad.forms module
