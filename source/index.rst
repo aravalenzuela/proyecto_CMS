@@ -10,6 +10,9 @@ Welcome to proyecto_CMS's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+.. autoclass:: test_login.Test_urls
+    :members:
+
 
 
 
