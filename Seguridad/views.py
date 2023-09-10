@@ -1,16 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import Permiso, Usuario
+from .models import Permiso, Usuario , Categoria, Rol 
 from django.contrib.auth.models import User
 from django.contrib import messages
-<<<<<<< HEAD
-from .forms import CategoriaForm, RolForm
-from .models import Categoria, Rol # Importación relativa
-=======
-from .forms import AsignarPermisoForm
-from .forms import CategoriaForm
-from .models import Categoria  # Importación relativa
->>>>>>> 45f777ebaded6472e1f5c8a667a4a4d7a6fd5ede
+from .forms import CategoriaForm, RolForm, AsignarPermisoForm
 
 
 #Codigos para la implementacion de los requerimientos

@@ -1,13 +1,7 @@
 from django.test import TestCase
 import pytest
 from django.urls import reverse
-<<<<<<< HEAD
-from Seguridad.models import Categoria, Rol  # Asegúrate de que la importación sea correcta
-=======
-from Seguridad.models import Permiso  # Asegúrate de que la importación sea correcta
-from Seguridad.models import Categoria  # Asegúrate de que la importación sea correcta
->>>>>>> 45f777ebaded6472e1f5c8a667a4a4d7a6fd5ede
-
+from Seguridad.models import Categoria, Rol, Permiso, Categoria  # Asegúrate de que la importación sea correcta
 
 # Create your tests here.
 
@@ -33,7 +27,6 @@ def test_listar_categorias(client):
     assert 'Categoria 1' in str(response.content)
     assert 'Categoria 2' in str(response.content)
 
-<<<<<<< HEAD
 @pytest.mark.django_db
 def test_crear_roles(client):
     url = reverse('crear_rol')  
@@ -55,7 +48,6 @@ def test_listar_roles (client):
     assert response.status_code == 200
     assert 'Rol 1' in str(response.content)
     assert 'Rol 2' in str(response.content)
-=======
 
 @pytest.mark.django_db
 def test_crear_permiso(client):
@@ -82,13 +74,3 @@ def test_listar_permisos(client):
     assert 'Permiso 2' in str(response.content)
 
 from django.shortcuts import redirect
-
-#def crear_permiso(request):
-#    if request.method == 'POST':
-#        nombre = request.POST['nombre']
-#        descripcion = request.POST['descripcion']
-#        permiso = Permiso(nombre=nombre, descripcion=descripcion)
-#        permiso.save()
-#        return redirect('nombre_de_la_vista_exitosa')
-#    return render(request, 'crear_permiso.html')
->>>>>>> 45f777ebaded6472e1f5c8a667a4a4d7a6fd5ede
