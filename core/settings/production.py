@@ -10,6 +10,10 @@ DATABASES = {
     )
 }
 
-CSRF_TRUSTED_ORIGINS = ['https://cms-is2.onrender.com/']
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='', cast=Csv())
+CSRF_TRUSTED_ORIGINS = ['https://cdesarrollo-cms-is2.onrender.com']
+
+# Static  files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+DEBUG = True
 
