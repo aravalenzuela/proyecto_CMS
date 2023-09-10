@@ -3,6 +3,7 @@ import pytest
 from django.urls import reverse
 from Seguridad.models import Permiso  # Asegúrate de que la importación sea correcta
 from Seguridad.models import Categoria  # Asegúrate de que la importación sea correcta
+from Seguridad.models import Categoria, Rol  # Asegúrate de que la importación sea correcta
 
 
 # Create your tests here.
@@ -64,3 +65,24 @@ from django.shortcuts import redirect
 #        permiso.save()
 #        return redirect('nombre_de_la_vista_exitosa')
 #    return render(request, 'crear_permiso.html')
+@pytest.mark.django_db
+def test_crear_roles(client):
+    url = reverse('crear_rol')  
+    data = {'nombre': 'Rol de prueba', 'descripcion': 'Descripción de prueba'}
+    response = client.post(url, data)
+    
+    assert response.status_code == 302  # Esperamos un redirect después de una creación exitosa
+    assert Rol.objects.count() == 1  
+    assert Rol.objects.first().nombre == 'Rol de prueba' 
+
+@pytest.mark.django_db
+def test_listar_roles (client):
+    Rol.objects.create(nombre='Rol 1', descripcion='Descripción 1')
+    Rol.objects.create(nombre='Rol 2', descripcion='Descripción 2')
+    
+    url = reverse('listar_roles')  
+    response = client.get(url)
+    
+    assert response.status_code == 200
+    assert 'Rol 1' in str(response.content)
+    assert 'Rol 2' in str(response.content)

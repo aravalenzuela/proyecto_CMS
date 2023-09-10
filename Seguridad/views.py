@@ -6,6 +6,8 @@ from django.contrib import messages
 from .forms import AsignarPermisoForm
 from .forms import CategoriaForm
 from .models import Categoria  # Importación relativa
+from .forms import CategoriaForm, RolForm
+from .models import Categoria, Rol # Importación relativa
 
 
 #Codigos para la implementacion de los requerimientos
@@ -202,3 +204,22 @@ def listar_categorias(request):
     categorias = Categoria.objects.all()
     return render(request, 'listar_categorias.html', {'categorias': categorias})
 
+def crear_rol(request):
+    print("Método de la petición:", request.method)
+    print("La función crear_rol se ha llamado")
+    if request.method == 'POST':
+        print("Detectada petición POST")
+        form = RolForm(request.POST)
+        if form.is_valid():
+            print("Formulario válido")
+            form.save()
+            return redirect('profile_view')  # Asegúrate de que esta vista existe y está definida en tu urls.py
+    else:
+        print("Petición no es POST, se asume GET y se muestra formulario")
+        form = CategoriaForm()
+    return render(request, 'crear_rol.html', {'form': form})
+
+
+def listar_roles(request):
+    roles = Rol.objects.all()
+    return render(request, 'listar_roles.html', {'roles': roles})
