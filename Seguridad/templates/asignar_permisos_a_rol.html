@@ -1,0 +1,86 @@
+<!-- asignar_permisos_a_rol.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asignar Permisos a Rol</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            background-color: #fafafa;
+            border-radius: 5px;
+        }
+
+        div {
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 5px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .messages {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+        }
+
+        .messages li {
+            list-style-type: none;
+            color: green; /* para mensajes de éxito */
+        }
+
+        .messages li.error {
+            color: red; /* para mensajes de error */
+        }
+    </style>
+</head>
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <h1>Asignar Permisos a Rol</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <div>
+            <label for="{{ form.nombre.id_for_label }}">Nombre del Rol:</label>
+            {{ form.nombre }}
+        </div>
+
+        <div>
+            <label for="{{ form.permisos.id_for_label }}">Permisos:</label>
+            {{ form.permisos }} <!-- Esto generará un widget de selección múltiple para permisos -->
+        </div>
+
+        <input type="submit" value="Guardar">
+    </form>
+    
+    <a href="{% url 'profile_view' %}">Volver al perfil</a>
+</body>
+</html>
+

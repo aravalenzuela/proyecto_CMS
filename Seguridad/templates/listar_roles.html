@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"> 
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,7 +34,7 @@
             <tr>
                 <th>Nombre</th>
                 <th>Descripción</th>
-                <!-- Puedes añadir más cabeceras de columna aquí -->
+                <th>Permisos</th>  <!-- Nueva columna para los permisos -->
             </tr>
         </thead>
         <tbody>
@@ -42,11 +42,17 @@
             <tr>
                 <td>{{ rol.nombre }}</td>
                 <td>{{ rol.descripcion }}</td>
-                <!-- Puedes añadir más celdas aquí -->
+                <td>
+                    <!-- Mostrando la lista de permisos para el rol -->
+                    <ul>
+                        {% for permiso in rol.permisos.all %}
+                            <li>{{ permiso.nombre }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </body>
 </html>
-

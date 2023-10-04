@@ -10,7 +10,20 @@ class CategoriaForm(forms.ModelForm):
         model = Categoria
         fields = ['nombre', 'descripcion']
 
-class RolForm(forms.ModelForm):
+class RolForms(forms.ModelForm):
     class Meta:
         model = Rol
-        fields = ['nombre', 'descripcion']
+        fields = ['nombre', 'descripcion', 'permisos']
+        widgets = {
+            'permisos': forms.CheckboxSelectMultiple()  # Para seleccionar múltiples permisos
+        }
+
+class RolForm(forms.ModelForm):
+    permisos = forms.ModelMultipleChoiceField(
+        queryset=Permiso.objects.all(),
+        widget=forms.CheckboxSelectMultiple,  # Usamos casillas de verificación para seleccionar múltiples permisos
+    )
+
+    class Meta:
+        model = Rol
+        fields = ['nombre', 'descripcion', 'permisos']
