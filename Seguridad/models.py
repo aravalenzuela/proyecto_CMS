@@ -47,3 +47,23 @@ class Categoria(models.Model):
 
     def __str__(self):
         return self.nombre
+
+
+#class Plantilla(models.Model):
+#    nombre = models.CharField(max_length=100)
+#    descripcion = models.TextField()
+#
+#    def __str__(self):
+#        return self.nombre
+
+#class Plantilla(models.Model):
+#    TIPO_CHOICES = (
+#        ('blog', 'Blog (Solo texto)'),
+#        ('multimedia', 'Multimedia (Texto + Multimedia)'),
+#    )
+#    nombre = models.CharField(max_length=100)
+#    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES)
+#    contenido = models.TextField()
+    
+#    def __str__(self):
+#        return self.nombre

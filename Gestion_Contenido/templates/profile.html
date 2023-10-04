@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Perfil de Usuario</h1>
+
+  <!-- Información del usuario -->
+  <p>Nombre de usuario: {{ user.username }}</p>
+  <p>Correo electrónico: {{ user.email }}</p>
+
+  <!-- Información de las plantillas del usuario -->
+  {% if plantilla_usuario %}
+    <h2>Plantillas del Usuario</h2>
+    <p>Nombre de la plantilla: {{ plantilla_usuario.plantilla.nombre }}</p>
+    <p>Tipo de la plantilla: {{ plantilla_usuario.plantilla.tipo }}</p>
+    <p>Contenido de la plantilla:</p>
+    <pre>{{ plantilla_usuario.plantilla.contenido }}</pre>
+  {% else %}
+    <p>El usuario no tiene plantillas asignadas.</p>
+  {% endif %}
+{% endblock %}

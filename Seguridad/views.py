@@ -9,6 +9,10 @@ from .models import Categoria  # Importación relativa
 from .forms import CategoriaForm, RolForm
 from .models import Categoria, Rol # Importación relativa
 
+#from .models import Plantilla
+#from .forms import SeleccionarPlantillaForm
+
+
 
 #Codigos para la implementacion de los requerimientos
 def crear_permiso(request):
@@ -223,3 +227,54 @@ def crear_rol(request):
 def listar_roles(request):
     roles = Rol.objects.all()
     return render(request, 'listar_roles.html', {'roles': roles})
+
+
+
+#def listar_plantillas(request):
+#    plantillas = Plantilla.objects.all()
+#    return render(request, 'listar_plantillas.html', {'plantillas': plantillas})
+
+
+
+# def seleccionar_plantilla(request):
+#    if request.method == 'POST':
+#        form = SeleccionarPlantillaForm(request.POST)
+#        if form.is_valid():
+#            plantilla_seleccionada = form.cleaned_data['plantilla']
+#            # Realiza la lógica necesaria con la plantilla seleccionada
+#    else:
+#        form = SeleccionarPlantillaForm()
+#
+#    return render(request, 'seleccionar_plantilla.html', {'form': form})
+
+
+#def seleccionar_plantilla_sitio(request):
+#    plantillas = Plantilla.objects.all()
+#    return render(request, 'seleccionar_plantilla_sitio.html', {'plantillas': plantillas})
+
+
+
+
+#from django.http import HttpResponse
+#from django.shortcuts import render, redirect
+#from .models import Plantilla
+#from .forms import SeleccionarPlantillaForm
+
+#def seleccionar_plantilla_sitio(request):
+#    if request.method == 'POST':
+#        form = SeleccionarPlantillaForm(request.POST)
+#        if form.is_valid():
+#            plantilla_seleccionada = form.cleaned_data['plantilla']
+#            # Realiza la lógica necesaria con la plantilla seleccionada
+#            if plantilla_seleccionada.tipo == 'blog':
+#                # Aplica restricciones para plantilla de tipo blog
+#                # Por ejemplo, permite la creación de contenido de texto
+#            elif plantilla_seleccionada.tipo == 'multimedia':
+#                # Aplica restricciones para plantilla de tipo multimedia
+#                # Por ejemplo, permite la creación de contenido multimedia
+#            else:
+#                # Maneja otros tipos de plantillas si es necesario
+#    else:
+#        form = SeleccionarPlantillaForm()
+
+#    return render(request, 'seleccionar_plantilla_sitio.html', {'form': form})

@@ -33,5 +33,6 @@ urlpatterns = [
     #Conflcitos
     path('social-auth/', include('social_django.urls', namespace='social')),  # Añade 
     path('', include('Seguridad.urls')),
+    path('', include('Gestion_Contenido.urls')),
 ]
 

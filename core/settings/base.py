@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Seguridad.apps.SeguridadConfig',
+    'Gestion_Contenido',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth',
