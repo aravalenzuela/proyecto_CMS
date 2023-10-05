@@ -53,6 +53,7 @@ def asignar_permiso(request, rol_id=None):
             messages.success(request, 'Permisos asignados con éxito.')
             return redirect('profile_view')
         else:
+            print(form.errors)  # Agregar esta línea para imprimir los errores
             messages.error(request, 'Ha ocurrido un error al asignar los permisos.')
     else:
         form = RolForm(instance=rol)

@@ -1,4 +1,3 @@
-<!-- asignar_permisos_a_rol.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -68,13 +67,17 @@
         {% csrf_token %}
         
         <div>
-            <label for="{{ form.nombre.id_for_label }}">Nombre del Rol:</label>
-            {{ form.nombre }}
+            <label>
+                Nombre del Rol:
+                {{ form.nombre }}
+            </label>
         </div>
 
         <div>
-            <label for="{{ form.permisos.id_for_label }}">Permisos:</label>
-            {{ form.permisos }} <!-- Esto generará un widget de selección múltiple para permisos -->
+            <label>
+                Permisos:
+                {{ form.permisos }}
+            </label>
         </div>
 
         <input type="submit" value="Guardar">
@@ -83,4 +86,3 @@
     <a href="{% url 'profile_view' %}">Volver al perfil</a>
 </body>
 </html>
-
