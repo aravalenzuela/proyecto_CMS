@@ -7,6 +7,7 @@ from .forms import SeleccionarPlantillaForm
 
 def listar_plantillas(request):
     plantillas = Plantilla.objects.all()
+    #print("Vista listar_plantillas se está ejecutando.")
     return render(request, 'listar_plantillas.html', {'plantillas': plantillas})
 
 def seleccionar_plantilla(request):
