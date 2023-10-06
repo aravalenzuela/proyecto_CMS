@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.insert(0, os.path.abspath('/home/ubuntu/Escritorio/IS2_STAGING/proyecto_CMS'))
+sys.path.insert(0, os.path.abspath('/home/ara/IS2_2023/proyecto_CMS'))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'core.settings'  # Reemplaza 'core.settings' con la ubicación real de tu archivo settings si es diferente.
 import django
 django.setup()
