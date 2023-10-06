@@ -1,6 +1,6 @@
 from django.test import TestCase
 import pytest
-from django.urls import reverse
+from django.urls import reverse, resolve
 from Seguridad.models import Categoria, Rol, Permiso, Categoria  # Asegúrate de que la importación sea correcta
 from django.shortcuts import redirect
 
@@ -74,4 +74,5 @@ def test_listar_permisos(client):
     assert response.status_code == 200
     assert 'Permiso 1' in str(response.content)
     assert 'Permiso 2' in str(response.content)
+
 
