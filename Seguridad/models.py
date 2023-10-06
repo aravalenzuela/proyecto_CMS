@@ -16,9 +16,8 @@ class Permiso(models.Model):
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=200)
 
-    def _str_(self):
+    def __str__(self):  # Asegúrate de que sea __str__ y no _str_ 
         return self.nombre
-
 class Rol(models.Model):
     """
         Funcion para crear un rol dentro sistema
@@ -28,7 +27,7 @@ class Rol(models.Model):
     """
 
     nombre = models.CharField(max_length=50)
-    descripcion = models.CharField(max_length=200)
+    descripcion = models.CharField(max_length=200, blank=True, null=True)
     permisos = models.ManyToManyField(Permiso)
 
     def __str__(self):
