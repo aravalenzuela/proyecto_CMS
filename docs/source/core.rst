@@ -1,5 +1,5 @@
-Seguridad package
-===========
+core package
+============
 
 Subpackages
 -----------
@@ -7,48 +7,47 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   Seguridad.migrations
+   core.settings
 
 Submodules
 ----------
 
-Seguridad.apps module
----------------
-
-.. automodule:: Seguridad.apps
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Seguridad.forms module
+core.asgi module
 ----------------
 
-.. automodule:: Seguridad.forms
+.. automodule:: core.asgi
    :members:
    :undoc-members:
    :show-inheritance:
 
-Seguridad.models module
+core.test\_login module
+-----------------------
+
+.. automodule:: core.test_login
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+core.urls module
+----------------
+
+.. automodule:: core.urls
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+core.views module
 -----------------
 
-.. automodule:: Seguridad.models
+.. automodule:: core.views
    :members:
    :undoc-members:
    :show-inheritance:
 
-Seguridad.urls module
----------------
-
-.. automodule:: Seguridad.urls
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Seguridad.views module
+core.wsgi module
 ----------------
 
-.. automodule:: Seguridad.views
+.. automodule:: core.wsgi
    :members:
    :undoc-members:
    :show-inheritance:
@@ -56,7 +55,7 @@ Seguridad.views module
 Module contents
 ---------------
 
-.. automodule:: Seguridad
+.. automodule:: core
    :members:
    :undoc-members:
    :show-inheritance:

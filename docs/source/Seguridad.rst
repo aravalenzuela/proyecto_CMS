@@ -1,5 +1,5 @@
 Seguridad package
-===========
+=================
 
 Subpackages
 -----------
@@ -12,22 +12,24 @@ Subpackages
 Submodules
 ----------
 
+Seguridad.admin module
+----------------------
+
+.. automodule:: Seguridad.admin
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Seguridad.apps module
----------------
+---------------------
 
 .. automodule:: Seguridad.apps
    :members:
    :undoc-members:
    :show-inheritance:
-   :maxdepth: 2
-   :caption: Contents:
-.. autoclass:: test_login.Test_urls
-    :members:
-
-
 
 Seguridad.forms module
-----------------
+----------------------
 
 .. automodule:: Seguridad.forms
    :members:
@@ -35,15 +37,23 @@ Seguridad.forms module
    :show-inheritance:
 
 Seguridad.models module
------------------
+-----------------------
 
 .. automodule:: Seguridad.models
    :members:
    :undoc-members:
    :show-inheritance:
 
+Seguridad.tests module
+----------------------
+
+.. automodule:: Seguridad.tests
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Seguridad.urls module
----------------
+---------------------
 
 .. automodule:: Seguridad.urls
    :members:
@@ -51,7 +61,7 @@ Seguridad.urls module
    :show-inheritance:
 
 Seguridad.views module
-----------------
+----------------------
 
 .. automodule:: Seguridad.views
    :members:
