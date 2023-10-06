@@ -3,7 +3,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Permiso, Usuario , Categoria, Rol 
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import CategoriaForm, RolForm, AsignarPermisoForm
+from .forms import AsignarPermisoForm
+from .forms import CategoriaForm
+from .models import Categoria  # Importación relativa
+from .forms import CategoriaForm, RolForm
+from .models import Categoria, Rol # Importación relativa
+
+#from .models import Plantilla
+#from .forms import SeleccionarPlantillaForm
+
+
 
 #Codigos para la implementacion de los requerimientos
 def crear_permiso(request):
