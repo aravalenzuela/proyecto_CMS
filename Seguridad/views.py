@@ -7,6 +7,15 @@ from .forms import CategoriaForm, RolForm, AsignarPermisoForm
 
 #Codigos para la implementacion de los requerimientos
 def crear_permiso(request):
+    """
+    Crea un nuevo permiso y lo guarda en la base de datos.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de creación de permiso o redirige al perfil tras la creación exitosa.
+    """
     if request.method == 'POST':
         nombre = request.POST['nombre']
         descripcion = request.POST['descripcion']
@@ -16,15 +25,41 @@ def crear_permiso(request):
     return render(request, 'crear_permiso.html')
 
 def listar_permisos(request):
-    # Lista de permisos a crear
+    """
+    Lista todos los permisos disponibles en la base de datos.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página que muestra la lista de permisos.
+    """
     permisos = Permiso.objects.all()
     return render(request, 'listar_permisos.html', {'permisos': permisos})
 
 def list_users(request):
+    """
+    Lista todos los usuarios registrados en la base de datos.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página que muestra la lista de usuarios.
+    """
     users = User.objects.all()
     return render(request, 'list_users.html', {'users': users})
 
 def crear_usuario(request):
+    """
+    Crea un nuevo usuario y lo guarda en la base de datos.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de creación de usuario o redirige tras la creación exitosa.
+    """
     if request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
@@ -44,6 +79,16 @@ def crear_usuario(request):
 
 
 def asignar_permiso(request, rol_id=None): 
+    """
+    Asigna permisos a un rol específico.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        rol_id (int, optional): ID del rol al que se asignarán los permisos. Defaults to None.
+        
+    Returns:
+        HttpResponse: Renderiza la página de asignación de permisos o redirige tras la asignación exitosa.
+    """
     rol = get_object_or_404(Rol, pk=rol_id) if rol_id else None
     
     if request.method == 'POST':
@@ -65,6 +110,15 @@ def asignar_permiso(request, rol_id=None):
 
 
 def crear_categoria(request):
+    """
+    Crea una nueva categoría y la guarda en la base de datos.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de creación de categoría o redirige tras la creación exitosa.
+    """
     print("Método de la petición:", request.method)
     print("La función crear_categoria se ha llamado")
     if request.method == 'POST':
@@ -80,10 +134,28 @@ def crear_categoria(request):
     return render(request, 'crear_categoria.html', {'form': form})
 
 def listar_categorias(request):
+    """
+    Lista todas las categorías disponibles en la base de datos.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página que muestra la lista de categorías.
+    """
     categorias = Categoria.objects.all()
     return render(request, 'listar_categorias.html', {'categorias': categorias})
 
 def crear_rol(request):
+    """
+    Crea un nuevo rol y lo guarda en la base de datos.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de creación de rol o redirige tras la creación exitosa.
+    """
     print("Método de la petición:", request.method)
     print("La función crear_rol se ha llamado")
     if request.method == 'POST':
@@ -98,9 +170,15 @@ def crear_rol(request):
         form = CategoriaForm()
     return render(request, 'crear_rol.html', {'form': form})
 
-
 def listar_roles(request):
+    """
+    Lista todos los roles disponibles en la base de datos junto con sus permisos asociados.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página que muestra la lista de roles.
+    """
     roles = Rol.objects.all().prefetch_related('permisos')
     return render(request, 'listar_roles.html', {'roles': roles})
-
-# views.py
