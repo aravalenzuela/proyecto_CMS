@@ -5,8 +5,7 @@ from .models import Categoria, Rol, Permiso
 
 class AsignarPermisoForm(forms.Form):
     permiso = forms.ModelChoiceField(queryset=Permiso.objects.all())
-from .models import Categoria
-from .models import Categoria, Rol
+
 
 class CategoriaForm(forms.ModelForm):
     class Meta:
@@ -21,7 +20,7 @@ class RolForm(forms.ModelForm):
 
     class Meta:
         model = Rol
-        fields = ['nombre', 'descripcion']
+        fields = ['nombre', 'descripcion', 'permisos']
 
 
 #class SeleccionarPlantillaForm(forms.Form):
