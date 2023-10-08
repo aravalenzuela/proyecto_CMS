@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Permiso, Usuario , Categoria, Rol 
+from .models import Permiso, Usuario , Categoria, Rol , Contenido, TipoDeContenido
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import CategoriaForm, RolForm, AsignarPermisoForm
@@ -182,3 +182,12 @@ def listar_roles(request):
     """
     roles = Rol.objects.all().prefetch_related('permisos')
     return render(request, 'listar_roles.html', {'roles': roles})
+
+def listar_contenidos(request):
+    contenidos = Contenido.objects.all()
+    return render(request, 'lista_contenidos.html', {'contenidos': contenidos})
+
+def contenido_detalle(request, pk):
+    contenido = get_object_or_404(Contenido, pk=pk)
+    return render(request, 'contenido_detalle.html', {'contenido': contenido})
+

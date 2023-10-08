@@ -29,6 +29,10 @@ urlpatterns = [
     # Ruta para asignar permisos a los roles ya creados.
     path('asignar_permiso/', views.asignar_permiso, name='asignar_permiso'),
 
+    path('contenidos/', views.listar_contenidos, name='lista_contenidos'),
+
+    path('contenido/<int:pk>/', views.contenido_detalle, name='contenido_detalle'),
+
     # urls.py
     #path('rol/<int:rol_id>/', views.asignar_permisos_a_rol, name='asignar_permisos_a_rol'),
     #path('rol/nuevo/', views.asignar_permisos_a_rol, name='nuevo_rol'),
