@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Subcategorías</title>
+    <style>
+        /* Estilos básicos para mejorar la apariencia */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Listado de Subcategorías</h1>
+        <ul>
+            {% for subcategoria in subcategorias %}
+            <li>{{ subcategoria.nombre }} - {{ subcategoria.descripcion }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'crear_subcategoria' %}">Crear Nueva Subcategoría</a>
+    </div>
+</body>
+</html>
+

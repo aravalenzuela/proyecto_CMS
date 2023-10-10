@@ -1,0 +1,15 @@
+/* Estilo para el título */
+h1 {
+    color: #333;
+    font-size: 24px;
+}
+
+/* Estilo para la lista de categorías */
+ul {
+    list-style: none;
+}
+
+/* Estilo para cada elemento de la lista */
+li {
+    margin-bottom: 10px;
+}

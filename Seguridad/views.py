@@ -9,6 +9,9 @@ from .models import Categoria  # Importación relativa
 from .forms import CategoriaForm, RolForm
 from .models import Categoria, Rol # Importación relativa
 
+from .models import Subcategoria
+
+from .forms import SubcategoriaForm  # Asegúrate de importar el formulario adecuado
 #from .models import Plantilla
 #from .forms import SeleccionarPlantillaForm
 
@@ -191,3 +194,56 @@ def listar_roles(request):
     """
     roles = Rol.objects.all().prefetch_related('permisos')
     return render(request, 'listar_roles.html', {'roles': roles})
+
+
+
+#Mati
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def modificar_categoria(request, categoria_id):
+    categoria = get_object_or_404(Categoria, pk=categoria_id)
+    
+    if request.method == 'POST':
+        form = CategoriaForm(request.POST, instance=categoria)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_categorias')  # Cambia 'listar_categorias' por el nombre real de tu vista de lista de categorías
+    else:
+        form = CategoriaForm(instance=categoria)
+    
+    context = {
+        'form': form,
+        'categoria': categoria,
+    }
+    
+    return render(request, 'modificar_categoria.html', context)
+
+
+
+def crear_subcategoria(request):
+    """
+    Crea una nueva subcategoría y la guarda en la base de datos.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de creación de subcategoría o redirige tras la creación exitosa.
+    """
+    if request.method == 'POST':
+        form = SubcategoriaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_subcategorias')  # Cambia 'listar_subcategorias' por el nombre real de tu vista de lista de subcategorías
+    else:
+        form = SubcategoriaForm()
+    return render(request, 'crear_subcategoria.html', {'form': form})
+
+
+
+def listar_subcategorias(request):
+    # Aquí coloca la lógica para obtener y listar las subcategorías desde la base de datos
+    subcategorias = Subcategoria.objects.all()
+    return render(request, 'listar_subcategorias.html', {'subcategorias': subcategorias})
+

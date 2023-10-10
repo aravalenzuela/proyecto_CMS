@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="es"> <!-- Cambiado a "es" porque parece que tu aplicación es en español -->
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Permiso</title>
+    <title>Crear Categoría</title>
     <style>
-        /* Estilos para mejorar la apariencia */
+        /* Estilos básicos para mejorar la apariencia */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -49,14 +49,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>Crear Permiso</h1>
-        <form method="post" aria-label="Formulario para crear permiso">
+        <h1>Crear Subcategoría</h1>
+        <form method="post" action="{% url 'crear_subcategoria' %}">
             {% csrf_token %}
             <label for="{{ form.nombre.id_for_label }}">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" required aria-required="true">
+            {{ form.nombre }}
             <label for="{{ form.descripcion.id_for_label }}">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" rows="4" required aria-required="true"></textarea>
-            <button type="submit">Guardar Permiso</button>
+            {{ form.descripcion }}
+            <button type="submit">Guardar</button>
         </form>
     </div>
 </body>

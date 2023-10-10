@@ -3,11 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listar Permisos</title>
+    <title>Listar Roles</title>
     <style>
         /* Estilos básicos para mejorar la apariencia */
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
         }
         table {
             border-collapse: collapse;
@@ -20,39 +34,45 @@
             padding: 8px;
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #e0f7fa; /* Celeste */
         }
         tr:nth-child(even) {
-            background-color: #f2f2f2;
+            background-color: #e0f7fa; /* Celeste */
+        }
+        /* Estilo para la columna "Permisos" */
+        td:nth-child(3) {
+            background-color: #faf9e0; /* Amarillo claro */
         }
     </style>
 </head>
 <body>
-    <h1>Listado de Roles</h1>
-    <table aria-label="Tabla de Roles">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Permisos</th>  <!-- Nueva columna para los permisos -->
-            </tr>
-        </thead>
-        <tbody>
-            {% for rol in roles %}
-            <tr>
-                <td>{{ rol.nombre }}</td>
-                <td>{{ rol.descripcion }}</td>
-                <td>
-                    <!-- Mostrando la lista de permisos para el rol -->
-                    <ul>
-                        {% for permiso in rol.permisos.all %}
-                            <li>{{ permiso.nombre }}</li>
-                        {% endfor %}
-                    </ul>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <h1>Listado de Roles</h1>
+        <table aria-label="Tabla de Roles">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Permisos</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rol in roles %}
+                <tr>
+                    <td>{{ rol.nombre }}</td>
+                    <td>{{ rol.descripcion }}</td>
+                    <td>
+                        <!-- Mostrando la lista de permisos para el rol -->
+                        <ul>
+                            {% for permiso in rol.permisos.all %}
+                                <li>{{ permiso.nombre }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

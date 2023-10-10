@@ -1,22 +1,77 @@
-
-
-{% block content %}
-    <h1>Listado de Plantillas</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Tipo</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for plantilla in plantillas %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Plantillas</title>
+    <style>
+        /* Estilos básicos para mejorar la apariencia */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #e0f7fa; /* Celeste */
+        }
+        tr:nth-child(even) {
+            background-color: #e0f7fa; /* Celeste */
+        }
+        /* Estilo para las celdas en la primera columna */
+        td:first-child {
+            background-color: #faf9e0; 
+        }
+        /* Estilo para las celdas en la segunda columna */
+        td:nth-child(2) {
+            background-color: #faf6e0; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Listado de Plantillas</h1>
+        <table aria-label="Tabla de Plantillas">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for plantilla in plantillas %}
                 <tr>
                     <td>{{ plantilla.nombre }}</td>
-                    <td>{{ plantilla.tipo }}</td>
+                    <td>{{ plantilla.tipo }}</td>               
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% endblock %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+
+
+
 

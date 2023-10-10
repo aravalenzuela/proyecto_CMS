@@ -29,6 +29,14 @@ urlpatterns = [
     # Ruta para asignar permisos a los roles ya creados.
     path('asignar_permiso/', views.asignar_permiso, name='asignar_permiso'),
 
+    # Ruta para modificar una categoría existente.
+    path('modificar_categoria/<int:categoria_id>/', views.modificar_categoria, name='modificar_categoria'),
+
+    # URL para crear una subcategoría
+    path('crear_subcategoria/', views.crear_subcategoria, name='crear_subcategoria'),
+
+    path('listar_subcategorias/', views.listar_subcategorias, name='listar_subcategorias'),
+
     # urls.py
     #path('rol/<int:rol_id>/', views.asignar_permisos_a_rol, name='asignar_permisos_a_rol'),
     #path('rol/nuevo/', views.asignar_permisos_a_rol, name='nuevo_rol'),

@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 
 from .models import Plantilla
 from .forms import SeleccionarPlantillaForm
+
+
 
 def listar_plantillas(request):
     plantillas = Plantilla.objects.all()
@@ -29,6 +31,8 @@ def seleccionar_plantilla(request):
         form = SeleccionarPlantillaForm()
 
     return render(request, 'seleccionar_plantilla.html', {'form': form})
+
+        
 
 
 from Gestion_Contenido.models import PlantillaUsuario
