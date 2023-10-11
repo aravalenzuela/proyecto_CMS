@@ -1,0 +1,22 @@
+
+<!-- seleccionar_plantilla_sitio.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Seleccionar Plantilla para el Sitio</title>
+</head>
+<body>
+    <h1>Seleccionar Plantilla para el Sitio</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="plantilla">Seleccione una plantilla:</label>
+        <select name="plantilla" id="plantilla">
+            {% for plantilla in plantillas %}
+                <option value="{{ plantilla.id }}">{{ plantilla.nombre }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Guardar Plantilla">
+    </form>
+</body>
+</html>

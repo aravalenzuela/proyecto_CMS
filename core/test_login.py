@@ -19,3 +19,7 @@ class Test_urls(SimpleTestCase):
   def test_logout(self):
     url = reverse('logout_custom') #HAce referencia al name de lo que esta en la urls.py
     self.assertEqual(resolve(url).func,logout)
+
+  def test_login2(self):
+    url = reverse('login')
+    self.assertEqual(resolve(url).func,login_view)

@@ -16,7 +16,7 @@
         <h1>Panel de Administración</h1>
         <nav>
             <ul>
-                <a href="http://localhost:8000/" class="back-button">Volver a Inicio</a>
+                <a href="{% url 'home' %}" class="back-button">Volver a Inicio</a>
                 <a href="{% url 'logout' %}">Cerrar Sesión</a>
             </ul>
         </nav>
@@ -26,7 +26,7 @@
         <h2>Usuarios</h2>
         <ul>
             <li><a href="{% url 'list_users' %}">Listar Usuarios</a></li>
-            <li><a href="{% url 'crear_usuario' %}">Crear Usuario</a></li>
+            <!--<li><a href="{% url 'crear_usuario' %}">Crear Usuario</a></li>-->
             <li><a href="#delete-user">Dar de Baja Usuario</a></li>
         </ul>
     </section>
@@ -55,6 +55,8 @@
     <section>
         <h2>Contenidos</h2>
         <ul>
+            <li><a href="{% url 'listar_plantillas' %}">Listar Plantillas</a></li>
+            <li><a href="{% url 'seleccionar_plantilla' %}">Selecccionar Plantilla</a></li>
             <!-- Añade aquí las opciones relacionadas con contenidos -->
         </ul>
     </section>
@@ -71,7 +73,7 @@
     <!-- Puedes continuar agregando más secciones según lo necesites -->
 
 </body>
-    <footer>
+    <!--<footer>
         <p>© 2023 - Mi CMS</p>
-    </footer>
+    </footer>-->
 </html>
