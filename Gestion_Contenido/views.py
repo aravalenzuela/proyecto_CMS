@@ -9,7 +9,7 @@ from .forms import SeleccionarPlantillaForm
 
 def listar_plantillas(request):
     plantillas = Plantilla.objects.all()
-    #print("Vista listar_plantillas se está ejecutando.")
+    print("Vista listar_plantillas se está ejecutando.", plantillas)
     return render(request, 'listar_plantillas.html', {'plantillas': plantillas})
 
 def seleccionar_plantilla(request):
@@ -19,20 +19,19 @@ def seleccionar_plantilla(request):
             plantilla_seleccionada = form.cleaned_data['plantilla']
             # Asocia la plantilla seleccionada al usuario actual
             usuario_actual = request.user
-            try:
-                plantilla_usuario = PlantillaUsuario.objects.get(usuario=usuario_actual)
-                plantilla_usuario.plantilla = plantilla_seleccionada
-                plantilla_usuario.save()
-            except PlantillaUsuario.DoesNotExist:
-                plantilla_usuario = PlantillaUsuario(usuario=usuario_actual, plantilla=plantilla_seleccionada)
-                plantilla_usuario.save()
+
+            # Crea una instancia de PlantillaUsuario para cada plantilla seleccionada
+            for plantilla in plantilla_seleccionada:#veeeer
+                plantilla_usuario, created = PlantillaUsuario.objects.get_or_create(
+                    usuario=usuario_actual
+                )
+                plantilla_usuario.plantillas.add(plantilla_seleccionada)
+
             return redirect('profile_view')
     else:
         form = SeleccionarPlantillaForm()
 
-    return render(request, 'seleccionar_plantilla.html', {'form': form})
-
-        
+    return render(request, 'seleccionar_plantilla.html', {'form': form, 'plantillas': Plantilla.objects.all()})
 
 
 from Gestion_Contenido.models import PlantillaUsuario

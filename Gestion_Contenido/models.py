@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Plantilla(models.Model):
     TIPO_CHOICES = (
         ('blog', 'Blog (Solo texto)'),
@@ -24,10 +25,14 @@ class PlantillaPredeterminada(models.Model):
     def __str__(self):
         return self.nombre
 
-    
 
 class PlantillaUsuario(models.Model):
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
-    # Aquí puedes agregar otros campos relacionados con las plantillas si es necesario
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    plantillas = models.ManyToManyField(Plantilla,default="")
 
+    def __str__(self):
+        return f"Plantillas de {self.usuario.username}"
 
+    
+
+    
