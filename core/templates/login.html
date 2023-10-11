@@ -1,0 +1,84 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="{% static 'login_styles.css' %}">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-logo">
+                <img src="{% static 'imagenes/logo.png' %}" alt="Logo de la empresa">
+            </div>
+            <form method="post" action="." onsubmit="return validateForm()">
+            {% csrf_token %}
+                <!--<div class="login-field">
+                    <label for="username">Usuario</label>
+                    <input type="text" id="username" name="username">
+                    <span class="error-message" id="username-error"></span>
+                </div>
+                <div class="login-field">
+                    <label for="password">Contraseña</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" class="password-input">
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">👁</button>
+                    </div>
+                    <span class="error-message" id="password-error"></span> --> <!-- Mueve esta línea aquí -->
+                </div>                       
+                <!--<div class="login-links">
+                    <a href="#">Olvidé mi contraseña</a>
+                </div>
+                <button type="submit">Iniciar sesión</button>-->
+            </form>
+            <div class="sso-option">
+                <a href="{% url "social:begin" "google-oauth2" %}" class="back-button">Iniciar Sesión</a>
+                <a href="http://localhost:8000/" class="back-button">Volver a Inicio</a>
+        </div>
+    </div>
+    <script>
+        //Metodo para observar la contrasena
+        function togglePasswordVisibility() {
+            const passwordInput = document.querySelector('.password-input');
+            const toggleButton = document.querySelector('.toggle-password');
+    
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleButton.textContent = '🙈'; // Cambia al icono que prefieras para "ocultar" la contraseña
+            } else {
+                passwordInput.type = "password";
+                toggleButton.textContent = '👁'; // Cambia al icono que prefieras para "mostrar" la contraseña
+            }
+        }
+        //Validacion de Login
+        function validateForm() {
+            let valid = true;
+
+            const username = document.getElementById("username");
+            const password = document.getElementById("password");
+            const usernameError = document.getElementById("username-error");
+            const passwordError = document.getElementById("password-error");
+
+            if (username.value.trim() === "") {
+                usernameError.textContent = "El campo usuario no puede estar vacío.";
+                valid = false;
+            } else {
+                usernameError.textContent = "";
+            }
+
+            if (password.value.trim() === "") {
+                passwordError.textContent = "El campo contraseña no puede estar vacío.";
+                valid = false;
+            } else {
+                passwordError.textContent = "";
+            }
+
+            return valid; // Si es true, el formulario se enviará. Si es false, no se enviará.
+        }
+    </script>    
+</body>
+</html>
+

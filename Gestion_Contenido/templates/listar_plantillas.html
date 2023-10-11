@@ -1,0 +1,22 @@
+
+
+{% block content %}
+    <h1>Listado de Plantillas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for plantilla in plantillas %}
+                <tr>
+                    <td>{{ plantilla.nombre }}</td>
+                    <td>{{ plantilla.tipo }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

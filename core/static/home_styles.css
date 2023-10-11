@@ -1,0 +1,220 @@
+/*Styles de Home - Base.html*/
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #4d5257; /* Fondo azul */
+    color: white;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    max-width: 50px;
+    margin-right: 20px;
+}
+
+.intro-section {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.features-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}
+
+.feature-box {
+    flex: 0 0 calc(33.3333% - 20px);
+    background-color: rgba(255, 255, 255, 0.1); /* Un poco transparente para un efecto más moderno */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+.cta-section {
+    text-align: center;
+}
+
+.btn-login {
+    background-color: #0056b3; /* Un tono más oscuro de azul */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-login:hover {
+    background-color: #004392; /* Un tono aún más oscuro cuando se pasa el cursor */
+}
+.logo {
+    max-width: 100px;
+    margin-right: 100px;
+    border-radius: 50%;   /* Esto hace que la imagen sea redonda */
+    overflow: hidden;     /* Asegura que cualquier parte de la imagen fuera del círculo esté oculta */
+    display: block;       /* Asegura que se aplique correctamente el border-radius */
+}
+.blog img {
+    max-width: 900px;  /* O un valor específico si prefieres */
+    height: auto;
+}
+/*SS0 Boton Style*/
+.sso-option {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.sso-option p {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+.sso-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    margin-right: 5px; /* espacio entre botones */
+    font-weight: bold;
+    outline: none; /* elimina el borde azul al hacer clic */
+}
+
+/* Estilos para el botón de Google */
+.sso-google {
+    background-color: #DB4437;
+}
+
+.sso-google:hover {
+    background-color: #C53929;
+}
+.login-container {
+    display: flex;
+    justify-content: center;  /* Centra los elementos horizontalmente */
+    align-items: center;      /* Centra los elementos verticalmente */
+    height: 100vh;            /* Altura total de la ventana del navegador */
+    background-color: #4d5257;
+}
+
+.login-logo {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.login-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.login-field {
+    margin-bottom: 10px;
+}
+
+.login-field label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.login-field input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-links {
+    margin-top: 10px;
+    text-align: right;
+}
+
+.sso-option {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.sso-option p {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+.sso-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    margin-right: 5px; /* espacio entre botones */
+    font-weight: bold;
+    outline: none; /* elimina el borde azul al hacer clic */
+}
+
+/* Estilos para el botón de Google */
+.sso-google {
+    background-color: #DB4437;
+}
+
+.sso-google:hover {
+    background-color: #C53929;
+}
+
+.password-container {
+    position: relative; /* Esto permite posicionar el botón respecto a este contenedor */
+    display: flex;
+    align-items: center;
+    width: 100%;  
+}
+
+.password-input {
+    width: 100%; /* Ahora ocupará todo el ancho disponible de .password-container */
+    padding-right: 40px; /* Dejamos espacio para el botón, puede ajustar este valor según tus necesidades */
+}
+.toggle-password {
+    position: absolute; /* Esto sacará el botón del flujo normal y permitirá posicionarse respecto a .password-container */
+    right: 10px; /* Posicionamos el botón a 10px del borde derecho */
+    top: 50%; /* Centramos el botón verticalmente */
+    transform: translateY(-50%); /* Ajustamos la posición vertical para que quede perfectamente centrado */
+    width: 30px;  
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+.error-message {
+    color: red;
+    font-size: 15px; /*Corresponde al tamano de la palabra */
+}
+/*Boton de retroceso*/
+.back-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF; /* Color de fondo azul */
+    color: #FFFFFF;            /* Texto blanco */
+    text-decoration: none;     /* Remueve el subrayado del enlace */
+    border-radius: 5px;        /* Esquinas redondeadas */
+    border: none;
+    cursor: pointer;           /* Cambia el cursor al pasar sobre el botón */
+    font-size: 16px;
+}
+
+/* Efecto al pasar el mouse sobre el botón */
+.back-button:hover {
+    background-color: #0056b3; /* Un azul un poco más oscuro */
+}
+
+
