@@ -1,0 +1,18 @@
+<!-- proyecto_CMS/Gestion_Contenido/templates/editar_plantilla.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Plantilla</title>
+</head>
+<body>
+    <h1>Editar Plantilla</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="contenido_editable">Contenido Editable:</label>
+        <textarea name="contenido_editable" id="contenido_editable">{{ contenido_editable }}</textarea>
+        <input type="submit" value="Guardar Cambios">
+    </form>
+</body>
+</html>
+
