@@ -15,7 +15,7 @@ from django.http import HttpResponse  # Asegúrate de importar HttpResponse
 
 
 from .models import Plantilla, ContenidoEditable
-from .forms import SeleccionarPlantillaForm, ContenidoEditableForm  # Asegúrate de importar los formularios necesarios
+from .forms import ContenidoEditableForm  # Asegúrate de importar los formularios necesarios
 
 from django.http import HttpResponseRedirect
 
@@ -38,29 +38,35 @@ from django.shortcuts import render, redirect
 
 def seleccionar_plantilla(request):
     configuracion_form = ConfiguracionSitioForm() 
-     
+    usuario_actual = request.user
+    
     if request.method == 'POST':
         form = SeleccionarPlantillaForm(request.POST)
         if form.is_valid():
             plantilla_seleccionada = form.cleaned_data['plantilla']
-            usuario_actual = request.user
 
-            # Resto del código...
+            # Guarda la plantilla seleccionada en la sesión
+            request.session['plantilla_seleccionada_id'] = plantilla_seleccionada.id
 
-            return render(request, 'seleccionar_plantilla.html', {
-                'form': form,
-                'configuracion_form': configuracion_form,
-                'plantilla_seleccionada': plantilla_seleccionada,  # Agrega esta línea
-            })
+            return HttpResponseRedirect('/seleccionar_plantilla')  # Redirige para actualizar la vista
     else:
         form = SeleccionarPlantillaForm()
-        
+
+    # Obtén la última plantilla seleccionada del usuario actual desde la sesión
+    plantilla_seleccionada_id = request.session.get('plantilla_seleccionada_id')
+    plantilla_seleccionada = None
+
+    if plantilla_seleccionada_id is not None:
+        try:
+            plantilla_seleccionada = Plantilla.objects.get(id=plantilla_seleccionada_id)
+        except Plantilla.DoesNotExist:
+            pass
 
     return render(request, 'seleccionar_plantilla.html', {
         'form': form,
         'configuracion_form': configuracion_form,
+        'plantilla_seleccionada': plantilla_seleccionada,
     })
-
 
 
 def profile_view(request):
@@ -85,37 +91,70 @@ def profile_view(request):
     return render(request, 'profile.html', context)
 
 
-
 def editar_plantilla(request):
-    # Obtener el usuario actual y su plantilla seleccionada
+    # Obtener el usuario actual y su plantilla seleccionada desde la sesión
     usuario_actual = request.user
-    plantilla_usuario, created = PlantillaUsuario.objects.get_or_create(usuario=usuario_actual)
-    plantilla_seleccionada = plantilla_usuario.plantillas.first()
+
+    # Obtener la plantilla seleccionada a través de la sesión
+    plantilla_seleccionada_id = request.session.get('plantilla_seleccionada_id')
+    plantilla_seleccionada = None
+
+    if plantilla_seleccionada_id is not None:
+        try:
+            plantilla_seleccionada = Plantilla.objects.get(id=plantilla_seleccionada_id)
+        except Plantilla.DoesNotExist:
+            pass
 
     if request.method == 'POST':
-        contenido_editable_form = ContenidoEditableForm(request.POST)
+        contenido_editable_form = ContenidoEditableForm(request.POST, instance=plantilla_seleccionada)
         if contenido_editable_form.is_valid():
             contenido_nuevo = contenido_editable_form.cleaned_data['contenido']
 
-            # Actualizar el contenido editable de la plantilla seleccionada
-            if plantilla_seleccionada:
-                plantilla_seleccionada.contenido_editable = contenido_nuevo
-                plantilla_seleccionada.save()
+            # Guardar los cambios en la base de datos
+            contenido_editable_form.save()
 
     else:
-        contenido_editable_form = ContenidoEditableForm()
+        contenido_editable_form = ContenidoEditableForm(instance=plantilla_seleccionada)
 
     contenido_editable = plantilla_seleccionada.contenido_editable if plantilla_seleccionada else ""
 
     # Obtener todos los campos de la plantilla para mostrarlos
     plantilla_data = {
-        'nombre': plantilla_seleccionada.nombre,
-        'tipo': plantilla_seleccionada.tipo,
-        'contenido': plantilla_seleccionada.contenido,
+        'nombre': plantilla_seleccionada.nombre if plantilla_seleccionada else "",
+        'tipo': plantilla_seleccionada.tipo if plantilla_seleccionada else "",
+        'contenido': plantilla_seleccionada.contenido if plantilla_seleccionada else "",
     }
 
     return render(request, 'editar_plantilla.html', {
         'form': contenido_editable_form,
         'contenido_editable': contenido_editable,
         'plantilla_seleccionada': plantilla_data,  # Mostrar los detalles de la plantilla
+    })
+
+def ver_plantilla(request):
+    # Obtener el usuario actual y su plantilla seleccionada desde la sesión
+    usuario_actual = request.user
+
+    # Obtener la plantilla seleccionada a través de la sesión
+    plantilla_seleccionada_id = request.session.get('plantilla_seleccionada_id')
+    plantilla_seleccionada = None
+
+    if plantilla_seleccionada_id is not None:
+        try:
+            plantilla_seleccionada = Plantilla.objects.get(id=plantilla_seleccionada_id)
+        except Plantilla.DoesNotExist:
+            pass
+
+    contenido_editable = plantilla_seleccionada.contenido_editable if plantilla_seleccionada else ""
+
+    # Obtener todos los campos de la plantilla para mostrarlos
+    plantilla_data = {
+        'nombre': plantilla_seleccionada.nombre if plantilla_seleccionada else "",
+        'tipo': plantilla_seleccionada.tipo if plantilla_seleccionada else "",
+        'contenido': plantilla_seleccionada.contenido if plantilla_seleccionada else "",
+    }
+
+    return render(request, 'ver_plantilla.html', {
+        'contenido_editable': contenido_editable,
+        'plantilla_seleccionada': plantilla_data,
     })

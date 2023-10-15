@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Editar Plantilla</title>
+    <title>Ver Plantilla</title>
     <style>
         /* Estilos para mejorar la apariencia */
         body {
@@ -22,19 +21,19 @@
             color: #333;
             font-size: 24px;
         }
-        form {
+        h2 {
+            color: #333;
+            font-size: 18px;
             margin-top: 20px;
         }
-        button[type="submit"] {
-            background-color: #007bff; /* Azul */
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
+        pre {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 10px;
             border-radius: 4px;
-            cursor: pointer;
         }
-        a.btn-primary {
-            background-color: #007bff;
+        a.btn-secondary {
+            background-color: #007bff; /* Cambiado a azul (#007bff) */
             color: #fff;
             padding: 10px 20px;
             text-decoration: none;
@@ -42,18 +41,18 @@
             display: inline-block;
             margin-top: 20px;
         }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Editar Plantilla</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Guardar Cambios</button>
-        </form>
-      
-        <a href="{% url 'ver_plantilla' %}" class="btn btn-primary">Ver plantilla</a>
+        <h1>Plantilla Seleccionada</h1>
+        <h2>Nombre de la plantilla: {{ plantilla_seleccionada.nombre }}</h2>
+        <h2>Tipo de la plantilla: {{ plantilla_seleccionada.tipo }}</h2>
+        <h2>Contenido de la plantilla:</h2>
+        <pre>{{ plantilla_seleccionada.contenido }}</pre>
+
+        <a href="{% url 'profile_view' %}" class="btn btn-secondary">Volver</a>
     </div>
 </body>
 </html>
