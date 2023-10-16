@@ -2,8 +2,10 @@
 from Gestion_Contenido.models import Plantilla
 
 # Crear instancias de plantillas
-plantilla4 = Plantilla(nombre="Plantilla 4", tipo="blog", contenido="Contenido de la plantilla 4", predeterminada=True)
-plantilla4.save()
+plantilla7 = Plantilla(nombre="Plantilla 7", tipo="blog", contenido="Contenido de la plantilla 7", predeterminada=True)
+plantilla7.save()
+plantilla8 = Plantilla(nombre="Plantilla 8", tipo="multimedia", contenido="Contenido de la plantilla 8", predeterminada=True)
+plantilla8.save()
 
 
 

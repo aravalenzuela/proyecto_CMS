@@ -15,7 +15,7 @@ class Plantilla(models.Model):
     titulo_sitio = models.CharField(max_length=100, default='Mi Sitio Web') # Campo para el título del sitio 
     logotipo = models.ImageField(upload_to='logos/', default='default_logo.png') # Campo para el logotipo del sitio
     contenido_editable = models.TextField(blank=True, null=True)
-
+    imagen = models.ImageField(upload_to='imagenes/', blank=True, null=True)
     
     def __str__(self):
         return self.nombre

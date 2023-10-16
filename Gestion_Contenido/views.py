@@ -15,7 +15,7 @@ from django.http import HttpResponse  # Asegúrate de importar HttpResponse
 
 
 from .models import Plantilla, ContenidoEditable
-from .forms import ContenidoEditableForm  # Asegúrate de importar los formularios necesarios
+from .forms import ContenidoEditableForm,PlantillaMultimediaForm  # Asegúrate de importar los formularios necesarios
 
 from django.http import HttpResponseRedirect
 
@@ -106,15 +106,16 @@ def editar_plantilla(request):
             pass
 
     if request.method == 'POST':
-        contenido_editable_form = ContenidoEditableForm(request.POST, instance=plantilla_seleccionada)
+        # Utiliza PlantillaMultimediaForm para permitir cargar imágenes
+        contenido_editable_form = PlantillaMultimediaForm(request.POST, request.FILES, instance=plantilla_seleccionada)
         if contenido_editable_form.is_valid():
             contenido_nuevo = contenido_editable_form.cleaned_data['contenido']
 
             # Guardar los cambios en la base de datos
             contenido_editable_form.save()
-
     else:
-        contenido_editable_form = ContenidoEditableForm(instance=plantilla_seleccionada)
+        # Utiliza PlantillaMultimediaForm para permitir cargar imágenes
+        contenido_editable_form = PlantillaMultimediaForm(instance=plantilla_seleccionada)
 
     contenido_editable = plantilla_seleccionada.contenido_editable if plantilla_seleccionada else ""
 
@@ -130,6 +131,7 @@ def editar_plantilla(request):
         'contenido_editable': contenido_editable,
         'plantilla_seleccionada': plantilla_data,  # Mostrar los detalles de la plantilla
     })
+
 
 def ver_plantilla(request):
     # Obtener el usuario actual y su plantilla seleccionada desde la sesión
@@ -157,4 +159,5 @@ def ver_plantilla(request):
     return render(request, 'ver_plantilla.html', {
         'contenido_editable': contenido_editable,
         'plantilla_seleccionada': plantilla_data,
+        'imagen': plantilla_seleccionada.imagen,  # Pasa la imagen a la plantilla
     })

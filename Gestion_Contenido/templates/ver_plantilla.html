@@ -41,7 +41,13 @@
             display: inline-block;
             margin-top: 20px;
         }
-
+        .imagen-plantilla {
+            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+            margin-top: 10px;
+            /* Agrega otros estilos personalizados según tus necesidades */
+        }
     </style>
 </head>
 <body>
@@ -51,7 +57,14 @@
         <h2>Tipo de la plantilla: {{ plantilla_seleccionada.tipo }}</h2>
         <h2>Contenido de la plantilla:</h2>
         <pre>{{ plantilla_seleccionada.contenido }}</pre>
+        <!-- Agrega esto a tu plantilla ver_plantilla.html para mostrar la imagen -->
+        {% if imagen %}
+            <!-- Establece un ancho máximo para la imagen, por ejemplo, 100% del ancho del contenedor -->
+            <img src="{{ imagen.url }}" alt="Imagen de la plantilla" style="max-width: 100%;">
 
+
+        {% endif %}
+        <div>
         <a href="{% url 'profile_view' %}" class="btn btn-secondary">Volver</a>
     </div>
 </body>
