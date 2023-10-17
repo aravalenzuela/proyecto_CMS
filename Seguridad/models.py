@@ -41,8 +41,13 @@ class Categoria(models.Model):
         :param2: el id del rol.
     """
 
-    nombre = models.CharField(max_length=100, unique=true)
-    descripcion = models.TextField(blank=true, null=true)
+    nombre = models.CharField(max_length=100, 
+                              unique=True, 
+                              error_messages= {'unique': "Ya existe una categoría con este nombre. Por favor, elige otro nombre."
+        }
+    )
+    
+    descripcion = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.nombre
