@@ -23,28 +23,52 @@
             color: #333;
             font-size: 24px;
         }
-        ul {
-            list-style: none;
-            padding: 0;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-        li {
-            margin-bottom: 10px;
+        th, td {
             border: 1px solid #ccc;
-            padding: 10px;
-            background-color: #fff;
+            padding: 8px;
+        }
+        th {
+            background-color: #e0f7fa; /* Celeste */
+        }
+        tr:nth-child(even) {
+            background-color: #e0f7fa; /* Celeste */
+        }
+        /* Estilo para las celdas en la primera columna */
+        td:first-child {
+            background-color: #faf9e0; /* Amarillo claro */
+        }
+        /* Estilo para las celdas en la segunda columna */
+        td:nth-child(2) {
+            background-color: #faf6e0; /* Amarillo claro */
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Listado de Subcategorías</h1>
-        <ul>
-            {% for subcategoria in subcategorias %}
-            <li>{{ subcategoria.nombre }} - {{ subcategoria.descripcion }}</li>
-            {% endfor %}
-        </ul>
-        <a href="{% url 'crear_subcategoria' %}">Crear Nueva Subcategoría</a>
+        <table aria-label="Tabla de Subcategorías">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Categoría Relacionada</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subcategoria in subcategorias %}
+                <tr>
+                    <td>{{ subcategoria.nombre }}</td>
+                    <td>{{ subcategoria.descripcion }}</td>
+                    <td>{{ subcategoria.categoria_relacionada.nombre }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </body>
 </html>
-

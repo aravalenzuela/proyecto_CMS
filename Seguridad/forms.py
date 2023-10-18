@@ -30,7 +30,7 @@ class RolForm(forms.ModelForm):
 class SubcategoriaForm(forms.ModelForm):
     class Meta:
         model = Subcategoria
-        fields = ['nombre', 'descripcion']  # Asegúrate de que estos campos coincidan con los de tu modelo
+        fields = ['nombre', 'descripcion', 'categoria_relacionada']  # Asegúrate de que estos campos coincidan con los de tu modelo
 
 
 

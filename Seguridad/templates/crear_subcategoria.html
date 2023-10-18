@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Categoría</title>
+    <title>Crear Subcategoría</title>
     <style>
         /* Estilos básicos para mejorar la apariencia */
         body {
@@ -37,6 +37,12 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
         button[type="submit"] {
             background-color: #007bff; /* Azul */
             color: #fff;
@@ -50,13 +56,35 @@
 <body>
     <div class="container">
         <h1>Crear Subcategoría</h1>
-        <form method="post" action="{% url 'crear_subcategoria' %}">
+        <form method="post">
             {% csrf_token %}
-            <label for="{{ form.nombre.id_for_label }}">Nombre:</label>
-            {{ form.nombre }}
-            <label for="{{ form.descripcion.id_for_label }}">Descripción:</label>
-            {{ form.descripcion }}
-            <button type="submit">Guardar</button>
+            
+            <!-- Agrega este bloque para mostrar mensajes de error -->
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            
+            <div style="margin-top: 20px;">
+                <label for="categoria_relacionada">Seleccionar una categoría:</label>
+                <select name="categoria_relacionada" id="categoria_relacionada">
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="margin-top: 20px;">
+                <label for="nombre">Nombre de la subcategoría:</label>
+                <input type="text" id="nombre" name="nombre">
+            </div>
+            <div style="margin-top: 20px;">
+                <label for="descripcion">Descripción:</label>
+                <textarea id="descripcion" name="descripcion"></textarea>
+            </div>
+            <button type="submit" style="margin-top: 20px;">Guardar</button>
         </form>
     </div>
 </body>

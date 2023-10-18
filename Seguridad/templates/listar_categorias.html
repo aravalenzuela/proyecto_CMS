@@ -57,6 +57,7 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Descripción</th>
+                    <th>Subcategorías</th> <!-- Agregamos una nueva columna -->
                 </tr>
             </thead>
             <tbody>
@@ -64,6 +65,13 @@
                 <tr>
                     <td>{{ categoria.nombre }}</td>
                     <td>{{ categoria.descripcion }}</td>
+                    <td>
+                        <ul> <!-- Usamos una lista no ordenada para las subcategorías -->
+                            {% for subcategoria in categoria.subcategoria_set.all %} <!-- Iteramos sobre las subcategorías asociadas a esta categoría -->
+                                <li>{{ subcategoria.nombre }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -71,5 +79,3 @@
     </div>
 </body>
 </html>
-
-    

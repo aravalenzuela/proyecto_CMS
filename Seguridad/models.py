@@ -51,8 +51,11 @@ class Categoria(models.Model):
 
 
 class Subcategoria(models.Model):
+    
     nombre = models.CharField(max_length=255)
     descripcion = models.TextField()
+    categoria_relacionada = models.ForeignKey(Categoria, on_delete=models.CASCADE, null=True)
+  # Asegúrate de que esta línea esté presente
 
     def __str__(self):
         return self.nombre

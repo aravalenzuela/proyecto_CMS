@@ -37,6 +37,8 @@ urlpatterns = [
 
     path('listar_subcategorias/', views.listar_subcategorias, name='listar_subcategorias'),
 
+    path('ver_subcategoria/<int:subcategoria_id>/', views.ver_subcategoria, name='ver_subcategoria'),
+
     # urls.py
     #path('rol/<int:rol_id>/', views.asignar_permisos_a_rol, name='asignar_permisos_a_rol'),
     #path('rol/nuevo/', views.asignar_permisos_a_rol, name='nuevo_rol'),

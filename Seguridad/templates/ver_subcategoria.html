@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Agrega tus etiquetas meta, títulos, estilos, etc. aquí -->
+</head>
+<body>
+    <h1>Subcategoría Creada</h1>
+    <p><strong>Categoría relacionada:</strong>
+    {% if subcategoria.categoria_relacionada %}
+        {{ subcategoria.categoria_relacionada.nombre }}
+    {% else %}
+        Categoría no especificada
+    {% endif %}
+    </p>
+    <p><strong>Subcategoría Creada:</strong> {{ subcategoria.nombre }}</p>
+    <p><strong>Descripción:</strong> {{ subcategoria.descripcion }}</p>
+    <!-- Puedes mostrar más detalles aquí si es necesario -->
+    <a href="{% url 'profile_view' %}" >Volver</a>
+</body>
+</html>
