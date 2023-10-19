@@ -37,6 +37,10 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+        .button-container {
+            
+            margin-top: 20px; /* Espacio superior para separar el botón del contenido */
+        }
         button[type="submit"] {
             background-color: #007bff; /* Azul */
             color: #fff;
@@ -65,8 +69,10 @@
             <label for="{{ form.descripcion.id_for_label }}">Descripción:</label>
             {{ form.descripcion }}
             <button type="submit">Guardar</button>
+            <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver</a></button>
         </form>
     </div>
+
 </body>
 </html>
 

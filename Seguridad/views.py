@@ -12,6 +12,8 @@ from .models import Categoria, Rol # Importación relativa
 from .models import Subcategoria
 
 from .forms import SubcategoriaForm  # Asegúrate de importar el formulario adecuado
+
+from django.urls import reverse
 #from .models import Plantilla
 #from .forms import SeleccionarPlantillaForm
 
@@ -267,3 +269,14 @@ def ver_subcategoria(request, subcategoria_id):
     return render(request, 'ver_subcategoria.html', {'subcategoria': subcategoria})
 
 
+def modificar_subcategoria(request, subcategoria_id):
+    subcategoria = Subcategoria.objects.get(pk=subcategoria_id)
+
+    if request.method == 'POST':
+        # Procesar el formulario de modificación y guardar los cambios en la base de datos
+        subcategoria.nombre = request.POST['nombre']
+        subcategoria.descripcion = request.POST['descripcion']
+        subcategoria.save()
+        return redirect(reverse('listar_subcategorias'))  # Puedes redirigir a donde desees
+
+    return render(request, 'modificar_subcategoria.html', {'subcategoria': subcategoria})
