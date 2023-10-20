@@ -80,6 +80,7 @@ def test_listar_permisos(client):
     assert 'Permiso 2' in str(response.content)
 
 
+<<<<<<< HEAD
 
 # Prueba la creación de una subcategoría
 @pytest.mark.django_db
@@ -178,3 +179,5 @@ class SubcategoriaListViewTest(TestCase):
         response = self.client.get(reverse('listar_subcategorias'))
         self.assertContains(response, 'Subcategoría 1')
         self.assertContains(response, 'Subcategoría 2')
+=======
+>>>>>>> origin/dev_nacho
