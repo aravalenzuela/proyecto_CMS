@@ -36,12 +36,17 @@ class Categoria(models.Model):
     """
         Funcion para crear una categoría a un usuario del sistema
         
-        :param1: el usuario al que sera aignado el permiso 
+        :param1: el usuario al que sera asignado el permiso 
         :param2: el id del rol.
     """
 
-    nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
+    nombre = models.CharField(max_length=100, 
+                              unique=True, 
+                              error_messages= {'unique': "Ya existe una categoría con este nombre. Por favor, elige otro nombre."
+        }
+    )
+    
+    descripcion = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.nombre
@@ -61,6 +66,21 @@ class Contenido(models.Model):
 
     def __str__(self):
         return self.titulo
+
+
+
+
+class Subcategoria(models.Model):
+    
+    nombre = models.CharField(max_length=255)
+    descripcion = models.TextField()
+    categoria_relacionada = models.ForeignKey(Categoria, on_delete=models.CASCADE, null=True)
+  # Asegúrate de que esta línea esté presente
+
+    def __str__(self):
+        return self.nombre
+
+
 
 
 #class Plantilla(models.Model):

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"> <!-- Cambiado a "es" porque tu aplicación parece ser en español -->
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,20 @@
         /* Estilos básicos para mejorar la apariencia */
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
         }
         table {
             border-collapse: collapse;
@@ -20,33 +34,34 @@
             padding: 8px;
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #e0f7fa; /* Celeste */
         }
         tr:nth-child(even) {
-            background-color: #f2f2f2;
+            background-color: #e0f7fa; /* Celeste */
         }
     </style>
 </head>
 <body>
-    <h1>Listar Permisos</h1>
-    <table aria-label="Tabla de permisos">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <!-- Puedes añadir más cabeceras de columna aquí -->
-            </tr>
-        </thead>
-        <tbody>
-            {% for permiso in permisos %}
-            <tr>
-                <td>{{ permiso.nombre }}</td>
-                <td>{{ permiso.descripcion }}</td>
-                <!-- Puedes añadir más celdas aquí -->
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <h1>Listado de Permisos</h1>
+        <table aria-label="Tabla de Permisos">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <!-- Puedes añadir más cabeceras de columna aquí -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for permiso in permisos %}
+                <tr>
+                    <td>{{ permiso.nombre }}</td>
+                    <td>{{ permiso.descripcion }}</td>
+                    <!-- Puedes añadir más celdas aquí -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
-

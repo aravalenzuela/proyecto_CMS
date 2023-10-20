@@ -4,6 +4,7 @@ from django.test import TestCase
 
 from django.urls import reverse
 from .models import Plantilla
+from django.contrib.auth.models import User
 
 class ListarPlantillasTest(TestCase):
     def test_listar_plantillas(self):
@@ -30,4 +31,5 @@ class SeleccionarPlantillaTest(TestCase):
         # Asegurar  que esta vista funcione correctamente para seleccionar plantillas
         #  que los datos se guarden correctamente en la base de datos
         pass  # Reemplazar esto con el código de prueba
+
 

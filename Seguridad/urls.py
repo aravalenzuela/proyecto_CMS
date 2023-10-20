@@ -32,6 +32,17 @@ urlpatterns = [
     path('contenidos/', views.listar_contenidos, name='lista_contenidos'),
 
     path('contenido/<int:pk>/', views.contenido_detalle, name='contenido_detalle'),
+    # Ruta para modificar una categoría existente.
+    path('modificar_categoria/<int:categoria_id>/', views.modificar_categoria, name='modificar_categoria'),
+
+    # URL para crear una subcategoría
+    path('crear_subcategoria/', views.crear_subcategoria, name='crear_subcategoria'),
+
+    path('listar_subcategorias/', views.listar_subcategorias, name='listar_subcategorias'),
+
+    path('ver_subcategoria/<int:subcategoria_id>/', views.ver_subcategoria, name='ver_subcategoria'),
+
+    path('Modificar_Subcategoria/<int:subcategoria_id>/', views.modificar_subcategoria, name='modificar_subcategoria'),
 
     # urls.py
     #path('rol/<int:rol_id>/', views.asignar_permisos_a_rol, name='asignar_permisos_a_rol'),
