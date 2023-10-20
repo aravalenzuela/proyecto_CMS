@@ -7,11 +7,11 @@ class Plantilla(models.Model):
         ('blog', 'Blog (Solo texto)'),
         ('multimedia', 'Multimedia (Texto + Multimedia)'),
     )
-    nombre = models.CharField(max_length=100)
-    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES)
     contenido = models.TextField(default='Texto predeterminado')
+    nombre = models.CharField(max_length=100)
+    tipo = models.CharField(max_length=50, choices=TIPO_CHOICES)
     predeterminada = models.BooleanField(default=False)
-    color_principal = models.CharField(max_length=20, default='color_preset')# Campo para el color principal
+    color_principal = models.CharField(max_length=50, default='color_preset')# Campo para el color principal
     titulo_sitio = models.CharField(max_length=100, default='Mi Sitio Web') # Campo para el título del sitio 
     logotipo = models.ImageField(upload_to='logos/', default='default_logo.png') # Campo para el logotipo del sitio
     contenido_editable = models.TextField(blank=True, null=True)
