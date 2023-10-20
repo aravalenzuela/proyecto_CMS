@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Plantillas</title>
+    <title>Listar Subcategorías</title>
     <style>
         /* Estilos básicos para mejorar la apariencia */
         body {
@@ -24,13 +24,12 @@
             font-size: 24px;
         }
         table {
-            border-collapse: collapse;
             width: 100%;
+            border-collapse: collapse;
             margin-top: 20px;
         }
         th, td {
             border: 1px solid #ccc;
-            text-align: left;
             padding: 8px;
         }
         th {
@@ -41,17 +40,17 @@
         }
         /* Estilo para las celdas en la primera columna */
         td:first-child {
-            background-color: #faf9e0; 
+            background-color: #faf9e0; /* Amarillo claro */
         }
         /* Estilo para las celdas en la segunda columna */
         td:nth-child(2) {
-            background-color: #faf6e0; 
+            background-color: #faf6e0; /* Amarillo claro */
         }
         .button-container {
             text-align: center; /* Centra el contenido horizontalmente */
             margin-top: 20px; /* Espacio superior para separar el botón del contenido */
         }
-        .button {
+        button[type="submit"] {
             background-color: #007bff; /* Azul */
             color: #fff;
             padding: 10px 20px;
@@ -63,19 +62,23 @@
 </head>
 <body>
     <div class="container">
-        <h1>Listado de Plantillas</h1>
-        <table aria-label="Tabla de Plantillas">
+        <h1>Listar y Modificar Subcategorías</h1>
+        <table aria-label="Tabla de Subcategorías">
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Tipo</th>
+                    <th>Descripción</th>
+                    <th>Categoría Relacionada</th>
+                    <th>Modificar Subcategoria</th>
                 </tr>
             </thead>
             <tbody>
-                {% for plantilla in plantillas %}
+                {% for subcategoria in subcategorias %}
                 <tr>
-                    <td>{{ plantilla.nombre }}</td>
-                    <td>{{ plantilla.tipo }}</td>               
+                    <td>{{ subcategoria.nombre }}</td>
+                    <td>{{ subcategoria.descripcion }}</td>
+                    <td>{{ subcategoria.categoria_relacionada.nombre }}</td>
+                    <td><a href="{% url 'modificar_subcategoria' subcategoria.id %}">Modificar Subcategoría</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -84,6 +87,5 @@
     <div class="button-container">
         <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver</a></button>
     </div>
-    
 </body>
 </html>

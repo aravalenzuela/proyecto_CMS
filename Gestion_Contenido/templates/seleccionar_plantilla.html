@@ -1,22 +1,74 @@
-
-<!-- seleccionar_plantilla_sitio.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Seleccionar Plantilla para el Sitio</title>
+    <style>
+        /* Estilos para mejorar la apariencia */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        select, input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Seleccionar Plantilla para el Sitio</h1>
-    <form method="post">
-        {% csrf_token %}
-        <label for="plantilla">Seleccione una plantilla:</label>
-        <select name="plantilla" id="plantilla">
-            {% for plantilla in plantillas %}
-                <option value="{{ plantilla.id }}">{{ plantilla.nombre }}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Guardar Plantilla">
-    </form>
+    <div class="container">
+        <h1>Seleccionar Plantilla para el Sitio</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="plantilla">Seleccione una plantilla:</label>
+            {{ form.plantilla }}
+            <label for="color_principal">Color principal:</label>
+            {{ configuracion_form.color_principal }}
+            <label for="titulo_sitio">Título del sitio:</label>
+            {{ configuracion_form.titulo_sitio }}
+            <label for="logotipo">Logotipo:</label>
+            {{ configuracion_form.logotipo }}
+            <input type="submit" name="action" value="Seleccionar esta plantilla">
+        </form>
+        {% if plantilla_seleccionada %}
+        <h2>Plantilla Seleccionada</h2>
+        <p>Nombre de la plantilla: {{ plantilla_seleccionada.nombre }}</p>
+        <p>Tipo de la plantilla: {{ plantilla_seleccionada.tipo }}</p>
+        <p>Contenido de la plantilla:</p>
+        <pre>{{ plantilla_seleccionada.contenido }}</pre>
+        <a href="{% url 'editar_plantilla' %}">Editar Contenido</a>
+        {% endif %}
+    </div>
 </body>
 </html>

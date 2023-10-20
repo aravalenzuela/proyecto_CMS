@@ -9,6 +9,11 @@ from .models import Categoria  # Importación relativa
 from .forms import CategoriaForm, RolForm
 from .models import Categoria, Rol # Importación relativa
 
+from .models import Subcategoria
+
+from .forms import SubcategoriaForm  # Asegúrate de importar el formulario adecuado
+
+from django.urls import reverse
 #from .models import Plantilla
 #from .forms import SeleccionarPlantillaForm
 
@@ -128,17 +133,19 @@ def crear_categoria(request):
     Returns:
         HttpResponse: Renderiza la página de creación de categoría o redirige tras la creación exitosa.
     """
-    print("Método de la petición:", request.method)
-    print("La función crear_categoria se ha llamado")
     if request.method == 'POST':
-        print("Detectada petición POST")
         form = CategoriaForm(request.POST)
         if form.is_valid():
-            print("Formulario válido")
-            form.save()
-            return redirect('profile_view')  # Asegúrate de que esta vista existe y está definida en tu urls.py
+            nombre = form.cleaned_data['nombre']
+            descripcion = form.cleaned_data['descripcion']
+            
+            # Verificar si la categoría ya existe
+            if Categoria.objects.filter(nombre=nombre).exists():
+                messages.error(request, 'Esta categoría ya existe. Por favor cree una nueva')
+            else:
+                form.save()
+                return redirect('profile_view')
     else:
-        print("Petición no es POST, se asume GET y se muestra formulario")
         form = CategoriaForm()
     return render(request, 'crear_categoria.html', {'form': form})
 
@@ -191,3 +198,85 @@ def listar_roles(request):
     """
     roles = Rol.objects.all().prefetch_related('permisos')
     return render(request, 'listar_roles.html', {'roles': roles})
+
+
+
+#Mati
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def modificar_categoria(request, categoria_id):
+    categoria = get_object_or_404(Categoria, pk=categoria_id)
+    
+    if request.method == 'POST':
+        form = CategoriaForm(request.POST, instance=categoria)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_categorias')  # Cambia 'listar_categorias' por el nombre real de tu vista de lista de categorías
+    else:
+        form = CategoriaForm(instance=categoria)
+    
+    context = {
+        'form': form,
+        'categoria': categoria,
+    }
+    
+    return render(request, 'modificar_categoria.html', context)
+
+def crear_subcategoria(request):
+    if request.method == 'POST':
+        form = SubcategoriaForm(request.POST)
+        if form.is_valid():
+            categoria_id = request.POST.get('categoria_relacionada')
+            subcategoria_existente_id = request.POST.get('subcategoria_existente')
+            nombre = form.cleaned_data.get('nombre')
+
+            # Verificar si la subcategoría ya existe en cualquier categoría
+            if Subcategoria.objects.filter(nombre=nombre).exists():
+                messages.error(request, 'Esta subcategoría ya existe. Por favor, cree una nueva.')
+            else:
+                if categoria_id and subcategoria_existente_id:
+                    # Asociar subcategoría existente con la categoría seleccionada
+                    categoria = Categoria.objects.get(pk=categoria_id)
+                    subcategoria_existente = Subcategoria.objects.get(pk=subcategoria_existente_id)
+                    subcategoria_existente.categoria_relacionada = categoria
+                    subcategoria_existente.save()
+                else:
+                    # Crear una nueva subcategoría
+                    subcategoria = form.save(commit=False)
+                    subcategoria.categoria_relacionada = Categoria.objects.get(pk=categoria_id)
+                    subcategoria.save()
+                    return redirect('ver_subcategoria', subcategoria_id=subcategoria.id)
+
+    else:
+        form = SubcategoriaForm()
+
+    categorias = Categoria.objects.all()
+    subcategorias = Subcategoria.objects.all()
+
+    return render(request, 'crear_subcategoria.html', {'form': form, 'categorias': categorias, 'subcategorias': subcategorias})
+
+
+
+def listar_subcategorias(request):
+    # Aquí coloca la lógica para obtener y listar las subcategorías desde la base de datos
+    subcategorias = Subcategoria.objects.all()
+    return render(request, 'listar_subcategorias.html', {'subcategorias': subcategorias})
+
+
+def ver_subcategoria(request, subcategoria_id):
+    subcategoria = get_object_or_404(Subcategoria, pk=subcategoria_id)
+    return render(request, 'ver_subcategoria.html', {'subcategoria': subcategoria})
+
+
+def modificar_subcategoria(request, subcategoria_id):
+    subcategoria = Subcategoria.objects.get(pk=subcategoria_id)
+
+    if request.method == 'POST':
+        # Procesar el formulario de modificación y guardar los cambios en la base de datos
+        subcategoria.nombre = request.POST['nombre']
+        subcategoria.descripcion = request.POST['descripcion']
+        subcategoria.save()
+        return redirect(reverse('listar_subcategorias'))  # Puedes redirigir a donde desees
+
+    return render(request, 'modificar_subcategoria.html', {'subcategoria': subcategoria})

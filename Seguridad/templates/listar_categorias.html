@@ -1,8 +1,96 @@
-{% block content %}
-    <h1>Listado de Categorías</h1>
-    <ul>
-        {% for categoria in categorias %}
-            <li>{{ categoria.nombre }} - {{ categoria.descripcion }}</li>
-        {% endfor %}
-    </ul>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Categorías</title>
+    <style>
+        /* Estilos básicos para mejorar la apariencia */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #e0f7fa; /* Celeste */
+        }
+        tr:nth-child(even) {
+            background-color: #e0f7fa; /* Celeste */
+        }
+        /* Estilo para las celdas en la primera columna */
+        td:first-child {
+            background-color: #faf9e0; /* Amarillo claro */
+        }
+        /* Estilo para las celdas en la segunda columna */
+        td:nth-child(2) {
+            background-color: #faf6e0; /* Amarillo claro */
+        }
+        .button-container {
+            text-align: center; /* Centra el contenido horizontalmente */
+            margin-top: 20px; /* Espacio superior para separar el botón del contenido */
+        }
+        button[type="submit"] {
+            background-color: #007bff; /* Azul */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Listado de Categorías</h1>
+        <table aria-label="Tabla de Categorías">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Subcategorías</th> <!-- Agregamos una nueva columna -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for categoria in categorias %}
+                <tr>
+                    <td>{{ categoria.nombre }}</td>
+                    <td>{{ categoria.descripcion }}</td>
+                    <td>
+                        <ul> <!-- Usamos una lista no ordenada para las subcategorías -->
+                            {% for subcategoria in categoria.subcategoria_set.all %} <!-- Iteramos sobre las subcategorías asociadas a esta categoría -->
+                                <li>{{ subcategoria.nombre }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="button-container">
+        <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver</a></button>
+    </div>
+</body>
+</html>

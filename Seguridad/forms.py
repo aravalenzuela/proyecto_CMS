@@ -1,6 +1,9 @@
 from django import forms
 from .models import Categoria, Rol, Permiso
 
+
+from .models import Subcategoria
+
 #from .models import Plantilla
 
 class AsignarPermisoForm(forms.Form):
@@ -21,6 +24,14 @@ class RolForm(forms.ModelForm):
     class Meta:
         model = Rol
         fields = ['nombre', 'descripcion', 'permisos']
+
+
+
+class SubcategoriaForm(forms.ModelForm):
+    class Meta:
+        model = Subcategoria
+        fields = ['nombre', 'descripcion', 'categoria_relacionada']  # Asegúrate de que estos campos coincidan con los de tu modelo
+
 
 
 #class SeleccionarPlantillaForm(forms.Form):

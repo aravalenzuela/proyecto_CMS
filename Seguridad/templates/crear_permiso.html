@@ -5,35 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Permiso</title>
     <style>
-        /* Aquí puedes agregar algún estilo CSS para mejorar la apariencia */
+        /* Estilos para mejorar la apariencia */
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
         }
         form {
-            margin: 20px;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            margin-top: 20px;
         }
-        label, input, textarea, button {
+        label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button[type="submit"] {
+            background-color: #007bff; /* Azul */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>Crear Permiso</h1>
-    <form method="post" aria-label="Formulario para crear permiso">
-        {% csrf_token %}
-        <div>
-            <label for="nombre">Nombre:</label>
+    <div class="container">
+        <h1>Crear Permiso</h1>
+        <form method="post" aria-label="Formulario para crear permiso">
+            {% csrf_token %}
+            <label for="{{ form.nombre.id_for_label }}">Nombre:</label>
             <input type="text" id="nombre" name="nombre" required aria-required="true">
-        </div>
-        <div>
-            <label for="descripcion">Descripción:</label>
+            <label for="{{ form.descripcion.id_for_label }}">Descripción:</label>
             <textarea id="descripcion" name="descripcion" rows="4" required aria-required="true"></textarea>
-        </div>
-        <button type="submit">Guardar Permiso</button>
-    </form>
+            <button type="submit">Guardar Permiso</button>
+        </form>
+    </div>
 </body>
 </html>
