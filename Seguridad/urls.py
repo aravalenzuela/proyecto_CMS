@@ -44,7 +44,7 @@ urlpatterns = [
 
     path('Modificar_Subcategoria/<int:subcategoria_id>/', views.modificar_subcategoria, name='modificar_subcategoria'),
 
-    path('asignar_rol/<int:user_id>/', views.asignar_rol_a_usuario, name='asignar_rol_a_usuario'),
+    path('asignar_rol/<int:usuario_id>/', views.asignar_rol_a_usuario, name='asignar_rol_a_usuario'),
 
     path('vista_lector/', views.vista_lector, name="vista_lector")
 ]

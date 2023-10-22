@@ -1,45 +1,65 @@
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Permiso, Usuario , Categoria, Rol , Contenido, TipoDeContenido
-from django.contrib.auth.models import User
+from .models import Permiso, Usuario , Categoria, Rol , Contenido, TipoDeContenido, Subcategoria
 from django.contrib import messages
-from .forms import AsignarPermisoForm
-from .forms import CategoriaForm
-from .models import Categoria  # Importación relativa
-from .forms import CategoriaForm, RolForm, SubcategoriaForm, AsignarRolForm
-from .models import Categoria, Rol, Subcategoria # Importación relativa
+from .forms import CategoriaForm, RolForm, SubcategoriaForm, AsignarRolForm, AsignarPermisoForm
 from django.urls import reverse
 from core.views import get_gravatar_url
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
 
 
 #Codigos para la implementacion de los requerimientos
-def asignar_rol_a_usuario(request, user_id):
+@login_required
+def asignar_rol_a_usuario(request, usuario_id):
     print("Entrando a la función asignar_rol_a_usuario")
-    usuario = get_object_or_404(User, id=user_id)
-    print(f"Usuario obtenido: {usuario.username}")
+    
+    # Obtén la instancia del modelo Usuario basado en el usuario_id.
+    seguridad_usuario = get_object_or_404(Usuario, user_id=usuario_id)
+    print(f"Usuario obtenido: {seguridad_usuario.user.username}")
 
     if request.method == 'POST':
         print("Método POST detectado")
-        form = AsignarRolForm(request.POST, instance=usuario)
+        
+        # Ajusta el formulario para que use la instancia correcta
+        form = AsignarRolForm(request.POST, instance=seguridad_usuario)
+        
         if form.is_valid():
             print("Formulario válido")
-            usuario = form.save()
-            print(f"Rol asignado al usuario {usuario.username}: {usuario.rol.nombre}")
-            messages.success(request, 'Roles asignados con exito.')
+            
+            # Asegúrate de que estás obteniendo una instancia de Rol, no solo el ID.
+            rol_seleccionado = form.cleaned_data['rol']
+            seguridad_usuario.rol = rol_seleccionado
+            
+            print(f"Rol asignado al usuario: {seguridad_usuario.rol.nombre}")
+            seguridad_usuario.save()
+            
+            # Recargar el usuario después de guardar el formulario
+            # (Realmente no es necesario, puedes trabajar directamente con seguridad_usuario)
+            
+            if seguridad_usuario.rol:
+                print(f"Rol asignado al usuario {seguridad_usuario.user.username}: {seguridad_usuario.rol.nombre}")
+            else:
+                print(f"Rol asignado al usuario {seguridad_usuario.user.username}: Sin Rol")
+            
+            messages.success(request, 'Roles asignados con éxito.')
             return redirect('profile_view')
         else:
             print(form.errors)
-            messages.success(request, 'Ha ocurrido un error al asignar los roles.')
+            messages.error(request, 'Ha ocurrido un error al asignar los roles.') # Usar messages.error para errores.
             print("Formulario no válido")
     else:
-        form = AsignarRolForm(instance=usuario)
+        form = AsignarRolForm(instance=seguridad_usuario)
 
     context = {
         'form': form,
-        'usuario': usuario
+        'usuario': seguridad_usuario.user  # Usar el usuario de la instancia de Usuario (seguridad_usuario)
     }
     return render(request, 'asignar_rol.html', context)
+
+
+
 
 
 def crear_permiso(request):
@@ -243,11 +263,6 @@ def listar_contenidos(request):
 def contenido_detalle(request, pk):
     contenido = get_object_or_404(Contenido, pk=pk)
     return render(request, 'contenido_detalle.html', {'contenido': contenido})
-
-
-
-#Mati
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def modificar_categoria(request, categoria_id):

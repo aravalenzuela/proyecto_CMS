@@ -6,9 +6,6 @@ class AsignarRolForm(forms.ModelForm):
     class Meta:
         model = Usuario
         fields = ['rol']
-
-     # Opcional: Si quieres listar a todos los usuarios
-    user = forms.ModelChoiceField(queryset=User.objects.all())
         
 class AsignarPermisoForm(forms.Form):
     permiso = forms.ModelChoiceField(queryset=Permiso.objects.all())
@@ -36,7 +33,3 @@ class SubcategoriaForm(forms.ModelForm):
         model = Subcategoria
         fields = ['nombre', 'descripcion', 'categoria_relacionada']  # Asegúrate de que estos campos coincidan con los de tu modelo
 
-
-
-#class SeleccionarPlantillaForm(forms.Form):
-#    plantilla = forms.ModelChoiceField(queryset=Plantilla.objects.all())
