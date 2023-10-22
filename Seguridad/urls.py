@@ -44,8 +44,8 @@ urlpatterns = [
 
     path('Modificar_Subcategoria/<int:subcategoria_id>/', views.modificar_subcategoria, name='modificar_subcategoria'),
 
-    # urls.py
-    #path('rol/<int:rol_id>/', views.asignar_permisos_a_rol, name='asignar_permisos_a_rol'),
-    #path('rol/nuevo/', views.asignar_permisos_a_rol, name='nuevo_rol'),
+    path('asignar_rol/<int:user_id>/', views.asignar_rol_a_usuario, name='asignar_rol_a_usuario'),
 
+    path('vista_lector/', views.vista_lector, name="vista_lector")
 ]
+

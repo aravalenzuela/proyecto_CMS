@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Permiso, Usuario , Categoria, Rol , Contenido, TipoDeContenido
 from django.contrib.auth.models import User
@@ -6,20 +6,42 @@ from django.contrib import messages
 from .forms import AsignarPermisoForm
 from .forms import CategoriaForm
 from .models import Categoria  # Importación relativa
-from .forms import CategoriaForm, RolForm
-from .models import Categoria, Rol # Importación relativa
-
-from .models import Subcategoria
-
-from .forms import SubcategoriaForm  # Asegúrate de importar el formulario adecuado
-
+from .forms import CategoriaForm, RolForm, SubcategoriaForm, AsignarRolForm
+from .models import Categoria, Rol, Subcategoria # Importación relativa
 from django.urls import reverse
-#from .models import Plantilla
-#from .forms import SeleccionarPlantillaForm
-
+from core.views import get_gravatar_url
+from django.contrib.auth.models import User
 
 
 #Codigos para la implementacion de los requerimientos
+def asignar_rol_a_usuario(request, user_id):
+    print("Entrando a la función asignar_rol_a_usuario")
+    usuario = get_object_or_404(User, id=user_id)
+    print(f"Usuario obtenido: {usuario.username}")
+
+    if request.method == 'POST':
+        print("Método POST detectado")
+        form = AsignarRolForm(request.POST, instance=usuario)
+        if form.is_valid():
+            print("Formulario válido")
+            usuario = form.save()
+            print(f"Rol asignado al usuario {usuario.username}: {usuario.rol.nombre}")
+            messages.success(request, 'Roles asignados con exito.')
+            return redirect('profile_view')
+        else:
+            print(form.errors)
+            messages.success(request, 'Ha ocurrido un error al asignar los roles.')
+            print("Formulario no válido")
+    else:
+        form = AsignarRolForm(instance=usuario)
+
+    context = {
+        'form': form,
+        'usuario': usuario
+    }
+    return render(request, 'asignar_rol.html', context)
+
+
 def crear_permiso(request):
     """
     Crea un nuevo permiso y lo guarda en la base de datos.
@@ -62,6 +84,21 @@ def list_users(request):
         HttpResponse: Renderiza la página que muestra la lista de usuarios.
     """
     users = User.objects.all()
+
+    # Asigna la URL Gravatar a cada usuario
+    for user in users:
+        user.gravatar_url = get_gravatar_url(user.email)
+        
+        # Accediendo a los campos de 'Usuario' desde el modelo 'User'
+        if hasattr(user, 'usuario'):
+            user_role = user.usuario.rol
+        else:
+            user_role = None  # o cualquier otro valor por defecto
+
+        user.role_name = user_role.nombre if user_role else "Sin Rol Asignado"
+        print(f"Roles for {user.username}: {user.role_name}")
+
+    # ... Resto del código de la función
     return render(request, 'list_users.html', {'users': users})
 
 def crear_usuario(request):
@@ -288,3 +325,13 @@ def modificar_subcategoria(request, subcategoria_id):
         return redirect(reverse('listar_subcategorias'))  # Puedes redirigir a donde desees
 
     return render(request, 'modificar_subcategoria.html', {'subcategoria': subcategoria})
+
+def vista_lector(request):
+    # Asegurarse de que el usuario tiene el rol de lector
+    if not request.user.usuario.rol.nombre == 'lector':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página")
+
+    # Obtener todos los posts
+    posts = Contenido.objects.all()  # Asumiendo que tienes un modelo llamado Contenido para los posts
+
+    return render(request, 'vista_lector.html', {'posts': posts})

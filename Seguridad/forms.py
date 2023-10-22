@@ -1,11 +1,15 @@
 from django import forms
-from .models import Categoria, Rol, Permiso
+from .models import Categoria, Rol, Permiso, Subcategoria, Usuario
+from django.contrib.auth.models import User
 
+class AsignarRolForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = ['rol']
 
-from .models import Subcategoria
-
-#from .models import Plantilla
-
+     # Opcional: Si quieres listar a todos los usuarios
+    user = forms.ModelChoiceField(queryset=User.objects.all())
+        
 class AsignarPermisoForm(forms.Form):
     permiso = forms.ModelChoiceField(queryset=Permiso.objects.all())
 

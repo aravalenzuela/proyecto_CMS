@@ -1,0 +1,10 @@
+{% block content %}
+<h2>Asignar Rol a {{ usuario.user.nombre }}</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Asignar Rol</button>
+</form>
+<a href="{% url 'profile_view' %}">Volver al perfil</a>
+
+{% endblock %}
