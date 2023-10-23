@@ -1,11 +1,12 @@
 from django import forms
-from .models import Categoria, Rol, Permiso
+from .models import Categoria, Rol, Permiso, Subcategoria, Usuario
+from django.contrib.auth.models import User
 
-
-from .models import Subcategoria
-
-#from .models import Plantilla
-
+class AsignarRolForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = ['rol']
+        
 class AsignarPermisoForm(forms.Form):
     permiso = forms.ModelChoiceField(queryset=Permiso.objects.all())
 
@@ -32,7 +33,3 @@ class SubcategoriaForm(forms.ModelForm):
         model = Subcategoria
         fields = ['nombre', 'descripcion', 'categoria_relacionada']  # Asegúrate de que estos campos coincidan con los de tu modelo
 
-
-
-#class SeleccionarPlantillaForm(forms.Form):
-#    plantilla = forms.ModelChoiceField(queryset=Plantilla.objects.all())
