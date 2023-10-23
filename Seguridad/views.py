@@ -1,25 +1,63 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Permiso, Usuario , Categoria, Rol , Contenido, TipoDeContenido
-from django.contrib.auth.models import User
+from .models import Permiso, Usuario , Categoria, Rol , Contenido, TipoDeContenido, Subcategoria
 from django.contrib import messages
-from .forms import AsignarPermisoForm
-from .forms import CategoriaForm
-from .models import Categoria  # Importación relativa
-from .forms import CategoriaForm, RolForm
-from .models import Categoria, Rol # Importación relativa
-
-from .models import Subcategoria
-
-from .forms import SubcategoriaForm  # Asegúrate de importar el formulario adecuado
-
+from .forms import CategoriaForm, RolForm, SubcategoriaForm, AsignarRolForm, AsignarPermisoForm
 from django.urls import reverse
-#from .models import Plantilla
-#from .forms import SeleccionarPlantillaForm
-
+from core.views import get_gravatar_url
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
 
 
 #Codigos para la implementacion de los requerimientos
+@login_required
+def asignar_rol_a_usuario(request, usuario_id):
+    print("Entrando a la función asignar_rol_a_usuario")
+    
+    # Obtén la instancia del modelo Usuario basado en el usuario_id.
+    seguridad_usuario = get_object_or_404(Usuario, user_id=usuario_id)
+    print(f"Usuario obtenido: {seguridad_usuario.user.username}")
+
+    if request.method == 'POST':
+        print("Método POST detectado")
+        
+        # Ajusta el formulario para que use la instancia correcta
+        form = AsignarRolForm(request.POST, instance=seguridad_usuario)
+        
+        if form.is_valid():
+            print("Formulario válido")
+            
+            # Asegúrate de que estás obteniendo una instancia de Rol, no solo el ID.
+            rol_seleccionado = form.cleaned_data['rol']
+            seguridad_usuario.rol = rol_seleccionado
+            
+            print(f"Rol asignado al usuario: {seguridad_usuario.rol.nombre}")
+            seguridad_usuario.save()
+            
+            # Recargar el usuario después de guardar el formulario
+            # (Realmente no es necesario, puedes trabajar directamente con seguridad_usuario)
+            
+            if seguridad_usuario.rol:
+                print(f"Rol asignado al usuario {seguridad_usuario.user.username}: {seguridad_usuario.rol.nombre}")
+            else:
+                print(f"Rol asignado al usuario {seguridad_usuario.user.username}: Sin Rol")
+            
+            messages.success(request, 'Roles asignados con éxito.')
+            return redirect('profile_view')
+        else:
+            print(form.errors)
+            messages.error(request, 'Ha ocurrido un error al asignar los roles.') # Usar messages.error para errores.
+            print("Formulario no válido")
+    else:
+        form = AsignarRolForm(instance=seguridad_usuario)
+
+    context = {
+        'form': form,
+        'usuario': seguridad_usuario.user  # Usar el usuario de la instancia de Usuario (seguridad_usuario)
+    }
+    return render(request, 'asignar_rol.html', context)
+
 def crear_permiso(request):
     """
     Crea un nuevo permiso y lo guarda en la base de datos.
@@ -62,6 +100,21 @@ def list_users(request):
         HttpResponse: Renderiza la página que muestra la lista de usuarios.
     """
     users = User.objects.all()
+
+    # Asigna la URL Gravatar a cada usuario
+    for user in users:
+        user.gravatar_url = get_gravatar_url(user.email)
+        
+        # Accediendo a los campos de 'Usuario' desde el modelo 'User'
+        if hasattr(user, 'usuario'):
+            user_role = user.usuario.rol
+        else:
+            user_role = None  # o cualquier otro valor por defecto
+
+        user.role_name = user_role.nombre if user_role else "Sin Rol Asignado"
+        print(f"Roles for {user.username}: {user.role_name}")
+
+    # ... Resto del código de la función
     return render(request, 'list_users.html', {'users': users})
 
 def crear_usuario(request):
@@ -207,11 +260,6 @@ def contenido_detalle(request, pk):
     contenido = get_object_or_404(Contenido, pk=pk)
     return render(request, 'contenido_detalle.html', {'contenido': contenido})
 
-
-
-#Mati
-from django.contrib.auth.decorators import login_required
-
 @login_required
 def modificar_categoria(request, categoria_id):
     categoria = get_object_or_404(Categoria, pk=categoria_id)
@@ -288,3 +336,13 @@ def modificar_subcategoria(request, subcategoria_id):
         return redirect(reverse('listar_subcategorias'))  # Puedes redirigir a donde desees
 
     return render(request, 'modificar_subcategoria.html', {'subcategoria': subcategoria})
+
+def vista_lector(request):
+    # Asegurarse de que el usuario tiene el rol de lector
+    if not request.user.usuario.rol.nombre == 'lector':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página")
+
+    # Obtener todos los posts
+    posts = Contenido.objects.all()  # Asumiendo que tienes un modelo llamado Contenido para los posts
+
+    return render(request, 'vista_lector.html', {'posts': posts})
