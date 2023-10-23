@@ -45,8 +45,8 @@ def profile_view(request):
     # Basado en el rol, decides a qué vista redirigir
     if user_role == 12:
         return redirect('admin_dashboard')
-    elif user_role == 10:
-        return redirect('editor_dashboard')
+    elif user_role == 8:
+        return render(request, 'profile.html')
     elif user_role == 11 :
         return render(request, 'vista_lector.html')
 

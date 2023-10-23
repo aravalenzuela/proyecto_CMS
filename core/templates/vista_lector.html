@@ -1,10 +1,145 @@
-{% block content %}
-    <h1>Bienvenido, Lector</h1>
-    <h2>Lista de Posts:</h2>
-    <ul>
-    {% for post in posts %}
-        <li>{{ post.titulo }}</li>
-        <p>{{ post.contenido }}</p>
-    {% endfor %}
-    </ul>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <div class="nav-container">
+        <nav>
+            <ul>
+                <a href="{% url 'home' %}" class="back-button">Volver a Inicio</a>
+                <a href="{% url 'logout' %}">Cerrar Sesión</a>
+            </ul>
+        </nav>
+    </div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Iconos de FontAwesome para los íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Mi Diseño con Bootstrap</title>
+    <style>
+        /* Estilos personalizados */
+        .sidebar {
+            height: 100vh;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+        }
+        .sidebar .list-group-item {
+            background-color: transparent;
+            border: none;
+        }
+        .active {
+            background-color: #007BFF;
+        }
+        .container { /* o el nombre de clase/ID de tu contenedor principal */
+            position: relative;
+        }
+        nav {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul a {
+            display: inline-block;
+            padding: 5px 10px;
+            margin-left: 10px; /* un pequeño margen entre los enlaces */
+            background-color: #333; /* color de fondo, cámbialo a tu preferencia */
+            color: #fff; /* color del texto */
+            text-decoration: none;
+            border-radius: 4px; /* bordes redondeados */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 sidebar">
+            <h4 class="mt-3"><i class="fa fa-globe"></i> Mi sitio</h4>
+            <div class="mt-4">
+                <button class="btn btn-success mb-3">Vista Lector</button>
+                <button class="btn btn-primary mb-3">Mejorar el plan</button>
+            </div>
+            <input type="search" class="form-control my-3" placeholder="Buscar">
+            <ul class="list-group mt-4">
+                <li class="list-group-item active"><i class="fas fa-check-circle"></i> Recientes</li>
+                <li class="list-group-item"><i class="fas fa-lightbulb"></i> Descubre</li>
+                <li class="list-group-item"><i class="fas fa-star"></i> Me gusta</li>
+                <li class="list-group-item"><i class="fas fa-comments"></i> Conversaciones</li>
+                <header>
+            </header>
+                <!-- Agrega más elementos según lo necesites -->
+            </ul>
+            <!-- Otros elementos del sidebar -->
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="col-md-9">
+               <!-- Contenido principal -->
+        <div class="col-md-9 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3>Recientes</h3>
+                <div>
+                    <button class="btn btn-light">Escribir</button>
+                    <button class="btn btn-light">1</button>
+                    <button class="btn btn-light"><i class="fas fa-question-circle"></i></button>
+                </div>
+            </div>
+            <p>No te pierdas nada de los blogs a los que estás suscrito.</p>
+            
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="#" class="text-decoration-none text-dark">MICMS.com en Español</a>
+                        <small class="text-muted"> - Magdalena Oliva - es.blog.micms.com - Hace 2d</small>
+                    </h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Recién salidos del horno: nuevos temas para micms.com (octubre 2023)</h6>
+                    <p class="card-text">Nuestro equipo de temas está a tope. Aquí tenemos una nueva tanda de diseños para blogueros y artistas.</p>
+                </div>
+                <div class="card-footer bg-transparent border-0 d-flex justify-content-between">
+                    <div>
+                        <a href="#" class="text-muted text-decoration-none me-3"><i class="fas fa-share"></i> Compartir</a>
+                        <a href="#" class="text-muted text-decoration-none me-3"><i class="fas fa-redo"></i> Rebloguear</a>
+                        <a href="#" class="text-muted text-decoration-none"><i class="fas fa-comment"></i> Comentarios</a>
+                    </div>
+                    <span><i class="fas fa-star"></i> 15</span>
+                </div>
+            </div>
+
+            <!-- Aquí puedes añadir más entradas similares -->
+
+            <div class="mt-4">
+                <h5>Suscripciones</h5>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <i class="fab fa-wordpress"></i> MICMS.com en Español
+                        <span class="text-muted"> - hace 3 días</span>
+                    </div>
+                    <a href="#" class="text-muted">Gestionar</a>
+                </div>
+                <div>
+                    <i class="fas fa-globe"></i> Título del sitio
+                    <span class="text-muted"> - hace 2 meses</span>
+                </div>
+
+                <!-- Aquí puedes añadir más suscripciones -->
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+
