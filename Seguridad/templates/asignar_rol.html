@@ -1,10 +1,57 @@
 {% block content %}
-<h2>Asignar Rol a {{ usuario.user.nombre }}</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Asignar Rol</button>
-</form>
-<a href="{% url 'profile_view' %}">Volver al perfil</a>
+<style>
+    body {
+        background-color: #333;
+        color: #ddd;
+        font-family: Arial, sans-serif;
+    }
+    .form-container {
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #444;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    select, button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        font-size: 16px;
+        border: 1px solid #555;
+        border-radius: 5px;
+        background-color: #555;
+        color: #fff;
+        transition: background-color 0.3s;
+    }
+    select:hover, select:focus, button:hover {
+        background-color: #666;
+    }
+    a {
+        color: #00aaff;
+        text-decoration: none;
+        display: block;
+        margin-top: 10px;
+        text-align: center;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="form-container">
+    <h2>Asignar Rol a {{ usuario.user.nombre }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Asignar Rol</button>
+    </form>
+    <a href="{% url 'profile_view' %}">Volver al perfil</a>
+</div>
 
 {% endblock %}
+

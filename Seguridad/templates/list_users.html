@@ -8,20 +8,21 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #333;
-            color: white;
+            background-color: #f7f7f7;
+            color: #333;
         }
         .container {
             max-width: 800px;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
-            background-color: #444;
+            background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
         }
         h1 {
-            color: #ddd;
+            color: #444;
             font-size: 24px;
-            border-bottom: 1px solid #555;
+            border-bottom: 1px solid #eee;
             padding-bottom: 10px;
             margin-bottom: 20px;
         }
@@ -29,15 +30,21 @@
             display: flex;
             align-items: center;
             padding: 10px;
-            background-color: #555;
+            border: 1px solid #eee;
             border-radius: 5px;
             margin-bottom: 10px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+        .user-card:hover {
+            background-color: #f5f5f5;
         }
         .user-avatar {
             width: 60px;
             height: 60px;
             border-radius: 50%;
             margin-right: 15px;
+            border: 2px solid #e0e0e0;
         }
         .user-details {
             flex: 1;
@@ -45,13 +52,26 @@
         .user-name {
             font-size: 20px;
             font-weight: bold;
+            color: #555;
         }
         .user-username {
             font-size: 18px;
-            color: #bbb;
+            color: #999;
         }
         .user-role {
             font-size: 16px;
+            background-color: #ddd;
+            border-radius: 4px;
+            padding: 2px 5px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -61,23 +81,16 @@
         
         {% for user in users %}
         <div class="user-card">
-            <!-- Suponiendo que el avatar se obtiene del inicio de sesión con Google -->
             <img src="{{ user.gravatar_url }}" alt="{{ user.name }}" class="user-avatar">
             <div class="user-details">
                 <div class="user-name">{{ user.name }}</div>
                 <div class="user-username">{{ user.username }}</div>
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.email }}</td>
-                    <div class="user-role">{{ user.role_name }}</div>
-                </tr>
+                <div>{{ user.id }} | {{ user.email }}</div>
+                <div class="user-role">{{ user.role_name }}</div>
             </div>
+            <a href="{% url 'asignar_rol_a_usuario' usuario_id=user.id %}">Asignar Rol</a>
         </div>
         {% endfor %}
-        <li>
-            <a href="{% url 'asignar_rol_a_usuario' usuario_id=user.id %}">Asignar Rol</a>
-        </li>
     </div>
 </body>
 </html>
-

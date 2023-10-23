@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 import hashlib
+from Seguridad.models import Usuario, Rol  # Asegúrate de que este modelo exista y tenga un campo 'role'
+
 
 def get_gravatar_url(email):
     email_hash = hashlib.md5(email.lower().encode('utf-8')).hexdigest()
@@ -25,9 +27,31 @@ def logout(request):
     return redirect('/accounts/logout/')
 
 def profile_view(request):
+    # Verifica si el usuario está autenticado
     if not request.user.is_authenticated:
         return redirect('login_view')  # Redirige al usuario a la vista de inicio de sesión
 
+    # Obtiene el email del usuario y su avatar
     user_email = request.user.email
     gravatar_url = get_gravatar_url(user_email)
+
+    # Obtiene el perfil del usuario y su rol
+    try:
+        user_profile = Usuario.objects.get(user=request.user)
+        user_role = user_profile.rol.id
+    except Usuario.DoesNotExist:
+        user_role = None
+
+    # Basado en el rol, decides a qué vista redirigir
+    if user_role == 12:
+        return redirect('admin_dashboard')
+    elif user_role == 10:
+        return redirect('editor_dashboard')
+    elif user_role == 11 :
+        return render(request, 'vista_lector.html')
+
+    # Si no tiene un rol específico o es un rol desconocido, muestra su perfil con Gravatar
     return render(request, 'profile.html', {'gravatar_url': gravatar_url})
+
+
+

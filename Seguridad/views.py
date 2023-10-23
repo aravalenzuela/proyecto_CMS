@@ -58,10 +58,6 @@ def asignar_rol_a_usuario(request, usuario_id):
     }
     return render(request, 'asignar_rol.html', context)
 
-
-
-
-
 def crear_permiso(request):
     """
     Crea un nuevo permiso y lo guarda en la base de datos.
