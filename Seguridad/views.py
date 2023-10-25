@@ -8,6 +8,7 @@ from core.views import get_gravatar_url
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from django.http import JsonResponse
 
 
 #Codigos para la implementacion de los requerimientos
@@ -346,3 +347,20 @@ def vista_lector(request):
     posts = Contenido.objects.all()  # Asumiendo que tienes un modelo llamado Contenido para los posts
 
     return render(request, 'vista_lector.html', {'posts': posts})
+
+def toggle_active_view(request, user_id):
+    user = CustomUser.objects.get(id=user_id)
+    user.is_active = not user.is_active
+    user.save()
+    return JsonResponse({'success': True})
+
+def toggle_user_active(request, user_id):
+    # Aquí va tu lógica para activar/desactivar el usuario
+    # Por ejemplo, cambiar el campo is_active en el modelo User
+    # Luego, devolver una respuesta basada en el resultado
+
+    user = User.objects.get(pk=user_id)
+    user.is_active = not user.is_active
+    user.save()
+
+    return JsonResponse({'success': True, 'is_active': user.is_active})

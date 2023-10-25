@@ -73,6 +73,27 @@
         a:hover {
             text-decoration: underline;
         }
+        
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .actions > span {
+            margin: 0 10px;
+            color: #999; /* Color gris claro para el separador */
+        }
+        .toggle-user {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            color: #e74c3c;
+        }
+        .toggle-user:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -89,8 +110,36 @@
                 <div class="user-role">{{ user.role_name }}</div>
             </div>
             <a href="{% url 'asignar_rol_a_usuario' usuario_id=user.id %}">Asignar Rol</a>
+            <div class="toggle-user">
+                <h1>_</h1>
+                <label for="toggle{{ user.id }}">Dar de Baja</label>                
+                <input type="checkbox" id="toggle{{ user.id }}" {% if not user.is_active %}checked{% endif %} onchange="toggleActive({{ user.id }})" data-toggle-url="{% url 'toggle_user_active' user.id %}">
+
+            </div>
         </div>
         {% endfor %}
     </div>
 </body>
+<script>
+   function toggleActive(userId) {
+    console.log(userId);
+    let checkboxElement = document.getElementById('toggle' + userId);
+    let toggleUrl = checkboxElement.getAttribute('data-toggle-url');
+    fetch(toggleUrl, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // aquí puedes añadir alguna notificación de éxito si lo deseas
+        } else {
+            // notificar error
+        }
+    });
+}
+
+</script>
 </html>
