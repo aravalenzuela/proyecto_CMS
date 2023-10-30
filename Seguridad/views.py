@@ -13,6 +13,17 @@ from django.contrib.auth import login
 #Codigos para la implementacion de los requerimientos
 @login_required
 def asignar_rol_a_usuario(request, usuario_id):
+    """
+    Asigna un rol a un usuario específico.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        usuario_id (int): ID del usuario al que se asignará el rol.
+        
+    Returns:
+        HttpResponse: Renderiza la página de asignación de rol o redirige tras la asignación exitosa.
+    """
+
     print("Entrando a la función asignar_rol_a_usuario")
     
     # Obtén la instancia del modelo Usuario basado en el usuario_id.
@@ -58,6 +69,8 @@ def asignar_rol_a_usuario(request, usuario_id):
     }
     return render(request, 'asignar_rol.html', context)
 
+
+
 def crear_permiso(request):
     """
     Crea un nuevo permiso y lo guarda en la base de datos.
@@ -76,6 +89,8 @@ def crear_permiso(request):
         return redirect('profile_view')  # Cambia esto al nombre real de la vista a la que deseas redirigir
     return render(request, 'crear_permiso.html')
 
+
+
 def listar_permisos(request):
     """
     Lista todos los permisos disponibles en la base de datos.
@@ -88,6 +103,8 @@ def listar_permisos(request):
     """
     permisos = Permiso.objects.all()
     return render(request, 'listar_permisos.html', {'permisos': permisos})
+
+
 
 def list_users(request):
     """
@@ -117,6 +134,8 @@ def list_users(request):
     # ... Resto del código de la función
     return render(request, 'list_users.html', {'users': users})
 
+
+
 def crear_usuario(request):
     """
     Crea un nuevo usuario y lo guarda en la base de datos.
@@ -143,6 +162,7 @@ def crear_usuario(request):
             messages.error(request, 'Ha ocurrido un error al crear el usuario.')
         
     return render(request, 'crear_usuario.html')
+
 
 
 def asignar_permiso(request, rol_id=None): 
@@ -202,6 +222,8 @@ def crear_categoria(request):
         form = CategoriaForm()
     return render(request, 'crear_categoria.html', {'form': form})
 
+
+
 def listar_categorias(request):
     """
     Lista todas las categorías disponibles en la base de datos.
@@ -214,6 +236,8 @@ def listar_categorias(request):
     """
     categorias = Categoria.objects.all()
     return render(request, 'listar_categorias.html', {'categorias': categorias})
+
+
 
 def crear_rol(request):
     """
@@ -239,6 +263,8 @@ def crear_rol(request):
         form = CategoriaForm()
     return render(request, 'crear_rol.html', {'form': form})
 
+
+
 def listar_roles(request):
     """
     Lista todos los roles disponibles en la base de datos junto con sus permisos asociados.
@@ -252,34 +278,87 @@ def listar_roles(request):
     roles = Rol.objects.all().prefetch_related('permisos')
     return render(request, 'listar_roles.html', {'roles': roles})
 
+
+
 def listar_contenidos(request):
+    """
+    Lista todos los contenidos disponibles en la base de datos.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página que muestra la lista de contenidos.
+    """
+
     contenidos = Contenido.objects.all()
     return render(request, 'lista_contenidos.html', {'contenidos': contenidos})
 
+
+
 def contenido_detalle(request, pk):
+    """
+    Muestra detalles de un contenido específico.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        pk (int): ID del contenido a mostrar detalles.
+        
+    Returns:
+        HttpResponse: Renderiza la página de detalles del contenido.
+    """
+
     contenido = get_object_or_404(Contenido, pk=pk)
     return render(request, 'contenido_detalle.html', {'contenido': contenido})
 
 @login_required
-def modificar_categoria(request, categoria_id):
-    categoria = get_object_or_404(Categoria, pk=categoria_id)
+
+
+
+def modificar_categoria(request):
+
+    """
+    Permite modificar una categoría existente.
     
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de modificación de categoría o guarda los cambios en la base de datos.
+    """
+
+    categorias = Categoria.objects.all()  # Obtén todas las categorías
+    categoria = None
+
     if request.method == 'POST':
-        form = CategoriaForm(request.POST, instance=categoria)
-        if form.is_valid():
-            form.save()
-            return redirect('listar_categorias')  # Cambia 'listar_categorias' por el nombre real de tu vista de lista de categorías
-    else:
-        form = CategoriaForm(instance=categoria)
-    
-    context = {
-        'form': form,
-        'categoria': categoria,
-    }
-    
-    return render(request, 'modificar_categoria.html', context)
+        accion = request.POST.get('accion')
+        if accion == 'seleccionar':
+            categoria_id = request.POST.get('categoria')
+            categoria = get_object_or_404(Categoria, pk=categoria_id)
+        elif accion == 'guardar':
+            categoria_id = request.POST.get('categoria_id')
+            categoria = get_object_or_404(Categoria, pk=categoria_id)
+            categoria.nombre = request.POST.get('nombre')
+            categoria.descripcion = request.POST.get('descripcion')
+            categoria.save()
+            # Redirige a donde desees después de guardar los cambios
+
+    return render(request, 'modificar_categoria.html', {'categorias': categorias, 'categoria': categoria})
+
+
 
 def crear_subcategoria(request):
+
+    """
+    Crea una nueva subcategoría y la guarda en la base de datos.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de creación de subcategoría o redirige tras la creación exitosa.
+    """
+
     if request.method == 'POST':
         form = SubcategoriaForm(request.POST)
         if form.is_valid():
@@ -315,17 +394,54 @@ def crear_subcategoria(request):
 
 
 def listar_subcategorias(request):
+
+    """
+    Lista todas las subcategorías disponibles en la base de datos.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página que muestra la lista de subcategorías.
+    """
+
     # Aquí coloca la lógica para obtener y listar las subcategorías desde la base de datos
     subcategorias = Subcategoria.objects.all()
     return render(request, 'listar_subcategorias.html', {'subcategorias': subcategorias})
 
 
+
 def ver_subcategoria(request, subcategoria_id):
+
+    """
+    Muestra detalles de una subcategoría específica.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        subcategoria_id (int): ID de la subcategoría a mostrar detalles.
+        
+    Returns:
+        HttpResponse: Renderiza la página de detalles de la subcategoría.
+    """
+        
     subcategoria = get_object_or_404(Subcategoria, pk=subcategoria_id)
     return render(request, 'ver_subcategoria.html', {'subcategoria': subcategoria})
 
 
+
 def modificar_subcategoria(request, subcategoria_id):
+
+    """
+    Permite modificar una subcategoría existente.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        subcategoria_id (int): ID de la subcategoría a modificar.
+        
+    Returns:
+        HttpResponse: Renderiza la página de modificación de subcategoría o guarda los cambios en la base de datos.
+    """
+        
     subcategoria = Subcategoria.objects.get(pk=subcategoria_id)
 
     if request.method == 'POST':
@@ -337,7 +453,20 @@ def modificar_subcategoria(request, subcategoria_id):
 
     return render(request, 'modificar_subcategoria.html', {'subcategoria': subcategoria})
 
+
+
 def vista_lector(request):
+
+    """
+    Muestra una vista para usuarios con el rol de "lector".
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de vista para lectores o muestra un mensaje de error si el usuario no tiene el rol adecuado.
+    """
+        
     # Asegurarse de que el usuario tiene el rol de lector
     if not request.user.usuario.rol.nombre == 'lector':
         return HttpResponseForbidden("No tienes permiso para acceder a esta página")

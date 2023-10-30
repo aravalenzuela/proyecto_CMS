@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    
     # Ruta para crear un nuevo permiso.
     path('crear_permiso/', views.crear_permiso, name='crear_permiso'),
 
@@ -33,7 +34,7 @@ urlpatterns = [
 
     path('contenido/<int:pk>/', views.contenido_detalle, name='contenido_detalle'),
     # Ruta para modificar una categoría existente.
-    path('modificar_categoria/<int:categoria_id>/', views.modificar_categoria, name='modificar_categoria'),
+    path('modificar_categoria/', views.modificar_categoria, name='modificar_categoria'),
 
     # URL para crear una subcategoría
     path('crear_subcategoria/', views.crear_subcategoria, name='crear_subcategoria'),
