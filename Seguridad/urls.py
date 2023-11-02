@@ -20,6 +20,9 @@ urlpatterns = [
     # Ruta para listar todas las categorías disponibles.
     path('listar_categorias/', views.listar_categorias, name='listar_categorias'),
 
+   # Ruta para modificar el estado de una categoría.
+    path('modificar_estado_categoria/<int:categoria_id>/', views.modificar_estado_categoria, name='modificar_estado_categoria'),   
+
     # Ruta para crear un nuevo rol.
     path('crear_rol/', views.crear_rol, name='crear_rol'),
 

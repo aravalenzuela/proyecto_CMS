@@ -1,8 +1,29 @@
+
 {% block content %}
     <h1>Listado de Categorías</h1>
-    <ul>
-        {% for categoria in categorias %}
-            <li>{{ categoria.nombre }} - {{ categoria.descripcion }}</li>
-        {% endfor %}
-    </ul>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for categoria in categorias %}
+                <tr>
+                    <td>{{ categoria.nombre }}</td>
+                    <td>{{ categoria.descripcion }}</td>
+                    <td>{% if categoria.activo %}Activa{% else %}Inactiva{% endif %}</td>
+                    <td>
+                        <form method="post" action="{% url 'modificar_estado_categoria' categoria.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">Modificar Estado</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

@@ -8,7 +8,8 @@ from .forms import CategoriaForm
 from .models import Categoria  # Importación relativa
 from .forms import CategoriaForm, RolForm
 from .models import Categoria, Rol # Importación relativa
-
+from django.views.decorators.http import require_http_methods
+from django.http import JsonResponse
 #from .models import Plantilla
 #from .forms import SeleccionarPlantillaForm
 
@@ -154,6 +155,18 @@ def listar_categorias(request):
     """
     categorias = Categoria.objects.all()
     return render(request, 'listar_categorias.html', {'categorias': categorias})
+
+
+@require_http_methods(["POST"])
+def modificar_estado_categoria(request, categoria_id):
+    try:
+        categoria = Categoria.objects.get(pk=categoria_id)
+        categoria.activo = not categoria.activo
+        categoria.save()
+        return JsonResponse({'mensaje': 'Estado de categoría modificado correctamente'})
+    except Categoria.DoesNotExist:
+        return JsonResponse({'mensaje': 'Categoría no encontrada'}, status=404)
+    
 
 def crear_rol(request):
     """

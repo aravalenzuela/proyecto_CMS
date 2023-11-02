@@ -49,6 +49,8 @@ class Categoria(models.Model):
     
     descripcion = models.TextField(blank=True, null=True)
 
+    activo = models.BooleanField(default=True)  # Campo booleano para el estado de la categoría
+
     def __str__(self):
         return self.nombre
 
