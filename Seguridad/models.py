@@ -55,12 +55,17 @@ class Categoria(models.Model):
 
     def __str__(self):
         return self.nombre
+
+
 class TipoDeContenido(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField(blank=True)
+    plantilla = models.ForeignKey('Gestion_Contenido.Plantilla', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.nombre
+
+
 class Contenido(models.Model):
     tipo = models.ForeignKey(TipoDeContenido, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=200)

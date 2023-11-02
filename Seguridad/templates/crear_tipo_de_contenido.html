@@ -67,6 +67,11 @@
             {{ form.nombre }}
             <label for="{{ form.descripcion.id_for_label }}">Descripción:</label>
             {{ form.descripcion }}
+
+            <label for="{{ form.plantilla.id_for_label }}">Seleccionar Plantilla:</label>
+            {{ form.plantilla }}            
+
+
             <button type="submit">Guardar</button>
             <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver</a></button>
         </form>

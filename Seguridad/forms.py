@@ -1,6 +1,7 @@
 from django import forms
 from .models import Categoria, Rol, Permiso, Subcategoria, Usuario
 from django.contrib.auth.models import User
+from Gestion_Contenido.models import Plantilla
 
 
 from .models import TipoDeContenido
@@ -91,6 +92,13 @@ class SubcategoriaForm(forms.ModelForm):
 class TipoDeContenidoForm(forms.ModelForm):
     class Meta:
         model = TipoDeContenido
-        fields = ['nombre', 'descripcion']
+        fields = ['nombre', 'descripcion', 'plantilla']
+
+    # Añade el campo "plantilla" como un desplegable
+    plantilla = forms.ModelChoiceField(
+        queryset=Plantilla.objects.all(),
+        empty_label="Seleccionar Plantilla",  # Etiqueta para la opción vacía
+        required=False  # Para permitir que el campo sea opcional
+    )
 
 

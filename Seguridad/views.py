@@ -10,6 +10,7 @@ from .models import Categoria, Rol # Importación relativa
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from Gestion_Contenido.models import Plantilla
 #from .models import Plantilla
 #from .forms import SeleccionarPlantillaForm
 
@@ -505,7 +506,8 @@ def crear_tipo_de_contenido(request):
         if form.is_valid():
             nombre = form.cleaned_data['nombre']
             descripcion = form.cleaned_data['descripcion']
-            
+            plantilla = form.cleaned_data['plantilla'] 
+
             # Verificar si el tipo de contenido ya existe
             if TipoDeContenido.objects.filter(nombre=nombre).exists():
                 messages.error(request, 'Este tipo de contenido ya existe. Por favor crea uno nuevo')
@@ -520,4 +522,8 @@ def crear_tipo_de_contenido(request):
 
 def listar_tipos_de_contenido(request):
     tipos_de_contenido = TipoDeContenido.objects.all()
+
+    for tipo in tipos_de_contenido:
+        tipo.plantilla_nombre = tipo.plantilla.nombre if tipo.plantilla else "N/A"
+
     return render(request, 'listar_tipos_de_contenido.html', {'tipos_de_contenido': tipos_de_contenido})
