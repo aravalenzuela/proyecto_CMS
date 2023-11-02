@@ -9,6 +9,7 @@ from .forms import CategoriaForm, RolForm
 from .models import Categoria, Rol # Importación relativa
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 #from .models import Plantilla
 #from .forms import SeleccionarPlantillaForm
 
