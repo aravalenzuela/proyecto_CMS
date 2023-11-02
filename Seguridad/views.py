@@ -253,7 +253,8 @@ def modificar_estado_categoria(request, categoria_id):
         categoria = Categoria.objects.get(pk=categoria_id)
         categoria.activo = not categoria.activo
         categoria.save()
-        return JsonResponse({'mensaje': 'Estado de categoría modificado correctamente'})
+        # Redirige de nuevo a la página de listado de categorías con un parámetro de éxito
+        return redirect('listar_categorias')
     except Categoria.DoesNotExist:
         return JsonResponse({'mensaje': 'Categoría no encontrada'}, status=404)
     

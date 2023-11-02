@@ -1,29 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Categorías</title>
+</head>
+<body>
 
-{% block content %}
-    <h1>Listado de Categorías</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for categoria in categorias %}
-                <tr>
-                    <td>{{ categoria.nombre }}</td>
-                    <td>{{ categoria.descripcion }}</td>
-                    <td>{% if categoria.activo %}Activa{% else %}Inactiva{% endif %}</td>
-                    <td>
-                        <form method="post" action="{% url 'modificar_estado_categoria' categoria.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-primary">Modificar Estado</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% endblock %}
+<h1>Listado de Categorías</h1>
+
+{% if request.GET.modificado == 'exito' %}
+<div class="alert alert-success">
+    Estado de categoría modificado correctamente.
+</div>
+{% endif %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for categoria in categorias %}
+        <tr>
+            <td>{{ categoria.nombre }}</td>
+            <td>{{ categoria.descripcion }}</td>
+            <td>{% if categoria.activo %}Activa{% else %}Inactiva{% endif %}</td>
+            <td>
+                <form method="post" action="{% url 'modificar_estado_categoria' categoria.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Modificar Estado</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $("form").submit(function(e) {
+        e.preventDefault(); // Evita la recarga de la página
+        var form = $(this);
+        $.ajax({
+            type: form.attr("method"),
+            url: form.attr("action"),
+            data: form.serialize(),
+            success: function(data) {
+                // Mostrar mensaje de éxito
+                $(".alert").html("Estado de categoría modificado correctamente.").addClass("alert-success").show();
+                // Recargar la página después de un breve retraso (por ejemplo, 1 segundo)
+                setTimeout(function() {
+                    location.reload();
+                }, 500);
+            },
+            error: function(data) {
+                // Manejar errores si es necesario
+            }
+        });
+    });
+});
+</script>
+
+
+
+</body>
+</html>
