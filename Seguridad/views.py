@@ -9,6 +9,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 
+from .forms import TipoDeContenidoForm
+
+from .models import TipoDeContenido
+
 
 #Codigos para la implementacion de los requerimientos
 @login_required
@@ -475,3 +479,29 @@ def vista_lector(request):
     posts = Contenido.objects.all()  # Asumiendo que tienes un modelo llamado Contenido para los posts
 
     return render(request, 'vista_lector.html', {'posts': posts})
+
+
+
+
+def crear_tipo_de_contenido(request):
+    if request.method == 'POST':
+        form = TipoDeContenidoForm(request.POST)
+        if form.is_valid():
+            nombre = form.cleaned_data['nombre']
+            descripcion = form.cleaned_data['descripcion']
+            
+            # Verificar si el tipo de contenido ya existe
+            if TipoDeContenido.objects.filter(nombre=nombre).exists():
+                messages.error(request, 'Este tipo de contenido ya existe. Por favor crea uno nuevo')
+            else:
+                form.save()
+                return redirect('profile_view')  # Puedes redirigir a la página deseada
+    else:
+        form = TipoDeContenidoForm()
+    return render(request, 'crear_tipo_de_contenido.html', {'form': form})
+
+
+
+def listar_tipos_de_contenido(request):
+    tipos_de_contenido = TipoDeContenido.objects.all()
+    return render(request, 'listar_tipos_de_contenido.html', {'tipos_de_contenido': tipos_de_contenido})

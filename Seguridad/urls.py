@@ -47,6 +47,12 @@ urlpatterns = [
 
     path('asignar_rol/<int:usuario_id>/', views.asignar_rol_a_usuario, name='asignar_rol_a_usuario'),
 
-    path('vista_lector/', views.vista_lector, name="vista_lector")
+    path('vista_lector/', views.vista_lector, name="vista_lector"),
+
+
+    
+    path('crear_tipo_de_contenido/', views.crear_tipo_de_contenido, name='crear_tipo_de_contenido'),
+    
+    path('listar_tipos_de_contenido/', views.listar_tipos_de_contenido, name='listar_tipos_de_contenido'),
 ]
 

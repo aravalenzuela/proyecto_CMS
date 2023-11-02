@@ -2,7 +2,11 @@ from django import forms
 from .models import Categoria, Rol, Permiso, Subcategoria, Usuario
 from django.contrib.auth.models import User
 
+
+from .models import TipoDeContenido
+
 class AsignarRolForm(forms.ModelForm):
+    
 
     """
     Formulario para asignar un rol a un usuario.
@@ -80,4 +84,13 @@ class SubcategoriaForm(forms.ModelForm):
     class Meta:
         model = Subcategoria
         fields = ['nombre', 'descripcion', 'categoria_relacionada']  # Asegúrate de que estos campos coincidan con los de tu modelo
+
+
+
+
+class TipoDeContenidoForm(forms.ModelForm):
+    class Meta:
+        model = TipoDeContenido
+        fields = ['nombre', 'descripcion']
+
 
