@@ -364,3 +364,10 @@ def toggle_user_active(request, user_id):
     user.save()
 
     return JsonResponse({'success': True, 'is_active': user.is_active})
+
+def eliminar_rol(request, rol_id):
+    rol = get_object_or_404(Rol, pk=rol_id)
+    if request.method == "POST":  # Si el método es POST, significa que el usuario ha confirmado la eliminación
+        rol.delete()
+        return redirect('listar_roles')
+    return render(request, 'confirmar_eliminacion.html', {'rol': rol})

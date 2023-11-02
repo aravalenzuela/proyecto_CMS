@@ -50,6 +50,7 @@ urlpatterns = [
 
     path('dar_de_baja_o_activar/<int:user_id>/', views.toggle_user_active, name='toggle_user_active'),
 
+    path('eliminar_rol/<int:rol_id>/', views.eliminar_rol, name='eliminar_rol')
 
 ]
 
