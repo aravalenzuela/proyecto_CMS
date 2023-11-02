@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    
     # Ruta para crear un nuevo permiso.
     path('crear_permiso/', views.crear_permiso, name='crear_permiso'),
 
@@ -32,8 +33,23 @@ urlpatterns = [
     # Ruta para asignar permisos a los roles ya creados.
     path('asignar_permiso/', views.asignar_permiso, name='asignar_permiso'),
 
-    # urls.py
-    #path('rol/<int:rol_id>/', views.asignar_permisos_a_rol, name='asignar_permisos_a_rol'),
-    #path('rol/nuevo/', views.asignar_permisos_a_rol, name='nuevo_rol'),
+    path('contenidos/', views.listar_contenidos, name='lista_contenidos'),
 
+    path('contenido/<int:pk>/', views.contenido_detalle, name='contenido_detalle'),
+    # Ruta para modificar una categoría existente.
+    path('modificar_categoria/', views.modificar_categoria, name='modificar_categoria'),
+
+    # URL para crear una subcategoría
+    path('crear_subcategoria/', views.crear_subcategoria, name='crear_subcategoria'),
+
+    path('listar_subcategorias/', views.listar_subcategorias, name='listar_subcategorias'),
+
+    path('ver_subcategoria/<int:subcategoria_id>/', views.ver_subcategoria, name='ver_subcategoria'),
+
+    path('Modificar_Subcategoria/<int:subcategoria_id>/', views.modificar_subcategoria, name='modificar_subcategoria'),
+
+    path('asignar_rol/<int:usuario_id>/', views.asignar_rol_a_usuario, name='asignar_rol_a_usuario'),
+
+    path('vista_lector/', views.vista_lector, name="vista_lector")
 ]
+

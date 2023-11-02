@@ -1,7 +1,5 @@
 from django.db import models
-
 from django.contrib.auth.models import User
-# Create your models here.
 
 
 class Plantilla(models.Model):
@@ -9,38 +7,49 @@ class Plantilla(models.Model):
         ('blog', 'Blog (Solo texto)'),
         ('multimedia', 'Multimedia (Texto + Multimedia)'),
     )
-    nombre = models.CharField(max_length=100)
-    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES)
     contenido = models.TextField(default='Texto predeterminado')
+    nombre = models.CharField(max_length=100)
+    tipo = models.CharField(max_length=50, choices=TIPO_CHOICES)
+    predeterminada = models.BooleanField(default=False)
+    color_principal = models.CharField(max_length=50, default='color_preset')# Campo para el color principal
+    titulo_sitio = models.CharField(max_length=100, default='Mi Sitio Web') # Campo para el título del sitio 
+    logotipo = models.ImageField(upload_to='logos/', default='default_logo.png') # Campo para el logotipo del sitio
+    contenido_editable = models.TextField(blank=True, null=True)
+    imagen = models.ImageField(upload_to='imagenes/', blank=True, null=True)
     
     def __str__(self):
         return self.nombre
     
 
 
+class PlantillaPredeterminada(models.Model):
+    nombre = models.CharField(max_length=100)
+    tipo = models.CharField(max_length=20, choices=[('blog', 'Plantilla solo de texto'), ('imagen', 'Plantilla con imagen')])
+    contenido = models.TextField()
+
+    def __str__(self):
+        return self.nombre
+
 
 class PlantillaUsuario(models.Model):
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
-    # Aquí puedes agregar otros campos relacionados con las plantillas si es necesario
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    plantillas = models.ManyToManyField(Plantilla,default="")
 
-from django.db import migrations
+    def __str__(self):
+        return f"Plantillas de {self.usuario.username}"
 
-def agregar_plantillas_ejemplo(apps, schema_editor):
-    Plantilla = apps.get_model('Gestion_Contenido', 'Plantilla')
+
+
+
+class ContenidoEditable(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    plantilla = models.ForeignKey(Plantilla, on_delete=models.CASCADE)
+    contenido = models.TextField()
+
+    def __str__(self):
+        return f"Contenido editable de {self.usuario.username} para la plantilla {self.plantilla.nombre}"
+
+
     
-    # Crea las plantillas de ejemplo
-    Plantilla.objects.create(nombre='Plantilla 1', tipo='blog', contenido='Contenido de la Plantilla 1')
-    Plantilla.objects.create(nombre='Plantilla 2', tipo='multimedia', contenido='Contenido de la Plantilla 2')
-    # Agrega más plantillas de ejemplo si es necesario
 
-class Migration(migrations.Migration):
-
-    dependencies = [
-        # Asegúrate de que esta dependencia sea la última migración de la app Gestion_Contenido
-    ]
-
-    operations = [
-        migrations.RunPython(agregar_plantillas_ejemplo),
-    ]
-
-
+    

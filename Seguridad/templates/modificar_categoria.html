@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <style>
+        /* Estilo para el botón de "Seleccionar y Modificar Categoría" */
+        .button-select {
+            background-color: #007bff; /* Azul */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Estilo para el botón de "Guardar Cambios" */
+        .button-save {
+            background-color: #007bff; /* Azul */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        /* Estilo para el botón de "Volver" */
+        .button {
+            background-color: #007bff; /* Azul */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        /* Estilo para el mensaje de cambios guardados */
+        .message {
+            color: #28a745; /* Verde */
+            font-weight: bold;
+        }
+        
+        </style>
+    <!-- Agrega tus etiquetas meta, títulos, estilos, etc. aquí -->
+</head>
+<body>
+    {% block content %}
+    <h1>Modificar Categoría</h1>
+    <form method="post" action="{% url 'modificar_categoria' %}">
+        {% csrf_token %}
+        <label for="categoria">Selecciona una categoría:</label>
+        <select name="categoria" id="categoria">
+            {% for cat in categorias %}
+                <option value="{{ cat.id }}">{{ cat.nombre }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" name="accion" value="seleccionar" class="button-select">Seleccionar y Modificar Categoría</button>
+    </form>
+    {% if categoria %}
+        <h2>Nombre: {{ categoria.nombre }}</h2>
+        <h2>Descripción: {{ categoria.descripcion }}</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="categoria_id" value="{{ categoria.id }}">
+            <label for="nombre">Nombre:</label>
+            <input type="text" name="nombre" value="{{ categoria.nombre }}">
+            <br>
+            <label for="descripcion">Descripción:</label>
+            <textarea name="descripcion">{{ categoria.descripcion }}</textarea>
+            <br>
+            <div class="button-container">
+                <button type="submit" name="accion" value="guardar" class="button button-select">Guardar Cambios</button>
+                <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver</a></button>
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}
+
+</body>
+</html>

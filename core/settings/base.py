@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-45t!r%25k&7i)$l@i2wzbse!lm$*dua)i3^1xnq#=^g=38m+7k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['cms-is2.onrender.com', 'localhost', '127.0.0.1','desarrollo-cms-is2.onrender.com']
+ALLOWED_HOSTS = ['cms-is2.onrender.com', 'localhost', '127.0.0.1','desarrollo-cms-is2-4omt.onrender.com']
 
 
 # Application definition
@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth',
     'allauth.account',
-    'social_django'
+    'social_django',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -148,6 +149,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+# Configuración para los medios (imágenes)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Default primary key field type

@@ -6,11 +6,11 @@ from decouple import config
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgres://bd_proyecto_cms_is2_user:SyG6Zn5uyiHIZ8MHN9tQs9UJxr8lZkYg@dpg-ck0g7ve3ktkc73e4eukg-a.oregon-postgres.render.com/bd_proyecto_cms_is2'
+        default='postgres://bd_development_proyecto_cms_is2_user:xtZjPMguh4Bix3NnhmqL0hosHP0FKa4N@dpg-ckpep9m2eoec73e1qou0-a/bd_development_proyecto_cms_is2'
     )
 }
 
-CSRF_TRUSTED_ORIGINS = ['https://desarrollo-cms-is2.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://desarrollo-cms-is2-4omt.onrender.com']
 
 # Static  files
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

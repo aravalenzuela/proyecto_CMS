@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Modificar Subcategoría</title>
+</head>
+<body>
+    <h1>Modificar Subcategoría</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" value="{{ subcategoria.nombre }}" required>
+        <br>
+
+        <label for="descripcion">Descripción:</label>
+        <textarea name="descripcion" rows="4" required>{{ subcategoria.descripcion }}</textarea>
+        <br>
+
+        <input type="submit" value="Guardar Cambios">
+    </form>
+
+</body>
+</html>

@@ -19,20 +19,23 @@ from django.urls import path, include
 from . import views
 from django.views.generic.base import RedirectView
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home, name='home'), #Inicio del Home - http://127.0.0.1:8000/
     path('admin/', admin.site.urls),#funciond el admin - http://127.0.0.1:8000/admin   
-    #path('', views.inicio, name='home'),
     path('login/', views.login_view, name='login'),  # Inicio del Login - http://127.0.0.1:8000/login
     path('accounts/profile/', views.profile_view, name='profile_view'), #Funcion de la pantalla profile - http://localhost:8000/accounts/profile/
     path('accounts/profile/', RedirectView.as_view(url='/'), name='redirect_to_home'),#Funcion retroceso de pantalla
-    #COnflictos
     path('logout/', views.logout, name='logout_custom'),
     path('logout2/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),#Al darle salir redirige a la pantalla de login
-    #Conflcitos
     path('social-auth/', include('social_django.urls', namespace='social')),  # Añade 
+
+    #Modulos 
     path('', include('Seguridad.urls')),
     path('', include('Gestion_Contenido.urls')),
 ]
 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

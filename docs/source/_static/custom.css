@@ -1,0 +1,57 @@
+/* Ajustes generales para el cuerpo de la página */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+}
+
+/* Ajustes para los títulos */
+h1, h2, h3, h4, h5, h6 {
+    color: #333;
+    margin-top: 1em;
+}
+
+h1 {
+    border-bottom: 2px solid #666;
+    padding-bottom: 0.5em;
+}
+
+/* Ajustes para los enlaces */
+a {
+    color: #007ACC;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Ajustes para el código */
+.highlight {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 1em;
+    border-radius: 4px;
+}
+
+/* Ajustes para la navegación */
+.wy-nav-side {
+    background-color: #f5f5f5;
+}
+
+.wy-side-nav-search, .wy-nav-top {
+    background: #007ACC;
+    color: white;
+}
+
+/* Si deseas cambiar el color de fondo de la barra lateral */
+.wy-side-scroll {
+    background-color: #f8f8f8;
+}
+
+/* Ajustes para el pie de página */
+footer {
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    padding: 1em 0;
+    text-align: center;
+}
