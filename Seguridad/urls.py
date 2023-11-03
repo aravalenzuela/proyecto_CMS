@@ -57,10 +57,8 @@ urlpatterns = [
 
     path('eliminar_rol/<int:rol_id>/', views.eliminar_rol, name='eliminar_rol'),
 
-    path('modificar_rol/<int:rol_id>/', views.modificar_rol, name='modificar_rol')
-
-
-    
+    path('modificar_rol/<int:rol_id>/', views.modificar_rol, name='modificar_rol'),
+        
     path('crear_tipo_de_contenido/', views.crear_tipo_de_contenido, name='crear_tipo_de_contenido'),
     
     path('listar_tipos_de_contenido/', views.listar_tipos_de_contenido, name='listar_tipos_de_contenido'),

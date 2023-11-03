@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Permiso, Usuario , Categoria, Rol , Contenido, TipoDeContenido, Subcategoria
 from django.contrib import messages
-from .forms import AsignarPermisoForm
+from .forms import AsignarRolForm
 from .forms import CategoriaForm
 from .models import Categoria  # Importación relativa
 from .forms import CategoriaForm, RolForm
@@ -15,6 +15,9 @@ from django.http import JsonResponse
 from Gestion_Contenido.models import Plantilla
 from .forms import SubcategoriaForm
 from django.urls import reverse
+from django.contrib.auth.models import User
+from core.views import get_gravatar_url
+
 #from .models import Plantilla
 #from .forms import SeleccionarPlantillaForm
 
