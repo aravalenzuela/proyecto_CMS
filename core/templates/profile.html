@@ -26,8 +26,6 @@
         <h2>Usuarios</h2>
         <ul>
             <li><a href="{% url 'list_users' %}">Listar Usuarios</a></li>
-            <!--<li><a href="{% url 'crear_usuario' %}">Crear Usuario</a></li>-->
-            <li><a href="#delete-user">Dar de Baja Usuario</a></li>
         </ul>
     </section>
 
@@ -36,9 +34,6 @@
         <ul>
             <li><a href="{% url 'listar_roles' %}">Listar Roles</a></li>
             <li><a href="{% url 'crear_rol' %}">Crear Rol</a></li>
-            <li><a href="#edit-role">Modificar Rol</a></li>
-            <li><a href="#delete-role">Eliminar Rol</a></li>
-            <li><a href="#assign-role">Asignar Rol</a></li>
             <li><a href="#unassign-role">Desasignar Rol</a></li>
         </ul>
     </section>
@@ -55,6 +50,9 @@
     <section>
         <h2>Contenidos</h2>
         <ul>
+            <li><a href="{% url 'crear_contenido' %}">Crear Contenido</a></li>
+            <li><a href="{% url 'crear_tipo_de_contenido' %}">Crear Tipo de Contenido</a></li>
+            <li><a href="{% url 'listar_tipos_de_contenido' %}">Listar Tipo de Contenido</a></li>
             <li><a href="{% url 'listar_plantillas' %}">Listar Plantillas</a></li>
             <li><a href="{% url 'seleccionar_plantilla' %}">Selecccionar Plantilla</a></li>
             <!-- Añade aquí las opciones relacionadas con contenidos -->
@@ -66,17 +64,15 @@
         <ul>
             <li><a href="{% url 'crear_categoria' %}">Crear Categoría</a></li>
             <li><a href="{% url 'listar_categorias' %}">Listar Categorías</a></li>
+
+
+            <li><a href="{% url 'modificar_categoria' %}">Modificar Categorias</a></li>
             
             <!-- Añade aquí las opciones relacionadas con categorías y subcategorías -->
             <li><a href="{% url 'crear_subcategoria' %}">Crear Subcategoría</a></li>
             <li><a href="{% url 'listar_subcategorias' %}">Listar y Modificar Subcategorías</a></li>
         </ul>
     </section>
-
     <!-- Puedes continuar agregando más secciones según lo necesites -->
-
 </body>
-    <!--<footer>
-        <p>© 2023 - Mi CMS</p>
-    </footer>-->
 </html>

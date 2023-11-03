@@ -22,21 +22,40 @@ from django.http import HttpResponseRedirect
 
 from .forms import SeleccionarPlantillaForm, ConfiguracionSitioForm  # Asegúrate de importar ConfiguracionSitioForm
 
-
+from django.shortcuts import render, redirect
 
 
 def listar_plantillas(request):
+
+    """
+    Lista todas las plantillas disponibles en la base de datos.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página que muestra la lista de plantillas.
+    """
+        
     plantillas = Plantilla.objects.all()
     
     return render(request, 'listar_plantillas.html', {'plantillas': plantillas})
 
 
-# En views.py
-from django.shortcuts import render, redirect
 
-# Resto del código...
 
 def seleccionar_plantilla(request):
+
+    """
+    Permite al usuario seleccionar una plantilla para su perfil.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de selección de plantilla o guarda la selección en la sesión.
+    """
+        
     configuracion_form = ConfiguracionSitioForm() 
     usuario_actual = request.user
     
@@ -69,7 +88,19 @@ def seleccionar_plantilla(request):
     })
 
 
+
 def profile_view(request):
+
+    """
+    Muestra el perfil del usuario, incluyendo la plantilla seleccionada y el contenido editable.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de perfil del usuario.
+    """
+        
     context = {}  # Define el contexto como un diccionario vacío
 
     # Agrega aquí tu lógica existente para obtener información del usuario
@@ -91,7 +122,19 @@ def profile_view(request):
     return render(request, 'profile.html', context)
 
 
+
 def editar_plantilla(request):
+
+    """
+    Permite al usuario editar la plantilla seleccionada, incluyendo la carga de imágenes.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de edición de la plantilla o guarda los cambios en la base de datos.
+    """
+        
     # Obtener el usuario actual y su plantilla seleccionada desde la sesión
     usuario_actual = request.user
 
@@ -133,7 +176,19 @@ def editar_plantilla(request):
     })
 
 
+
 def ver_plantilla(request):
+
+    """
+    Muestra los detalles de la plantilla seleccionada por el usuario.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de detalles de la plantilla.
+    """
+        
     # Obtener el usuario actual y su plantilla seleccionada desde la sesión
     usuario_actual = request.user
 

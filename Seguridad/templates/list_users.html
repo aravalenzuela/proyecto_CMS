@@ -2,72 +2,144 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Listar Usuarios</title>
+    <title>Usuarios</title>
     <style>
-        /* Estilos para la tabla */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f7f7f7;
+            color: #333;
         }
         .container {
             max-width: 800px;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
         }
         h1 {
-            color: #333;
+            color: #444;
             font-size: 24px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 25px;
+        .user-card {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+        .user-card:hover {
+            background-color: #f5f5f5;
+        }
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid #e0e0e0;
+        }
+        .user-details {
+            flex: 1;
+        }
+        .user-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #555;
+        }
+        .user-username {
             font-size: 18px;
-            text-align: left;
+            color: #999;
         }
-        th, td {
-            border: 1px solid #dddddd;
-            padding: 8px;
+        .user-role {
+            font-size: 16px;
+            background-color: #ddd;
+            border-radius: 4px;
+            padding: 2px 5px;
+            display: inline-block;
+            margin-top: 5px;
         }
-        th {
-            background-color: #e0f7fa; /* Celeste */
+        a {
+            color: #3498db;
+            text-decoration: none;
         }
-        td:nth-child(1),
-        td:nth-child(2),
-        td:nth-child(3) {
-            background-color: #faf9e0; /* Amarillo claro */
+        a:hover {
+            text-decoration: underline;
         }
-        tr:hover {
-            background-color: #faf9e0; /* Amarillo claro */
+        
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .actions > span {
+            margin: 0 10px;
+            color: #999; /* Color gris claro para el separador */
+        }
+        .toggle-user {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            color: #e74c3c;
+        }
+        .toggle-user:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Listar Usuarios</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre de Usuario</th>
-                    <th>Email</th>
-                    <!-- Añade más campos si lo necesitas -->
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <h1>Usuarios</h1>
+        
+        {% for user in users %}
+        <div class="user-card">
+            <img src="{{ user.gravatar_url }}" alt="{{ user.name }}" class="user-avatar">
+            <div class="user-details">
+                <div class="user-name">{{ user.name }}</div>
+                <div class="user-username">{{ user.username }}</div>
+                <div>{{ user.id }} | {{ user.email }}</div>
+                <div class="user-role">{{ user.role_name }}</div>
+            </div>
+            <a href="{% url 'asignar_rol_a_usuario' usuario_id=user.id %}">Asignar Rol</a>
+            <div class="toggle-user">
+                <h1>_</h1>
+                <label for="toggle{{ user.id }}">Dar de Baja</label>                
+                <input type="checkbox" id="toggle{{ user.id }}" {% if not user.is_active %}checked{% endif %} onchange="toggleActive({{ user.id }})" data-toggle-url="{% url 'toggle_user_active' user.id %}">
+
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </body>
+<script>
+   function toggleActive(userId) {
+    console.log(userId);
+    let checkboxElement = document.getElementById('toggle' + userId);
+    let toggleUrl = checkboxElement.getAttribute('data-toggle-url');
+    fetch(toggleUrl, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // aquí puedes añadir alguna notificación de éxito si lo deseas
+        } else {
+            // notificar error
+        }
+    });
+}
+
+</script>
 </html>
