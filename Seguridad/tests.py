@@ -9,6 +9,8 @@ from django.shortcuts import get_object_or_404
 
 from django.contrib.auth.models import User
 
+from .models import Contenido, TipoDeContenido, Plantilla
+
 
 # Prueba la creación de una categoría
 @pytest.mark.django_db
@@ -463,3 +465,54 @@ class ModificarCategoriaViewTest(TestCase):
         # Comprueba que los detalles de la categoría actualizada se muestran
         self.assertContains(response, f'Nombre: {updated_name}')
         self.assertContains(response, f'Descripción: {updated_description}')
+
+
+# Pruebas para el models Contenido
+class ContenidoModelTest(TestCase):
+
+    def setUp(self):
+        # Crear instancias para las FK y el usuario.
+        tipo = TipoDeContenido.objects.create(nombre="Tipo Test")
+        plantilla = Plantilla.objects.create(nombre="Plantilla Test")
+        user = User.objects.create_user('testuser', 'test@example.com', 'testpassword')
+
+        # Crear un objeto Contenido.
+        self.contenido = Contenido.objects.create(
+            tipo=tipo,
+            titulo="Test Título",
+            cuerpo="Test Cuerpo",
+            autor=user,
+            plantilla=plantilla
+        )
+
+    def test_contenido_creation(self):
+        """ Testear que el Contenido se crea correctamente """
+        self.assertEqual(self.contenido.titulo, "Test Título")
+        self.assertEqual(self.contenido.cuerpo, "Test Cuerpo")
+
+    def test_str_representation(self):
+        """ Testear la representación string del modelo """
+        self.assertEqual(str(self.contenido), "Test Título")
+
+    def test_fecha_creacion(self):
+        """ Testear que la fecha de creación se añade automáticamente """
+        self.assertIsNotNone(self.contenido.fecha_creacion)
+
+    def test_fecha_modificacion(self):
+        """ Testear que la fecha de modificación se actualiza automáticamente """
+        self.assertIsNotNone(self.contenido.fecha_modificacion)
+
+# Pruebas para el views de Contenido
+class CrearContenidoViewTests(TestCase):
+
+    def setUp(self):
+        # Crear un usuario de prueba
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.client.login(username='testuser', password='testpassword')
+    
+    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('crear_contenido'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'crear_contenido.html')
+
+    

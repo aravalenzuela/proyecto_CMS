@@ -16,24 +16,24 @@ class PlantillaForm(forms.ModelForm):
     Fields:
         nombre (CharField): Campo para el nombre de la plantilla.
         tipo (ChoiceField): Campo para seleccionar el tipo de plantilla.
-        contenido (HiddenInput/Textarea): Campo para el contenido de la plantilla (oculto o como área de texto).
+        contenidoDePlantilla (HiddenInput/Textarea): Campo para el contenido de la plantilla (oculto o como área de texto).
         imagen (ImageField): Campo para cargar una imagen asociada a la plantilla.
     """
         
     class Meta:
         model = Plantilla
-        fields = ['nombre', 'tipo', 'contenido', 'imagen']  # Agregamos el campo 'imagen'
+        fields = ['nombre', 'tipo', 'contenidoDePlantilla', 'imagen']  # Agregamos el campo 'imagen'
         widgets = {
             'tipo': forms.Select(attrs={'onchange': 'showHideFields()'}),  # Añadimos un evento onchange
         }
 
     def __init__(self, *args, **kwargs):
         super(PlantillaForm, self).__init__(*args, **kwargs)
-        # Ocultamos el campo 'contenido' cuando el tipo es 'blog'
-        self.fields['contenido'].widget = forms.HiddenInput()
+        # Ocultamos el campo 'contenidoDePlantilla' cuando el tipo es 'blog'
+        self.fields['contenidoDePlantilla'].widget = forms.HiddenInput()
 
-        # Agregamos un atributo 'class' al campo 'contenido' para aplicar CSS personalizado
-        self.fields['contenido'].widget.attrs.update({'class': 'contenido-field'})
+        # Agregamos un atributo 'class' al campo 'contenidoDePlantilla' para aplicar CSS personalizado
+        self.fields['contenidoDePlantilla'].widget.attrs.update({'class': 'contenidoDePlantilla-field'})
 
 
 
@@ -46,18 +46,18 @@ class PlantillaMultimediaForm(PlantillaForm):
     Fields:
         nombre (CharField): Campo para el nombre de la plantilla.
         tipo (ChoiceField): Campo para seleccionar el tipo de plantilla.
-        contenido (Textarea): Campo para el contenido de la plantilla (como área de texto).
+        contenidoDePlantilla (Textarea): Campo para el contenido de la plantilla (como área de texto).
         imagen (ImageField): Campo para cargar una imagen asociada a la plantilla.
     """
         
     class Meta:
         model = Plantilla
-        fields = ['nombre', 'tipo', 'contenido', 'imagen']
+        fields = ['nombre', 'tipo', 'contenidoDePlantilla', 'imagen']
 
     def __init__(self, *args, **kwargs):
         super(PlantillaMultimediaForm, self).__init__(*args, **kwargs)
-        # Mostramos el campo 'contenido' cuando el tipo es 'multimedia'
-        self.fields['contenido'].widget = forms.Textarea(attrs={'class': 'contenido-field'})
+        # Mostramos el campo 'contenidoDePlantilla' cuando el tipo es 'multimedia'
+        self.fields['contenidoDePlantilla'].widget = forms.Textarea(attrs={'class': 'contenidoDePlantilla-field'})
 
     def is_valid(self):
         valid = super(PlantillaMultimediaForm, self).is_valid()
@@ -104,15 +104,15 @@ class SeleccionarPlantillaForm(forms.Form):
 class ContenidoEditableForm(forms.ModelForm):
 
     """
-    Formulario para crear o editar contenido editable.
+    Formulario para crear o editar contenidoDePlantilla editable.
 
     Fields:
-        contenido (CharField/Textarea): Campo para el contenido editable.
+        contenidoDePlantilla (CharField/Textarea): Campo para el contenido editable.
     """
     
     class Meta:
         model = ContenidoEditable
-        fields = ['contenido']  # Asegúrate de que los campos coincidan con el modelo ContenidoEditable
+        fields = ['contenidoDePlantilla']  # Asegúrate de que los campos coincidan con el modelo ContenidoEditable
 
 
 

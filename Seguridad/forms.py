@@ -2,6 +2,7 @@ from django import forms
 from .models import Categoria, Rol, Permiso, Subcategoria, Usuario
 from django.contrib.auth.models import User
 from Gestion_Contenido.models import Plantilla
+from .models import Contenido, TipoDeContenido, Plantilla
 
 
 from .models import TipoDeContenido
@@ -101,4 +102,17 @@ class TipoDeContenidoForm(forms.ModelForm):
         required=False  # Para permitir que el campo sea opcional
     )
 
+class CrearContenidoForm(forms.ModelForm):
+    class Meta:
+        model = Contenido
+        fields = ['titulo', 'cuerpo', 'tipo', 'plantilla']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'tipo' in self.data:
+            try:
+                tipo_id = int(self.data.get('tipo'))
+                tipo_de_contenido = TipoDeContenido.objects.get(id=tipo_id)
+                self.fields['plantilla'].queryset = Plantilla.objects.filter(id=tipo_de_contenido.plantilla.id)
+            except (ValueError, TypeError, TipoDeContenido.DoesNotExist):
+                pass

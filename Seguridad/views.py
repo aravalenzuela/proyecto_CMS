@@ -5,7 +5,7 @@ from django.contrib import messages
 from .forms import AsignarRolForm
 from .forms import CategoriaForm
 from .models import Categoria  # Importación relativa
-from .forms import CategoriaForm, RolForm
+from .forms import CategoriaForm, RolForm, CrearContenidoForm
 from .models import Categoria, Rol # Importación relativa
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
@@ -319,9 +319,8 @@ def listar_contenidos(request):
         HttpResponse: Renderiza la página que muestra la lista de contenidos.
     """
 
-    contenidos = Contenido.objects.all()
-    return render(request, 'lista_contenidos.html', {'contenidos': contenidos})
-
+    contenidos = Contenido.objects.all() 
+    return render(request, 'listar_contenidos.html', {'contenidos': contenidos})
 
 
 def contenido_detalle(request, pk):
@@ -577,3 +576,34 @@ def listar_tipos_de_contenido(request):
         tipo.plantilla_nombre = tipo.plantilla.nombre if tipo.plantilla else "N/A"
 
     return render(request, 'listar_tipos_de_contenido.html', {'tipos_de_contenido': tipos_de_contenido})
+
+
+def crear_contenido(request):
+    """
+    Vista para crear un nuevo contenido. Si se accede mediante POST y el formulario es válido, 
+    se guarda el contenido con el usuario actual como autor y se redirige al listado de contenidos.
+    Si se accede mediante GET o el formulario POST no es válido, se muestra el formulario de creación.
+    
+    Parameters:
+    - request (HttpRequest): Objeto HttpRequest con los detalles de la petición.
+    
+    Returns:
+    - HttpResponse: Respuesta HTTP con el formulario de creación o redirección al listado de contenidos.
+    """
+    if request.method == "POST":
+        form = CrearContenidoForm(request.POST)
+        if form.is_valid():
+            contenido = form.save(commit=False)
+            contenido.autor = request.user
+            contenido.save()
+            return redirect('listar_contenidos')
+    else:
+        form = CrearContenidoForm()
+
+    return render(request, 'crear_contenido.html', {'form': form})
+
+
+def vista_de_formulario(request):
+    plantillas = Plantilla.objects.all()
+    form = CrearContenidoForm()
+    return render(request, 'crear_contenido.html', {'form': form, 'plantillas': plantillas})

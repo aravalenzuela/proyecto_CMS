@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from Gestion_Contenido.models import Plantilla
+
+
 
 class Permiso(models.Model):
     nombre = models.CharField(max_length=50)
@@ -67,12 +70,28 @@ class TipoDeContenido(models.Model):
 
 
 class Contenido(models.Model):
+    """
+    Modelo que representa un Contenido en la aplicación.
+
+    Campos:
+    - tipo (ForeignKey): Relación con el modelo TipoDeContenido. Representa el tipo de contenido.
+    - titulo (CharField): Título del contenido. Máximo de 200 caracteres.
+    - cuerpo (TextField): Descripción del contenido principal.
+    - fecha_creacion (DateTimeField): Fecha y hora cuando el contenido fue creado. Se establece automáticamente.
+    - fecha_modificacion (DateTimeField): Fecha y hora de la última modificación del contenido. Se actualiza automáticamente.
+    - autor (ForeignKey): Relación con el modelo User. Representa el autor del contenido.
+    - plantilla (ForeignKey): Relación opcional con el modelo Plantilla. Representa la plantilla asociada al contenido.
+
+    Métodos:
+    - __str__(): Devuelve una representación en cadena del objeto, en este caso, el título del contenido.
+    """
     tipo = models.ForeignKey(TipoDeContenido, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=200)
     cuerpo = models.TextField()
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_modificacion = models.DateTimeField(auto_now=True)
     autor = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    plantilla = models.ForeignKey(Plantilla, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.titulo
