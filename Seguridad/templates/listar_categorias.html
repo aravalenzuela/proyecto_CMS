@@ -59,6 +59,14 @@
             border-radius: 4px;
             cursor: pointer;
         }
+        /* Agrega estilos para la tabla con estado de categoría */
+        .table {
+            margin-top: 20px;
+        }
+        .alert {
+            padding: 10px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -69,7 +77,9 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Descripción</th>
-                    <th>Subcategorías</th> <!-- Agregamos una nueva columna -->
+                    <th>Subcategorías</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -78,11 +88,18 @@
                     <td>{{ categoria.nombre }}</td>
                     <td>{{ categoria.descripcion }}</td>
                     <td>
-                        <ul> <!-- Usamos una lista no ordenada para las subcategorías -->
-                            {% for subcategoria in categoria.subcategoria_set.all %} <!-- Iteramos sobre las subcategorías asociadas a esta categoría -->
+                        <ul>
+                            {% for subcategoria in categoria.subcategoria_set.all %}
                                 <li>{{ subcategoria.nombre }}</li>
                             {% endfor %}
                         </ul>
+                    </td>
+                    <td>{% if categoria.activo %}Activa{% else %}Inactiva{% endif %}</td>
+                    <td>
+                        <form method="post" action="{% url 'modificar_estado_categoria' categoria.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="button">Modificar Estado</button>
+                        </form>
                     </td>
                 </tr>
                 {% endfor %}
@@ -92,5 +109,32 @@
     <div class="button-container">
         <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver</a></button>
     </div>
+
+    <!-- Agrega el script jQuery aquí -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $("form").submit(function(e) {
+            e.preventDefault(); // Evita la recarga de la página
+            var form = $(this);
+            $.ajax({
+                type: form.attr("method"),
+                url: form.attr("action"),
+                data: form.serialize(),
+                success: function(data) {
+                    // Mostrar mensaje de éxito
+                    $(".alert").html("Estado de categoría modificado correctamente.").addClass("alert-success").show();
+                    // Recargar la página después de un breve retraso (por ejemplo, 1 segundo)
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                },
+                error: function(data) {
+                    // Manejar errores si es necesario
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>

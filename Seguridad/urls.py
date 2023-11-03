@@ -1,7 +1,9 @@
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
+    
     # Ruta para crear un nuevo permiso.
     path('crear_permiso/', views.crear_permiso, name='crear_permiso'),
 
@@ -20,6 +22,9 @@ urlpatterns = [
     # Ruta para listar todas las categorías disponibles.
     path('listar_categorias/', views.listar_categorias, name='listar_categorias'),
 
+   # Ruta para modificar el estado de una categoría.
+    path('modificar_estado_categoria/<int:categoria_id>/', views.modificar_estado_categoria, name='modificar_estado_categoria'),   
+
     # Ruta para crear un nuevo rol.
     path('crear_rol/', views.crear_rol, name='crear_rol'),
 
@@ -33,7 +38,7 @@ urlpatterns = [
 
     path('contenido/<int:pk>/', views.contenido_detalle, name='contenido_detalle'),
     # Ruta para modificar una categoría existente.
-    path('modificar_categoria/<int:categoria_id>/', views.modificar_categoria, name='modificar_categoria'),
+    path('modificar_categoria/', views.modificar_categoria, name='modificar_categoria'),
 
     # URL para crear una subcategoría
     path('crear_subcategoria/', views.crear_subcategoria, name='crear_subcategoria'),
@@ -54,5 +59,10 @@ urlpatterns = [
 
     path('modificar_rol/<int:rol_id>/', views.modificar_rol, name='modificar_rol')
 
+
+    
+    path('crear_tipo_de_contenido/', views.crear_tipo_de_contenido, name='crear_tipo_de_contenido'),
+    
+    path('listar_tipos_de_contenido/', views.listar_tipos_de_contenido, name='listar_tipos_de_contenido'),
 ]
 
