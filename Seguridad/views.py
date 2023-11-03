@@ -11,6 +11,8 @@ from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from Gestion_Contenido.models import Plantilla
+from .forms import SubcategoriaForm
+from django.urls import reverse
 #from .models import Plantilla
 #from .forms import SeleccionarPlantillaForm
 
