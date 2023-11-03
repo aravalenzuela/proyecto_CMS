@@ -1,13 +1,14 @@
 from django.test import TestCase
 import pytest
 from django.urls import reverse
-from Seguridad.models import Categoria, Rol, Permiso, Subcategoria  # Asegúrate de que la importación sea correcta
+from Seguridad.models import Categoria, Rol, Permiso, Subcategoria, TipoDeContenido, Contenido # Asegúrate de que la importación sea correcta
 from django.shortcuts import redirect
-
+from django.db.utils import IntegrityError
 
 from django.shortcuts import get_object_or_404
-
+from Seguridad.views import listar_tipos_de_contenido, modificar_estado_categoria
 from django.contrib.auth.models import User
+
 
 
 # Prueba la creación de una categoría
@@ -463,3 +464,190 @@ class ModificarCategoriaViewTest(TestCase):
         # Comprueba que los detalles de la categoría actualizada se muestran
         self.assertContains(response, f'Nombre: {updated_name}')
         self.assertContains(response, f'Descripción: {updated_description}')
+
+@pytest.mark.django_db
+def test_modificar_estado_categoria_view(client):
+
+    """
+    Prueba unitaria para la vista que modifica el estado de una categoría.
+
+    Parameters:
+        client (Client): Un cliente de prueba para realizar solicitudes HTTP.
+
+    Returns:
+        None
+
+    """
+
+    # Crear una instancia de la categoría
+    categoria = Categoria.objects.create(nombre="Categoría de prueba", activo=True)
+
+    # Realizar una solicitud POST a la vista con el ID de la categoría
+    response = client.post(reverse('modificar_estado_categoria', args=[categoria.pk]))
+
+    # Verificar que la solicitud fue exitosa (código de respuesta HTTP 302 para la redirección)
+    assert response.status_code == 302
+
+    # Verificar que la categoría cambió su estado a inactivo (activo=False)
+    categoria_actualizada = Categoria.objects.get(pk=categoria.pk)
+    assert not categoria_actualizada.activo
+
+@pytest.mark.django_db
+def test_modificar_estado_categoria_view_category_not_found(client):
+
+    """
+    Prueba unitaria para la vista que intenta modificar el estado de una categoría que no existe.
+
+    Parameters:
+        client (Client): Un cliente de prueba para realizar solicitudes HTTP.
+
+    Returns:
+        None
+
+    """
+
+    # Intentar modificar el estado de una categoría que no existe
+    response = client.post(reverse('modificar_estado_categoria', args=[999]))  # ID no existente
+
+    # Verificar que la categoría no se encontró y se devuelve una respuesta JSON con un código de estado 404
+    assert response.status_code == 404
+    assert response.json() == {'mensaje': 'Categoría no encontrada'}
+
+
+@pytest.mark.django_db
+def test_listar_tipos_de_contenido_view(client):
+
+    """
+    Prueba unitaria para la vista que lista los tipos de contenido.
+
+    Parameters:
+        client (Client): Un cliente de prueba para realizar solicitudes HTTP.
+
+    Returns:
+        None
+
+    """
+    # Crear instancias de TipoDeContenido (puedes ajustar esto según tus necesidades)
+    tipo1 = TipoDeContenido.objects.create(nombre="Tipo 1")
+    tipo2 = TipoDeContenido.objects.create(nombre="Tipo 2")
+
+    # Realizar una solicitud GET a la vista
+    response = client.get(reverse('listar_tipos_de_contenido'))  # Ajusta el nombre de la URL según tu proyecto
+
+    # Verificar que la solicitud fue exitosa (código de respuesta HTTP 200)
+    assert response.status_code == 200
+
+    # Verificar que los objetos TipoDeContenido se muestran en la respuesta
+    assert tipo1.nombre.encode() in response.content
+    assert tipo2.nombre.encode() in response.content
+
+    # También puedes verificar otros aspectos de la respuesta, como la plantilla utilizada
+
+    # Por ejemplo, verifica que se está utilizando la plantilla 'listar_tipos_de_contenido.html'
+    assert 'listar_tipos_de_contenido.html' in [template.name for template in response.templates]
+
+    # También puedes verificar que el contexto de la vista es correcto
+    assert 'tipos_de_contenido' in response.context
+
+    # Verificar que el contexto contiene los objetos TipoDeContenido
+    assert tipo1 in response.context['tipos_de_contenido']
+    assert tipo2 in response.context['tipos_de_contenido']
+
+@pytest.mark.django_db
+def test_contenido_creation():
+
+    """
+    Prueba unitaria para la creación de una instancia de Contenido.
+
+    Returns:
+        None
+
+    """
+    # Crear instancias de TipoDeContenido y User para usar en la prueba
+    tipo_de_contenido = TipoDeContenido.objects.create(nombre="Ejemplo")
+    user = User.objects.create_user(username="usuario", password="contraseña")
+
+    # Crear una instancia de Contenido
+    contenido = Contenido(
+        tipo=tipo_de_contenido,
+        titulo="Título de ejemplo",
+        cuerpo="Cuerpo de ejemplo",
+        autor=user,
+    )
+    contenido.save()
+
+    # Comprobar que la instancia se ha guardado correctamente en la base de datos
+    assert Contenido.objects.count() == 1
+
+    # Comprobar que los atributos se han guardado correctamente
+    contenido_guardado = Contenido.objects.first()
+    assert contenido_guardado.tipo == tipo_de_contenido
+    assert contenido_guardado.titulo == "Título de ejemplo"
+    assert contenido_guardado.cuerpo == "Cuerpo de ejemplo"
+    assert contenido_guardado.autor == user
+
+@pytest.mark.django_db
+def test_contenido_str_method():
+    """
+    Prueba unitaria para el método __str__ de la clase Contenido.
+
+    Returns:
+        None
+
+    """
+
+    tipo_de_contenido = TipoDeContenido.objects.create(nombre="Ejemplo")
+    user = User.objects.create_user(username="usuario", password="contraseña")
+    contenido = Contenido(
+        tipo=tipo_de_contenido,
+        titulo="Título de ejemplo",
+        cuerpo="Cuerpo de ejemplo",
+        autor=user,
+    )
+
+    # Comprobar que el método __str__ devuelve el título del contenido
+    assert str(contenido) == "Título de ejemplo"
+
+
+@pytest.mark.django_db
+def test_tipo_de_contenido_creation():
+    """
+    Prueba unitaria para la creación de una instancia de TipoDeContenido.
+
+    Returns:
+        None
+
+    """
+
+    # Crear una instancia de TipoDeContenido
+    tipo_de_contenido = TipoDeContenido(
+        nombre="Ejemplo",
+        descripcion="Descripción de ejemplo",
+    )
+    tipo_de_contenido.save()
+
+    # Comprobar que la instancia se ha guardado correctamente en la base de datos
+    assert TipoDeContenido.objects.count() == 1
+
+    # Comprobar que los atributos se han guardado correctamente
+    tipo_guardado = TipoDeContenido.objects.first()
+    assert tipo_guardado.nombre == "Ejemplo"
+    assert tipo_guardado.descripcion == "Descripción de ejemplo"
+
+@pytest.mark.django_db
+def test_tipo_de_contenido_str_method():
+    """
+    Prueba unitaria para el método __str__ de la clase TipoDeContenido.
+
+    Returns:
+        None
+
+    """
+    tipo_de_contenido = TipoDeContenido(
+        nombre="Ejemplo",
+        descripcion="Descripción de ejemplo",
+    )
+
+    # Comprobar que el método __str__ devuelve el nombre del tipo de contenido
+    assert str(tipo_de_contenido) == "Ejemplo"
+

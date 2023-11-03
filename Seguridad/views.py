@@ -252,6 +252,21 @@ def listar_categorias(request):
 
 @require_http_methods(["POST"])
 def modificar_estado_categoria(request, categoria_id):
+
+    """
+    Vista que permite modificar el estado activo/inactivo de una categoría.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponseRedirect o JsonResponse: 
+            - Si la categoría se encuentra y se modifica correctamente, se redirige a la página de listado de categorías con un parámetro de éxito.
+            - Si la categoría no se encuentra, se devuelve una respuesta JSON con un mensaje de error y un código de estado 404.
+
+    """
+
+
     try:
         categoria = Categoria.objects.get(pk=categoria_id)
         categoria.activo = not categoria.activo
@@ -503,6 +518,20 @@ def vista_lector(request):
 
 
 def crear_tipo_de_contenido(request):
+
+    """
+    Vista que permite la creación de un nuevo tipo de contenido.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponseRedirect o HttpResponse: 
+            - Si la solicitud es un POST y los datos del formulario son válidos, se crea un nuevo tipo de contenido y se redirige a la página deseada.
+            - Si la solicitud es un POST pero los datos del formulario no son válidos o el tipo de contenido ya existe, se muestra un mensaje de error y se vuelve a mostrar el formulario.
+            - Si la solicitud es un GET, se muestra el formulario vacío para la creación de un nuevo tipo de contenido.
+    """
+    
     if request.method == 'POST':
         form = TipoDeContenidoForm(request.POST)
         if form.is_valid():
@@ -523,6 +552,18 @@ def crear_tipo_de_contenido(request):
 
 
 def listar_tipos_de_contenido(request):
+
+    """
+    Vista que muestra una lista de tipos de contenido.
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: 
+            - Muestra una página que lista todos los tipos de contenido disponibles, junto con sus nombres de plantilla si están asociados.
+    """
+
     tipos_de_contenido = TipoDeContenido.objects.all()
 
     for tipo in tipos_de_contenido:

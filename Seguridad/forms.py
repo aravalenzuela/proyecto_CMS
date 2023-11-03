@@ -90,6 +90,18 @@ class SubcategoriaForm(forms.ModelForm):
 
 
 class TipoDeContenidoForm(forms.ModelForm):
+    """
+    Formulario para crear o editar un tipo de contenido.
+
+    Attributes:
+        Meta (inner class):
+            model (TipoDeContenido): El modelo de TipoDeContenido que se utiliza para crear el formulario.
+            fields (list): Los campos del modelo que se incluirán en el formulario (nombre, descripcion, plantilla).
+            
+        plantilla (ModelChoiceField):
+            Un campo desplegable que permite al usuario seleccionar una Plantilla para asociar al TipoDeContenido.
+            El campo es opcional y tiene una etiqueta para la opción vacía.
+    """
     class Meta:
         model = TipoDeContenido
         fields = ['nombre', 'descripcion', 'plantilla']
