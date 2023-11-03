@@ -47,8 +47,8 @@ def profile_view(request):
 
      # Diccionario que mapea roles a vistas
     role_to_view = {
-        4: 'profile.html',
-        5: 'vista_lector.html'
+        2: 'profile.html',
+        1: 'vista_lector.html'
     }
     # Busca la vista o función correspondiente en el diccionario
     view_name = role_to_view.get(user_role, 'vista_lector.html')  # Valor predeterminado es 'profile.html'
