@@ -371,3 +371,23 @@ def eliminar_rol(request, rol_id):
         rol.delete()
         return redirect('listar_roles')
     return render(request, 'confirmar_eliminacion.html', {'rol': rol})
+
+def clean_nombre(self):
+    nombre = self.cleaned_data.get('nombre')
+    if Rol.objects.filter(nombre=nombre).exists():
+        raise forms.ValidationError("Este rol ya existe.")
+    return nombre
+
+def modificar_rol(request, rol_id):
+    rol_instance = get_object_or_404(Rol, pk=rol_id)
+    
+    if request.method == 'POST':
+        form = RolForm(request.POST, instance=rol_instance)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Rol modificado con éxito.')
+            return redirect('listar_roles')
+    else:
+        form = RolForm(instance=rol_instance)
+
+    return render(request, 'modificar_rol.html', {'form': form, 'rol': rol_instance})

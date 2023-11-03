@@ -33,8 +33,3 @@ class SubcategoriaForm(forms.ModelForm):
         model = Subcategoria
         fields = ['nombre', 'descripcion', 'categoria_relacionada']  # Asegúrate de que estos campos coincidan con los de tu modelo
 
-def clean_nombre(self):
-    nombre = self.cleaned_data.get('nombre')
-    if Rol.objects.filter(nombre=nombre).exists():
-        raise forms.ValidationError("Este rol ya existe.")
-    return nombre
