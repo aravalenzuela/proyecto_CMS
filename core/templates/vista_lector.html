@@ -10,18 +10,28 @@
     <style>
         .sidebar {
             height: 100vh;
-            background-color: #333;
+            background-color: #202022;
             color: white;
             padding: 20px;
         }
 
         .sidebar .list-group-item {
-            background-color: transparent;
+            background-color: #333;
             border: none;
+            color: white; /* Texto blanco cuando está activo */
+        }
+
+        .sidebar .list-group-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar .list-group-item.active {
+            background-color: blue;
+            color: white;
         }
 
         .active {
-            background-color: #007BFF;
+            background-color: #0e1d50;
         }
 
         .container {
@@ -107,7 +117,7 @@
                     <div class="card-body">
                         <h5 class="card-title">
                             <a href="#" class="text-decoration-none text-dark">MICMS.com en Español</a>
-                            <small class="text-muted"> - Magdalena Oliva - es.blog.micms.com - Hace 2d</small>
+                            <small class="text-muted"> - Marcelo Caceres - es.blog.micms.com - Hace 30m</small>
                         </h5>
                         <h6 class="card-subtitle mb-2 text-muted">Recién salidos del horno: nuevos temas para micms.com (octubre 2023)</h6>
                         <p class="card-text">Nuestro equipo de temas está a tope. Aquí tenemos una nueva tanda de diseños para blogueros y artistas.</p>
@@ -152,6 +162,16 @@
     <script>
         document.getElementById('likes-button').addEventListener('click', function() {
             document.querySelector('.likes-message').style.display = 'block';
+        });
+        // Código para cambiar el elemento activo en el sidebar
+        const listItems = document.querySelectorAll('.sidebar .list-group-item');
+
+        listItems.forEach(function(item) {
+            item.addEventListener('click', function() {
+            // Elimina la clase "active" de todos los elementos
+            listItems.forEach(i => i.classList.remove('active'));
+            // Añade la clase "active" al elemento clicado
+            this.classList.add('active');
         });
     </script>
 </body>
