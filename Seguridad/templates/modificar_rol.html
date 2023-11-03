@@ -4,6 +4,5 @@
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Guardar cambios</button>
-    <a href="{% url 'profile_view' %}">Volver al perfil</a>
 </form>
 {% endblock %}
