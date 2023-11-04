@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Contenidos</title>
+    <style>
+        /* Los estilos ya definidos anteriormente */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #e0f7fa; /* Celeste */
+        }
+        tr:nth-child(even) {
+            background-color: #e0f7fa; /* Celeste */
+        }
+        td:first-child {
+            background-color: #faf9e0; /* Amarillo claro */
+        }
+        td:nth-child(2) {
+            background-color: #faf6e0; /* Amarillo claro */
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Listado de Contenidos</h1>
+        <table aria-label="Tabla de Contenidos">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Autor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contenido in contenidos %}
+                <tr>
+                    <td>{{ contenido.titulo }}</td>
+                    <td>{{ contenido.descripcion }}</td>
+                    <td>{{ contenido.autor }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No hay contenidos disponibles.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="button-container">
+        <button type="submit" class="button"><a href="{% url 'crear_contenido' %}" style="color: white; text-decoration: none;">Crear nuevo contenido</a></button>
+        <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver</a></button>
+    </div>
+</body>
+</html>

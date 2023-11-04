@@ -27,7 +27,7 @@ class Plantilla(models.Model):
         ('blog', 'Blog (Solo texto)'),
         ('multimedia', 'Multimedia (Texto + Multimedia)'),
     )
-    contenido = models.TextField(default='Texto predeterminado')
+    contenidoDePlantilla = models.TextField(default='Texto predeterminado')
     nombre = models.CharField(max_length=100)
     tipo = models.CharField(max_length=50, choices=TIPO_CHOICES)
     predeterminada = models.BooleanField(default=False)
@@ -59,7 +59,7 @@ class PlantillaPredeterminada(models.Model):
 
     nombre = models.CharField(max_length=100)
     tipo = models.CharField(max_length=20, choices=[('blog', 'Plantilla solo de texto'), ('imagen', 'Plantilla con imagen')])
-    contenido = models.TextField()
+    contenidoDePlantilla = models.TextField()
 
     def __str__(self):
         return self.nombre
@@ -105,7 +105,7 @@ class ContenidoEditable(models.Model):
 
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     plantilla = models.ForeignKey(Plantilla, on_delete=models.CASCADE)
-    contenido = models.TextField()
+    contenidoDePlantilla = models.TextField()
 
     def __str__(self):
         return f"Contenido editable de {self.usuario.username} para la plantilla {self.plantilla.nombre}"

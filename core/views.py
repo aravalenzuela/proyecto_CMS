@@ -38,20 +38,26 @@ def profile_view(request):
     # Obtiene el perfil del usuario y su rol
     try:
         user_profile = Usuario.objects.get(user=request.user)
-        user_role = user_profile.rol.id
+        user_role = user_profile.rol.id if user_profile.rol else None
     except Usuario.DoesNotExist:
-        user_role = None
+        # Si el usuario no tiene un perfil, crea uno y le asigna el rol de lector
+        lector_role = Rol.objects.get(id=5)
+        user_profile = Usuario.objects.create(user=request.user, rol=lector_role)
+        user_role = 5  # ID del rol Lector
 
-    # Basado en el rol, decides a qué vista redirigir
-    if user_role == 12:
-        return redirect('admin_dashboard')
-    elif user_role == 8:
-        return render(request, 'profile.html')
-    elif user_role == 11 :
-        return render(request, 'vista_lector.html')
+     # Diccionario que mapea roles a vistas
+    role_to_view = {
+        2: 'profile.html',
+        1: 'vista_lector.html'
+    }
+    # Busca la vista o función correspondiente en el diccionario
+    view_name = role_to_view.get(user_role, 'vista_lector.html')  # Valor predeterminado es 'profile.html'
 
-    # Si no tiene un rol específico o es un rol desconocido, muestra su perfil con Gravatar
-    return render(request, 'profile.html', {'gravatar_url': gravatar_url})
+    # Si es un nombre de vista, redirige. Si es un template, renderiza.
+    if view_name.endswith('.html'):
+        return render(request, view_name, {'gravatar_url': gravatar_url})
+    else:
+        return redirect(view_name)
 
 
 

@@ -14,14 +14,18 @@
         }
         .container {
             max-width: 800px;
-            margin: 0 auto;
+            margin: 40px auto;
             padding: 20px;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
         }
         h1 {
             color: #333;
             font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
         }
         table {
             border-collapse: collapse;
@@ -43,6 +47,26 @@
         td:nth-child(3) {
             background-color: #faf9e0; /* Amarillo claro */
         }
+        a {
+            display: inline-block;
+            background-color: #f44336; /* Rojo */
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        a:hover {
+            background-color: #d32f2f; /* Rojo oscuro */
+        }
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        ul li {
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -54,6 +78,7 @@
                     <th>Nombre</th>
                     <th>Descripción</th>
                     <th>Permisos</th>
+                    <th>Funciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -68,6 +93,9 @@
                                 <li>{{ permiso.nombre }}</li>
                             {% endfor %}
                         </ul>
+                    </td>
+                    <td>
+                        <a href="{% url 'eliminar_rol' rol.id %}">Eliminar Rol</a>
                     </td>
                 </tr>
                 {% endfor %}
