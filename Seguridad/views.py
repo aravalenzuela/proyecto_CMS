@@ -13,6 +13,10 @@ from django.contrib.auth.decorators import login_required
 from Gestion_Contenido.models import Plantilla
 from .forms import SubcategoriaForm
 from django.urls import reverse
+
+from core.views import get_gravatar_url
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 #from .models import Plantilla
 #from .forms import SeleccionarPlantillaForm
 
