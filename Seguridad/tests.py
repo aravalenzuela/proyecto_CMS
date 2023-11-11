@@ -9,6 +9,8 @@ from django.shortcuts import get_object_or_404
 from Seguridad.views import listar_tipos_de_contenido, modificar_estado_categoria
 from django.contrib.auth.models import User
 
+from .models import Contenido, TipoDeContenido, Plantilla
+
 
 
 # Prueba la creación de una categoría

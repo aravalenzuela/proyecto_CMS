@@ -34,7 +34,7 @@ urlpatterns = [
     # Ruta para asignar permisos a los roles ya creados.
     path('asignar_permiso/', views.asignar_permiso, name='asignar_permiso'),
 
-    path('contenidos/', views.listar_contenidos, name='lista_contenidos'),
+    path('listar_contenidos/', views.listar_contenidos, name='listar_contenidos'),
 
     path('contenido/<int:pk>/', views.contenido_detalle, name='contenido_detalle'),
     # Ruta para modificar una categoría existente.
@@ -53,10 +53,19 @@ urlpatterns = [
 
     path('vista_lector/', views.vista_lector, name="vista_lector"),
 
+    path('dar_de_baja_o_activar/<int:user_id>/', views.toggle_user_active, name='toggle_user_active'),
 
-    
+    path('eliminar_rol/<int:rol_id>/', views.eliminar_rol, name='eliminar_rol'),
+
+    path('modificar_rol/<int:rol_id>/', views.modificar_rol, name='modificar_rol'),
+
     path('crear_tipo_de_contenido/', views.crear_tipo_de_contenido, name='crear_tipo_de_contenido'),
     
     path('listar_tipos_de_contenido/', views.listar_tipos_de_contenido, name='listar_tipos_de_contenido'),
+    
+    path('crear_contenido/', views.crear_contenido, name='crear_contenido'),
+    #path('crear_contenido/obtener_todas_las_plantillas/', views.obtener_todas_las_plantillas, name='obtener_todas_las_plantillas'),
+
+
 ]
 

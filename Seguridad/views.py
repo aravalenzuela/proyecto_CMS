@@ -2,17 +2,22 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Permiso, Usuario , Categoria, Rol , Contenido, TipoDeContenido, Subcategoria
 from django.contrib import messages
-from .forms import AsignarPermisoForm
+from .forms import AsignarRolForm
 from .forms import CategoriaForm
 from .models import Categoria  # Importación relativa
-from .forms import CategoriaForm, RolForm
+from .forms import CategoriaForm, RolForm, CrearContenidoForm
 from .models import Categoria, Rol # Importación relativa
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
+from django.http import JsonResponse
 from Gestion_Contenido.models import Plantilla
 from .forms import SubcategoriaForm
 from django.urls import reverse
+from django.contrib.auth.models import User
+from core.views import get_gravatar_url
+
 #from .models import Plantilla
 #from .forms import SeleccionarPlantillaForm
 
@@ -329,9 +334,8 @@ def listar_contenidos(request):
         HttpResponse: Renderiza la página que muestra la lista de contenidos.
     """
 
-    contenidos = Contenido.objects.all()
-    return render(request, 'lista_contenidos.html', {'contenidos': contenidos})
-
+    contenidos = Contenido.objects.all() 
+    return render(request, 'listar_contenidos.html', {'contenidos': contenidos})
 
 
 def contenido_detalle(request, pk):
@@ -514,6 +518,49 @@ def vista_lector(request):
 
     return render(request, 'vista_lector.html', {'posts': posts})
 
+def toggle_active_view(request, user_id):
+    user = CustomUser.objects.get(id=user_id)
+    user.is_active = not user.is_active
+    user.save()
+    return JsonResponse({'success': True})
+
+def toggle_user_active(request, user_id):
+    # Aquí va tu lógica para activar/desactivar el usuario
+    # Por ejemplo, cambiar el campo is_active en el modelo User
+    # Luego, devolver una respuesta basada en el resultado
+
+    user = User.objects.get(pk=user_id)
+    user.is_active = not user.is_active
+    user.save()
+
+    return JsonResponse({'success': True, 'is_active': user.is_active})
+
+def eliminar_rol(request, rol_id):
+    rol = get_object_or_404(Rol, pk=rol_id)
+    if request.method == "POST":  # Si el método es POST, significa que el usuario ha confirmado la eliminación
+        rol.delete()
+        return redirect('listar_roles')
+    return render(request, 'confirmar_eliminacion.html', {'rol': rol})
+
+def clean_nombre(self):
+    nombre = self.cleaned_data.get('nombre')
+    if Rol.objects.filter(nombre=nombre).exists():
+        raise forms.ValidationError("Este rol ya existe.")
+    return nombre
+
+def modificar_rol(request, rol_id):
+    rol_instance = get_object_or_404(Rol, pk=rol_id)
+    
+    if request.method == 'POST':
+        form = RolForm(request.POST, instance=rol_instance)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Rol modificado con éxito.')
+            return redirect('listar_roles')
+    else:
+        form = RolForm(instance=rol_instance)
+
+    return render(request, 'modificar_rol.html', {'form': form, 'rol': rol_instance})
 
 
 
@@ -570,3 +617,34 @@ def listar_tipos_de_contenido(request):
         tipo.plantilla_nombre = tipo.plantilla.nombre if tipo.plantilla else "N/A"
 
     return render(request, 'listar_tipos_de_contenido.html', {'tipos_de_contenido': tipos_de_contenido})
+
+
+def crear_contenido(request):
+    """
+    Vista para crear un nuevo contenido. Si se accede mediante POST y el formulario es válido, 
+    se guarda el contenido con el usuario actual como autor y se redirige al listado de contenidos.
+    Si se accede mediante GET o el formulario POST no es válido, se muestra el formulario de creación.
+    
+    Parameters:
+    - request (HttpRequest): Objeto HttpRequest con los detalles de la petición.
+    
+    Returns:
+    - HttpResponse: Respuesta HTTP con el formulario de creación o redirección al listado de contenidos.
+    """
+    if request.method == "POST":
+        form = CrearContenidoForm(request.POST)
+        if form.is_valid():
+            contenido = form.save(commit=False)
+            contenido.autor = request.user
+            contenido.save()
+            return redirect('listar_contenidos')
+    else:
+        form = CrearContenidoForm()
+
+    return render(request, 'crear_contenido.html', {'form': form})
+
+
+def vista_de_formulario(request):
+    plantillas = Plantilla.objects.all()
+    form = CrearContenidoForm()
+    return render(request, 'crear_contenido.html', {'form': form, 'plantillas': plantillas})
