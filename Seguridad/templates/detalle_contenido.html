@@ -1,0 +1,69 @@
+<!-- proyecto_CMS/Seguridad/templates/detalle_contenido.html -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Contenido</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        a, button {
+            display: inline-block;
+            padding: 10px;
+            margin: 5px 0;
+            text-decoration: none;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        a {
+            background-color: #007BFF;
+        }
+
+        button {
+            background-color: #28a745;
+        }
+
+        a:hover, button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <h1>Detalles del Contenido</h1>
+    <p>Título: {{ contenido.titulo }}</p>
+    <p>Descripción: {{ contenido.cuerpo }}</p>
+    <p>Autor: {{ contenido.autor }}</p>
+    <p>Estado: {{ contenido.get_estado_display }}</p>
+
+    {% if contenido.estado == 'Borrador' %}
+        <a href="{% url 'revisar_contenido' contenido.id %}">Enviar a Revisión</a>
+        <a href="{% url 'cancelar_agregar_contenido' contenido.id %}">Cancelar</a>
+
+    {% elif contenido.estado == 'En Revisión' %}
+        <p>Este contenido está actualmente en revisión. Las acciones disponibles son:</p>
+        <a href="{% url 'aprobar_contenido' contenido.id %}">Aprobar</a>
+        <a href="{% url 'desaprobar_contenido' contenido.id %}">Desaprobar</a>
+        
+    {% endif %}
+
+    <a href="{% url 'listar_contenidos' %}" class="button">Volver al listado</a>
+
+</body>
+</html>

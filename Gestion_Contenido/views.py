@@ -152,7 +152,7 @@ def editar_plantilla(request):
         # Utiliza PlantillaMultimediaForm para permitir cargar imágenes
         contenido_editable_form = PlantillaMultimediaForm(request.POST, request.FILES, instance=plantilla_seleccionada)
         if contenido_editable_form.is_valid():
-            contenido_nuevo = contenido_editable_form.cleaned_data['contenido']
+            contenido_nuevo = contenido_editable_form.cleaned_data['contenidoDePlantilla']
 
             # Guardar los cambios en la base de datos
             contenido_editable_form.save()
@@ -166,7 +166,7 @@ def editar_plantilla(request):
     plantilla_data = {
         'nombre': plantilla_seleccionada.nombre if plantilla_seleccionada else "",
         'tipo': plantilla_seleccionada.tipo if plantilla_seleccionada else "",
-        'contenido': plantilla_seleccionada.contenido if plantilla_seleccionada else "",
+        'contenidoDePlantilla': plantilla_seleccionada.contenidoDePlantilla if plantilla_seleccionada else "",
     }
 
     return render(request, 'editar_plantilla.html', {
@@ -208,7 +208,7 @@ def ver_plantilla(request):
     plantilla_data = {
         'nombre': plantilla_seleccionada.nombre if plantilla_seleccionada else "",
         'tipo': plantilla_seleccionada.tipo if plantilla_seleccionada else "",
-        'contenido': plantilla_seleccionada.contenido if plantilla_seleccionada else "",
+        'contenidoDePlantilla': plantilla_seleccionada.contenidoDePlantilla if plantilla_seleccionada else "",
     }
 
     return render(request, 'ver_plantilla.html', {

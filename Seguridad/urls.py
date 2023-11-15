@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 
 
+
+
 urlpatterns = [
     
     # Ruta para crear un nuevo permiso.
@@ -66,6 +68,17 @@ urlpatterns = [
     path('crear_contenido/', views.crear_contenido, name='crear_contenido'),
     #path('crear_contenido/obtener_todas_las_plantillas/', views.obtener_todas_las_plantillas, name='obtener_todas_las_plantillas'),
 
+
+    
+    path('contenido/<int:contenido_id>/revisar/', views.revisar_contenido, name='revisar_contenido'),
+    path('contenido/<int:contenido_id>/aprobar/', views.aprobar_contenido, name='aprobar_contenido'),
+    path('contenido/<int:contenido_id>/desaprobar/', views.desaprobar_contenido, name='desaprobar_contenido'),
+    path('contenido/<int:contenido_id>/inactivar/', views.inactivar_contenido, name='inactivar_contenido'),
+    path('contenido/<int:contenido_id>/cancelar/', views.cancelar_agregar_contenido, name='cancelar_agregar_contenido'),
+    path('contenido/<int:contenido_id>/', views.detalle_contenido, name='detalle_contenido'),
+    path('tablero_kanban/', views.tablero_kanban, name='tablero_kanban'),
+    
+    path('cambiar_estado/', views.cambiar_estado_contenido, name='cambiar_estado_contenido'),
 
 ]
 

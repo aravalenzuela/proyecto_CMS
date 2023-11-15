@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from Gestion_Contenido.models import Plantilla
 
-
+import uuid
 
 class Permiso(models.Model):
     """
@@ -107,7 +107,42 @@ class Contenido(models.Model):
     Methods:
         __str__(): Devuelve el título del contenido como representación en cadena.
     """ 
+    ESTADO_BORRADOR = 'Borrador'
+    ESTADO_EN_REVISION = 'En Revisión'
+    ESTADO_RECHAZADO = 'Rechazado'
+    ESTADO_PUBLICADO = 'Publicado'
+    ESTADO_INACTIVO = 'Inactivo'
 
+    ESTADOS_CHOICES = [
+        (ESTADO_BORRADOR, 'Borrador'),
+        (ESTADO_EN_REVISION, 'En Revisión'),
+        (ESTADO_RECHAZADO, 'Rechazado'),
+        (ESTADO_PUBLICADO, 'Publicado'),
+        (ESTADO_INACTIVO, 'Inactivo'),
+    ]
+
+    def cambiar_estado(self, nuevo_estado):
+        if nuevo_estado in dict(self.ESTADOS_CHOICES).keys():
+            ModificacionContenido.objects.create(
+                contenido=self,
+                usuario_modificacion=self.autor,
+                estado_anterior=self.estado,
+            )
+            self.estado = nuevo_estado
+
+
+            # Guarda la posición solo si está cambiando a un estado diferente
+            if self.estado != nuevo_estado:
+                if nuevo_estado == Contenido.ESTADO_EN_REVISION:
+                    self.posicion += 1
+                elif nuevo_estado == Contenido.ESTADO_RECHAZADO or nuevo_estado == Contenido.ESTADO_PUBLICADO:
+                    self.posicion += 2  # Ajusta según el flujo de tu tablero
+                elif nuevo_estado == Contenido.ESTADO_INACTIVO:
+                    self.posicion += 3  # Ajusta según el flujo de tu tablero
+
+            # Ajusta según sea necesario
+
+            self.save()
 
     tipo = models.ForeignKey(TipoDeContenido, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=200)
@@ -116,9 +151,29 @@ class Contenido(models.Model):
     fecha_modificacion = models.DateTimeField(auto_now=True)
     autor = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     plantilla = models.ForeignKey(Plantilla, on_delete=models.CASCADE, null=True)
+    estado = models.CharField(max_length=20, choices=ESTADOS_CHOICES, default=ESTADO_BORRADOR)
+
+    # Nuevo campo para la posición en el tablero Kanban
+    posicion = models.IntegerField(default=0)
+
+    comentario = models.TextField(blank=True)
+
+    #identificador = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     def __str__(self):
         return self.titulo
+
+
+# En models.py
+@receiver(post_save, sender=Contenido)
+def registrar_modificacion_contenido(sender, instance, created, **kwargs):
+    # Registra una modificación solo si el contenido ya existía y su estado cambió
+    if not created and instance.estado != instance.get_estado_display():
+        ModificacionContenido.objects.create(
+            contenido=instance,
+            usuario_modificacion=instance.autor,
+            estado_anterior=instance.estado,
+        )
 
 class Subcategoria(models.Model):
 
@@ -184,3 +239,23 @@ def save_user_profile(sender, instance, **kwargs):
         instance.usuario.save()
     except User.usuario.RelatedObjectDoesNotExist:
         Usuario.objects.create(user=instance)
+
+
+
+
+class ModificacionContenido(models.Model):
+    contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE)
+    fecha_modificacion = models.DateTimeField(auto_now_add=True)
+    usuario_modificacion = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    estado_anterior = models.CharField(max_length=20, choices=Contenido.ESTADOS_CHOICES)
+    comentario = models.TextField(blank=True, null=True)  # Ejemplo de campo de comentario
+    # Otros campos para el registro de modificaciones
+
+@receiver(post_save, sender=Contenido)
+def registrar_modificacion_contenido(sender, instance, **kwargs):
+    ModificacionContenido.objects.create(
+        contenido=instance,
+        usuario_modificacion=instance.autor,
+        estado_anterior=instance.estado,
+        # Otros campos para el registro de modificaciones
+    )
