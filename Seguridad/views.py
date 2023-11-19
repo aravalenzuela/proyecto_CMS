@@ -11,13 +11,14 @@ from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
-from django.http import JsonResponse
+
 from Gestion_Contenido.models import Plantilla
 from .forms import SubcategoriaForm
 from django.urls import reverse
-from django.contrib.auth.models import User
-from core.views import get_gravatar_url
 
+from core.views import get_gravatar_url
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 #from .models import Plantilla
 #from .forms import SeleccionarPlantillaForm
 
@@ -648,3 +649,93 @@ def vista_de_formulario(request):
     plantillas = Plantilla.objects.all()
     form = CrearContenidoForm()
     return render(request, 'crear_contenido.html', {'form': form, 'plantillas': plantillas})
+
+
+
+
+
+def revisar_contenido(request, contenido_id):
+    contenido = get_object_or_404(Contenido, pk=contenido_id)
+    contenido.estado = Contenido.ESTADO_EN_REVISION
+    contenido.save()
+    # Puedes agregar lógica adicional según tus necesidades
+    return render(request, 'detalle_contenido.html', {'contenido': contenido})
+
+
+def aprobar_contenido(request, contenido_id):
+    contenido = get_object_or_404(Contenido, pk=contenido_id)
+    contenido.estado = Contenido.ESTADO_PUBLICADO
+    contenido.save()
+    # Puedes agregar lógica adicional según tus necesidades
+    return render(request, 'detalle_contenido.html', {'contenido': contenido})
+
+# En views.py
+def desaprobar_contenido(request, contenido_id):
+    if request.method == 'POST':
+        contenido = get_object_or_404(Contenido, pk=contenido_id)
+        contenido.estado = Contenido.ESTADO_RECHAZADO
+        contenido.comentario = request.POST.get('comentario', '')
+        contenido.save()
+        # Puedes agregar lógica adicional según tus necesidades
+        return render(request, 'detalle_contenido.html', {'contenido': contenido})
+    else:
+        contenido = get_object_or_404(Contenido, pk=contenido_id)
+        return render(request, 'desaprobar_contenido.html', {'contenido': contenido})
+
+
+def inactivar_contenido(request, contenido_id):
+    contenido = get_object_or_404(Contenido, pk=contenido_id)
+    contenido.estado = Contenido.ESTADO_INACTIVO
+    contenido.save()
+    # Puedes agregar lógica adicional según tus necesidades
+    return render(request, 'detalle_contenido.html', {'contenido': contenido})
+
+
+# proyecto_CMS/Seguridad/views.py
+
+def cancelar_agregar_contenido(request, contenido_id):
+    contenido = get_object_or_404(Contenido, pk=contenido_id)
+    
+    # Asegúrate de agregar lógica adicional si es necesario antes de eliminar el contenido
+    contenido.delete()
+    
+    # Puedes redirigir a donde sea apropiado en tu aplicación
+    return redirect('profile_view')  # Redirige a la vista de perfil o a donde consideres necesario
+
+
+
+def detalle_contenido(request, contenido_id):
+    contenido = get_object_or_404(Contenido, pk=contenido_id)
+    return render(request, 'detalle_contenido.html', {'contenido': contenido})
+
+# proyecto_CMS/Seguridad/views.py
+
+# En views.py
+def tablero_kanban(request):
+    estados = [estado[0] for estado in Contenido.ESTADOS_CHOICES]
+    contenidos_por_estado = {estado: Contenido.objects.filter(estado=estado).order_by('posicion') for estado in estados}
+
+    return render(request, 'tablero_kanban.html', {'contenidos_por_estado': contenidos_por_estado})
+
+
+
+
+def cambiar_estado_contenido(request):
+    if request.method == 'POST':
+        contenido_id = request.POST.get('contenido_id')
+        nuevo_estado = request.POST.get('nuevo_estado')
+
+        #print(f"Contenido ID: {contenido_id}, Nuevo Estado: {nuevo_estado}")
+
+        try:
+            contenido = Contenido.objects.get(id=contenido_id)
+            contenido.cambiar_estado(nuevo_estado)
+
+            return JsonResponse({'success': True, 'nuevo_estado': nuevo_estado})
+        except Contenido.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Contenido no encontrado'})
+        except ValueError:
+            return JsonResponse({'success': False, 'error': 'Valor no válido'})
+    
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})
+

@@ -20,7 +20,8 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
-            color: #333;
+            color: #ff0800; /* Color rojo para el título */
+            text-align: center;
             font-size: 24px;
         }
         table {
@@ -78,7 +79,7 @@
                     <td>{{ subcategoria.nombre }}</td>
                     <td>{{ subcategoria.descripcion }}</td>
                     <td>{{ subcategoria.categoria_relacionada.nombre }}</td>
-                    <td><a href="{% url 'modificar_subcategoria' subcategoria.id %}">Modificar Subcategoría</a></td>
+                    <td><button type="submit" class="button"><a href="{% url 'modificar_subcategoria' subcategoria.id %}" style="color: white; text-decoration: none;">Modificar Subcategoría</a></button></td>
                 </tr>
                 {% endfor %}
             </tbody>

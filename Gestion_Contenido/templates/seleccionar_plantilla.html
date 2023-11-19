@@ -5,6 +5,7 @@
     <title>Seleccionar Plantilla para el Sitio</title>
     <style>
         /* Estilos para mejorar la apariencia */
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -19,7 +20,8 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
-            color: #333;
+            color: #ff0800; /* Color rojo para el título */
+            text-align: center;
             font-size: 24px;
         }
         form {
@@ -38,6 +40,14 @@
         }
         input[type="submit"] {
             background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button[type="submit"] {
+            background-color: #007bff; /* Azul */
             color: #fff;
             padding: 10px 20px;
             border: none;
@@ -66,8 +76,8 @@
         <p>Nombre de la plantilla: {{ plantilla_seleccionada.nombre }}</p>
         <p>Tipo de la plantilla: {{ plantilla_seleccionada.tipo }}</p>
         <p>Contenido de la plantilla:</p>
-        <pre>{{ plantilla_seleccionada.contenido }}</pre>
-        <a href="{% url 'editar_plantilla' %}">Editar Contenido</a>
+        <pre>{{ plantilla_seleccionada.contenidoDePlantilla }}</pre>
+        <button type="submit" class="button"><a href="{% url 'editar_plantilla' %}" style="color: white; text-decoration: none;">Editar Contenido</a></button>
         {% endif %}
     </div>
 </body>

@@ -68,14 +68,46 @@
                     <th>Título</th>
                     <th>Descripción</th>
                     <th>Autor</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 {% for contenido in contenidos %}
                 <tr>
                     <td>{{ contenido.titulo }}</td>
-                    <td>{{ contenido.descripcion }}</td>
+                    <td>{{ contenido.cuerpo }}</td>
                     <td>{{ contenido.autor }}</td>
+                    <td>{{ contenido.get_estado_display }}</td>
+                    <td>
+                        {% if contenido.estado == 'Borrador' %}
+                            <a href="{% url 'revisar_contenido' contenido.id %}">Enviar a Revisión</a>
+                            <a href="{% url 'cancelar_agregar_contenido' contenido.id %}">Cancelar</a>
+                        <!-- Lógica para mostrar acciones relacionadas con el estado de revisión -->
+                        
+
+                        {% elif contenido.estado == 'En Revisión' %}
+                            <a href="{% url 'aprobar_contenido' contenido.id %}">Aprobar</a>
+                            <a href="{% url 'desaprobar_contenido' contenido.id %}">Desaprobar</a>
+                                
+                        
+                        <!-- Lógica para mostrar acciones relacionadas con el estado de rechazado -->
+                        {% elif contenido.estado == 'Rechazado' %}
+                            <p>Estado: Rechazado</p>
+                            <p>Comentario de Desaprobación: {{ contenido.comentario }}</p>
+
+                        
+                        <!-- Lógica para mostrar acciones relacionadas con el estado de publicado -->
+                        {% elif contenido.estado == 'Publicado' %}
+                                <a href="{% url 'inactivar_contenido' contenido.id %}">Inactivar</a>
+                                
+                        <!-- Lógica para mostrar acciones relacionadas con el estado de inactivo -->
+                        {% elif contenido.estado == 'Inactivo' %}
+                        <p>Estado: Inactivo</p>
+                        
+                        {% endif %}
+
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
