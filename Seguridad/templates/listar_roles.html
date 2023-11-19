@@ -96,11 +96,13 @@
                     </td>
                     <td>
                         <a href="{% url 'eliminar_rol' rol.id %}">Eliminar Rol</a>
+                        <a href="{% url 'modificar_rol' rol.id %}">Modificar Roles</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver</a></button>
     </div>
 </body>
 </html>
