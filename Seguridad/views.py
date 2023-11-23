@@ -224,21 +224,28 @@ def crear_categoria(request):
     Returns:
         HttpResponse: Renderiza la página de creación de categoría o redirige tras la creación exitosa.
     """
+
     if request.method == 'POST':
         form = CategoriaForm(request.POST)
         if form.is_valid():
             nombre = form.cleaned_data['nombre']
             descripcion = form.cleaned_data['descripcion']
             
-            # Verificar si la categoría ya existe
-            if Categoria.objects.filter(nombre=nombre).exists():
-                messages.error(request, 'Esta categoría ya existe. Por favor cree una nueva')
+            # Verificar si la categoría ya existe (insensible a mayúsculas y minúsculas)
+            if Categoria.objects.filter(nombre__iexact=nombre).exists():
+                messages.error(request, 'Esta categoría ya existe. Por favor, crea una nueva.')
             else:
                 form.save()
                 return redirect('profile_view')
+        else:
+            messages.error(request, 'No se puede crear la categoria. Hay dos posibilidades:')
+            messages.error(request, '1) Debe completar correctamente todos los campos ')
+            messages.error(request, '2) La categoria ya existe y debe crear una nueva')
     else:
         form = CategoriaForm()
+
     return render(request, 'crear_categoria.html', {'form': form})
+
 
 
 
@@ -410,7 +417,7 @@ def crear_subcategoria(request):
             nombre = form.cleaned_data.get('nombre')
 
             # Verificar si la subcategoría ya existe en cualquier categoría
-            if Subcategoria.objects.filter(nombre=nombre).exists():
+            if Subcategoria.objects.filter(nombre__iexact=nombre).exists():
                 messages.error(request, 'Esta subcategoría ya existe. Por favor, cree una nueva.')
             else:
                 if categoria_id and subcategoria_existente_id:
@@ -425,6 +432,9 @@ def crear_subcategoria(request):
                     subcategoria.categoria_relacionada = Categoria.objects.get(pk=categoria_id)
                     subcategoria.save()
                     return redirect('ver_subcategoria', subcategoria_id=subcategoria.id)
+        
+        else:
+            messages.error(request, 'Por favor, completa todos los campos correctamente.')
 
     else:
         form = SubcategoriaForm()
@@ -588,11 +598,15 @@ def crear_tipo_de_contenido(request):
             plantilla = form.cleaned_data['plantilla'] 
 
             # Verificar si el tipo de contenido ya existe
-            if TipoDeContenido.objects.filter(nombre=nombre).exists():
+            if TipoDeContenido.objects.filter(nombre__iexact=nombre).exists():
                 messages.error(request, 'Este tipo de contenido ya existe. Por favor crea uno nuevo')
             else:
                 form.save()
+                
                 return redirect('profile_view')  # Puedes redirigir a la página deseada
+            
+        else:
+            messages.error(request, 'Por favor, completa todos los campos correctamente.')
     else:
         form = TipoDeContenidoForm()
     return render(request, 'crear_tipo_de_contenido.html', {'form': form})
@@ -646,15 +660,34 @@ def crear_contenido(request):
 
 
 def vista_de_formulario(request):
+    """
+    Vista que muestra el formulario de creación de contenido.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+
+    Returns:
+        HttpResponse: Renderiza la página de creación de contenido con el formulario y las plantillas disponibles.
+    """
+    
     plantillas = Plantilla.objects.all()
     form = CrearContenidoForm()
     return render(request, 'crear_contenido.html', {'form': form, 'plantillas': plantillas})
 
 
 
-
-
 def revisar_contenido(request, contenido_id):
+    """
+    Cambia el estado de un contenido a 'En Revisión'.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        contenido_id (int): ID del contenido a revisar.
+
+    Returns:
+        HttpResponse: Renderiza la página de detalles del contenido revisado.
+    """
+
     contenido = get_object_or_404(Contenido, pk=contenido_id)
     contenido.estado = Contenido.ESTADO_EN_REVISION
     contenido.save()
@@ -663,6 +696,17 @@ def revisar_contenido(request, contenido_id):
 
 
 def aprobar_contenido(request, contenido_id):
+    """
+    Cambia el estado de un contenido a 'Publicado'.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        contenido_id (int): ID del contenido a aprobar.
+
+    Returns:
+        HttpResponse: Renderiza la página de detalles del contenido aprobado.
+    """
+
     contenido = get_object_or_404(Contenido, pk=contenido_id)
     contenido.estado = Contenido.ESTADO_PUBLICADO
     contenido.save()
@@ -671,6 +715,17 @@ def aprobar_contenido(request, contenido_id):
 
 # En views.py
 def desaprobar_contenido(request, contenido_id):
+    """
+    Cambia el estado de un contenido a 'Rechazado' con un comentario opcional.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        contenido_id (int): ID del contenido a desaprobar.
+
+    Returns:
+        HttpResponse: Renderiza la página de detalles del contenido desaprobado o muestra el formulario de desaprobación.
+    """
+
     if request.method == 'POST':
         contenido = get_object_or_404(Contenido, pk=contenido_id)
         contenido.estado = Contenido.ESTADO_RECHAZADO
@@ -684,6 +739,17 @@ def desaprobar_contenido(request, contenido_id):
 
 
 def inactivar_contenido(request, contenido_id):
+    """
+    Cambia el estado de un contenido a 'Inactivo'.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        contenido_id (int): ID del contenido a inactivar.
+
+    Returns:
+        HttpResponse: Renderiza la página de detalles del contenido inactivado.
+    """
+
     contenido = get_object_or_404(Contenido, pk=contenido_id)
     contenido.estado = Contenido.ESTADO_INACTIVO
     contenido.save()
@@ -694,6 +760,17 @@ def inactivar_contenido(request, contenido_id):
 # proyecto_CMS/Seguridad/views.py
 
 def cancelar_agregar_contenido(request, contenido_id):
+    """
+    Cancela la operación de agregar contenido y elimina el contenido.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        contenido_id (int): ID del contenido a cancelar y eliminar.
+
+    Returns:
+        HttpResponseRedirect: Redirige a la vista de perfil o a donde consideres necesario.
+    """
+
     contenido = get_object_or_404(Contenido, pk=contenido_id)
     
     # Asegúrate de agregar lógica adicional si es necesario antes de eliminar el contenido
@@ -705,6 +782,17 @@ def cancelar_agregar_contenido(request, contenido_id):
 
 
 def detalle_contenido(request, contenido_id):
+    """
+    Muestra detalles de un contenido específico.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        contenido_id (int): ID del contenido a mostrar detalles.
+
+    Returns:
+        HttpResponse: Renderiza la página de detalles del contenido.
+    """
+
     contenido = get_object_or_404(Contenido, pk=contenido_id)
     return render(request, 'detalle_contenido.html', {'contenido': contenido})
 
@@ -712,6 +800,16 @@ def detalle_contenido(request, contenido_id):
 
 # En views.py
 def tablero_kanban(request):
+    """
+    Vista que muestra un tablero Kanban con los contenidos organizados por estado.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+
+    Returns:
+        HttpResponse: Renderiza la página del tablero Kanban.
+    """
+
     estados = [estado[0] for estado in Contenido.ESTADOS_CHOICES]
     contenidos_por_estado = {estado: Contenido.objects.filter(estado=estado).order_by('posicion') for estado in estados}
 
@@ -721,6 +819,13 @@ def tablero_kanban(request):
 
 
 def cambiar_estado_contenido(request):
+    """
+    Cambia el estado de un contenido según la solicitud.
+
+    Returns:
+        JsonResponse: Respuesta JSON indicando el éxito o fallo de la operación.
+    """
+        
     if request.method == 'POST':
         contenido_id = request.POST.get('contenido_id')
         nuevo_estado = request.POST.get('nuevo_estado')

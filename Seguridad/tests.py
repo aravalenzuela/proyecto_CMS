@@ -653,3 +653,109 @@ def test_tipo_de_contenido_str_method():
     # Comprobar que el método __str__ devuelve el nombre del tipo de contenido
     assert str(tipo_de_contenido) == "Ejemplo"
 
+
+
+# Seguridad/tests.py
+
+class ContenidoViewsTest(TestCase):
+
+    """
+    Conjunto de pruebas para las vistas relacionadas con Contenido.
+
+    Métodos de configuración:
+        - setUp: Configura los datos de prueba para cada prueba.
+
+    Pruebas:
+        - test_revisar_contenido: Verifica que el contenido se pueda enviar a revisión correctamente.
+        - test_aprobar_contenido: Verifica que el contenido se pueda aprobar y cambiar a estado publicado.
+        - test_desaprobar_contenido: Verifica que el contenido se pueda desaprobar con un comentario asociado.
+        - test_inactivar_contenido: Verifica que el contenido se pueda inactivar correctamente.
+
+    """
+
+    def setUp(self):
+        """
+        Configura los datos de prueba para cada prueba.
+
+        Configuración:
+            - Crea un usuario de prueba.
+            - Crea un tipo de contenido o utiliza uno existente.
+            - Crea un contenido de prueba asociado al usuario y tipo de contenido.
+        """
+                
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        
+        # Crea un tipo de contenido o utiliza uno existente
+        tipo_de_contenido = TipoDeContenido.objects.create(nombre="Tipo de Contenido Ejemplo")
+
+        self.contenido = Contenido.objects.create(
+            tipo=tipo_de_contenido,
+            titulo="Contenido de prueba",
+            cuerpo="Cuerpo de prueba",
+            autor=self.user
+        )
+
+    def test_revisar_contenido(self):
+        """
+        Verifica que el contenido se pueda enviar a revisión correctamente.
+
+        Resultados:
+            - Se espera que la página se cargue correctamente.
+            - Se verifica que el estado del contenido cambie a 'En Revisión'.
+        """
+                
+        url = reverse('revisar_contenido', args=[self.contenido.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)  # Verifica que la página se carga correctamente
+        self.contenido.refresh_from_db()  # Actualiza la instancia desde la base de datos
+        self.assertEqual(self.contenido.estado, Contenido.ESTADO_EN_REVISION)
+
+    def test_aprobar_contenido(self):
+        """
+        Verifica que el contenido se pueda aprobar y cambiar a estado publicado.
+
+        Resultados:
+            - Se espera que la página se cargue correctamente.
+            - Se verifica que el estado del contenido cambie a 'Publicado'.
+        """
+                
+        url = reverse('aprobar_contenido', args=[self.contenido.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.contenido.refresh_from_db()
+        self.assertEqual(self.contenido.estado, Contenido.ESTADO_PUBLICADO)
+
+    def test_desaprobar_contenido(self):
+        """
+        Verifica que el contenido se pueda desaprobar con un comentario asociado.
+
+        Resultados:
+            - Se espera que la página se cargue correctamente.
+            - Se verifica que el estado del contenido cambie a 'Rechazado'.
+            - Se verifica que el comentario asociado se almacene correctamente en el contenido.
+        """
+                
+        url = reverse('desaprobar_contenido', args=[self.contenido.id])
+        response = self.client.post(url, {'comentario': 'No es adecuado'})
+        self.assertEqual(response.status_code, 200)
+        self.contenido.refresh_from_db()
+        self.assertEqual(self.contenido.estado, Contenido.ESTADO_RECHAZADO)
+        self.assertEqual(self.contenido.comentario, 'No es adecuado')
+
+    def test_inactivar_contenido(self):
+        """
+        Verifica que el contenido se pueda inactivar correctamente.
+
+        Resultados:
+            - Se espera que la página se cargue correctamente.
+            - Se verifica que el estado del contenido cambie a 'Inactivo'.
+        """
+
+        url = reverse('inactivar_contenido', args=[self.contenido.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.contenido.refresh_from_db()
+        self.assertEqual(self.contenido.estado, Contenido.ESTADO_INACTIVO)
+
+    
+
