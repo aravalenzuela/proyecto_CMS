@@ -48,6 +48,9 @@ INSTALLED_APPS = [
     'social_django',
     'django_extensions',
 ]
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = 900  # 15 minutos x 60 segundos/minuto
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

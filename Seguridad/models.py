@@ -131,19 +131,6 @@ class Contenido(models.Model):
             self.estado = nuevo_estado
 
 
-            # Guarda la posición solo si está cambiando a un estado diferente
-            if self.estado != nuevo_estado:
-                if nuevo_estado == Contenido.ESTADO_EN_REVISION:
-                    self.posicion += 1
-                elif nuevo_estado == Contenido.ESTADO_RECHAZADO or nuevo_estado == Contenido.ESTADO_PUBLICADO:
-                    self.posicion += 2  # Ajusta según el flujo de tu tablero
-                elif nuevo_estado == Contenido.ESTADO_INACTIVO:
-                    self.posicion += 3  # Ajusta según el flujo de tu tablero
-
-            # Ajusta según sea necesario
-
-            self.save()
-
     tipo = models.ForeignKey(TipoDeContenido, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=200)
     cuerpo = models.TextField()

@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 import hashlib
 from Seguridad.models import Usuario, Rol  # Asegúrate de que este modelo exista y tenga un campo 'role'
@@ -59,5 +59,8 @@ def profile_view(request):
     else:
         return redirect(view_name)
 
+
+def renew_session(request):
+    return JsonResponse({'status': 'session renewed'})
 
 
