@@ -49,32 +49,51 @@
             cursor: pointer;
         }
     </style>
+    <script>
+        function validarFormulario() {
+            var nombre = document.getElementById('id_nombre').value.trim();
+            var descripcion = document.getElementById('id_descripcion').value.trim();
+    
+            if (nombre === "" || descripcion === "") {
+                // Mostrar mensaje en la página
+                var mensaje = document.createElement("div");
+                mensaje.innerHTML = '<p style="color: red;">Por favor complete todos los campos.</p>';
+                document.body.appendChild(mensaje);
+                return false;
+            }
+    
+            return true;
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <h1>Crear Tipo de Contenido</h1>
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif  %}
-        
-        <form method="post" action="{% url 'crear_tipo_de_contenido' %}">
+        <form method="post">
             {% csrf_token %}
+            
+            <!-- Agrega este bloque para mostrar mensajes de error -->
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            
             <label for="{{ form.nombre.id_for_label }}">Nombre:</label>
             {{ form.nombre }}
+            
             <label for="{{ form.descripcion.id_for_label }}">Descripción:</label>
             {{ form.descripcion }}
-
+            
             <label for="{{ form.plantilla.id_for_label }}">Seleccionar Plantilla:</label>
             {{ form.plantilla }}            
 
-
-            <button type="submit">Guardar</button>
-            <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver</a></button>
+            <button type="submit" onclick="return validarFormulario()">Guardar</button>
+            <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver al Panel</a></button>
         </form>
     </div>
+    
 </body>
 </html>

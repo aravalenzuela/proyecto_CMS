@@ -30,7 +30,9 @@
     <p><strong>Descripción:</strong> {{ subcategoria.descripcion }}</p>
     <!-- Puedes mostrar más detalles aquí si es necesario -->
     <div class="button-container">
-        <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver</a></button>
+        <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver al Panel</a></button>
+        <button type="submit" class="button"><a href="{% url 'listar_categorias' %}" style="color: white; text-decoration: none;">Ver Lista de Categorias</a></button>
+        <button type="submit" class="button"><a href="{% url 'listar_subcategorias' %}" style="color: white; text-decoration: none;">Ver Lista de Subcategorias</a></button>
     </div>
 </body>
 </html>

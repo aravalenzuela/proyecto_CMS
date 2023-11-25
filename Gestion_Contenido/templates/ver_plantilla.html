@@ -48,6 +48,14 @@
             margin-top: 10px;
             /* Agrega otros estilos personalizados según tus necesidades */
         }
+        button[type="submit"] {
+            background-color: #007bff; /* Azul */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -65,7 +73,9 @@
 
         {% endif %}
         <div>
-        <a href="{% url 'profile_view' %}" class="btn btn-secondary">Volver</a>
+        <a href="{% url 'profile_view' %}" class="btn btn-secondary">Volver al Panel</a>
+        <button type="submit" class="button"><a href="{% url 'editar_plantilla' %}" style="color: white; text-decoration: none;">Atras</a></button>
+        
     </div>
 </body>
 </html>
