@@ -130,6 +130,13 @@ class Contenido(models.Model):
             )
             self.estado = nuevo_estado
 
+            # Crear notificación de cambio de estado
+            Notificacion.objects.create(
+                usuario=self.autor,
+                contenido=self,
+                mensaje=f"Tu contenido '{self.titulo}' ha cambiado a estado '{nuevo_estado}'.",
+            )
+
 
     tipo = models.ForeignKey(TipoDeContenido, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=200)
@@ -161,6 +168,17 @@ def registrar_modificacion_contenido(sender, instance, created, **kwargs):
             usuario_modificacion=instance.autor,
             estado_anterior=instance.estado,
         )
+
+class Notificacion(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE, blank=True, null=True)
+    mensaje = models.TextField()
+    leida = models.BooleanField(default=False)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Notificación para {self.usuario.username}"
+
 
 class Subcategoria(models.Model):
 
@@ -246,3 +264,32 @@ def registrar_modificacion_contenido(sender, instance, **kwargs):
         estado_anterior=instance.estado,
         # Otros campos para el registro de modificaciones
     )
+
+
+class Like(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.usuario.username} - {self.contenido.titulo}"
+    
+
+
+class Comentario(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE, related_name='comentarios')
+    texto = models.TextField()
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.usuario.username} - {self.contenido.titulo} - {self.texto}"
+
+class Compartido(models.Model):
+    usuario_origen = models.ForeignKey(User, on_delete=models.CASCADE, related_name='compartidos_enviados')
+    usuario_destino = models.ForeignKey(User, on_delete=models.CASCADE, related_name='compartidos_recibidos')
+    contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.usuario_origen.username} compartió contenido con {self.usuario_destino.username}"

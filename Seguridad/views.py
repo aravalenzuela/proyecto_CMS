@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Permiso, Usuario , Categoria, Rol , Contenido, TipoDeContenido, Subcategoria
+from .models import Permiso, Usuario , Categoria, Rol , Contenido, TipoDeContenido, Subcategoria, Notificacion, Like, Comentario, Compartido
 from django.contrib import messages
 from .forms import AsignarRolForm
 from .forms import CategoriaForm
@@ -15,6 +15,7 @@ from django.contrib.auth import login
 from Gestion_Contenido.models import Plantilla
 from .forms import SubcategoriaForm
 from django.urls import reverse
+from django.contrib import messages
 
 from core.views import get_gravatar_url
 from django.contrib.auth.models import User
@@ -64,8 +65,9 @@ def asignar_rol_a_usuario(request, usuario_id):
             print(f"Rol asignado al usuario: {seguridad_usuario.rol.nombre}")
             seguridad_usuario.save()
             
+
             # Recargar el usuario después de guardar el formulario
-            # (Realmente no es necesario, puedes trabajar directamente con seguridad_usuario)
+            # (Realmente no es necesario, se puede trabajar directamente con seguridad_usuario)
             
             if seguridad_usuario.rol:
                 print(f"Rol asignado al usuario {seguridad_usuario.user.username}: {seguridad_usuario.rol.nombre}")
@@ -329,6 +331,24 @@ def listar_roles(request):
     roles = Rol.objects.all().prefetch_related('permisos')
     return render(request, 'listar_roles.html', {'roles': roles})
 
+@login_required
+def mostrar_notificaciones(request):
+    # Obtenemos las notificaciones no leídas para el usuario actual
+    notificaciones = Notificacion.objects.filter(usuario=request.user, leida=False).order_by('-fecha_creacion')
+
+    # Marcamos las notificaciones como leídas
+    notificaciones.update(leida=True)
+
+    # Creamos un diccionario con la información necesaria para mostrar en el frontend
+    notificaciones_data = [
+        {
+            'mensaje': notif.mensaje,
+            'fecha_creacion': notif.fecha_creacion.strftime('%Y-%m-%d %H:%M:%S'),
+        }
+        for notif in notificaciones
+    ]
+
+    return JsonResponse({'notificaciones': notificaciones_data})
 
 
 def listar_contenidos(request):
@@ -710,10 +730,17 @@ def aprobar_contenido(request, contenido_id):
     contenido = get_object_or_404(Contenido, pk=contenido_id)
     contenido.estado = Contenido.ESTADO_PUBLICADO
     contenido.save()
-    # Puedes agregar lógica adicional según tus necesidades
+    
+    # Crear notificación de aprobación de contenido
+    Notificacion.objects.create(
+        usuario=contenido.autor,
+        contenido=contenido,
+        mensaje=f"Tu contenido '{contenido.titulo}' ha sido aprobado y publicado.",
+    )    
+
     return render(request, 'detalle_contenido.html', {'contenido': contenido})
 
-# En views.py
+
 def desaprobar_contenido(request, contenido_id):
     """
     Cambia el estado de un contenido a 'Rechazado' con un comentario opcional.
@@ -731,7 +758,14 @@ def desaprobar_contenido(request, contenido_id):
         contenido.estado = Contenido.ESTADO_RECHAZADO
         contenido.comentario = request.POST.get('comentario', '')
         contenido.save()
-        # Puedes agregar lógica adicional según tus necesidades
+
+        # Crear notificación de rechazo de contenido
+        Notificacion.objects.create(
+            usuario=contenido.autor,
+            contenido=contenido,
+            mensaje=f"Tu contenido '{contenido.titulo}' ha sido rechazado.",
+        )
+
         return render(request, 'detalle_contenido.html', {'contenido': contenido})
     else:
         contenido = get_object_or_404(Contenido, pk=contenido_id)
@@ -836,6 +870,14 @@ def cambiar_estado_contenido(request):
             contenido = Contenido.objects.get(id=contenido_id)
             contenido.cambiar_estado(nuevo_estado)
 
+            # Crear notificación de cambio de estado
+            Notificacion.objects.create(
+                usuario=contenido.autor,
+                contenido=contenido,
+                mensaje=f"El estado de tu contenido '{contenido.titulo}' ha cambiado a '{nuevo_estado}'.",
+            )
+
+
             return JsonResponse({'success': True, 'nuevo_estado': nuevo_estado})
         except Contenido.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Contenido no encontrado'})
@@ -844,3 +886,65 @@ def cambiar_estado_contenido(request):
     
     return JsonResponse({'success': False, 'error': 'Método no permitido'})
 
+
+@login_required
+def dar_like(request, contenido_id):
+    contenido = get_object_or_404(Contenido, pk=contenido_id)
+
+    # Verificar si el usuario ya ha dado like
+    if Like.objects.filter(usuario=request.user, contenido=contenido).exists():
+        messages.warning(request, 'Ya has dado like a este contenido.')
+    else:
+        # Crear el nuevo like
+        like = Like(usuario=request.user, contenido=contenido)
+        like.save()
+        messages.success(request, 'Has dado like a este contenido.')
+
+        # Crear la notificación
+        mensaje = f'El usuario {request.user.username} dio like a tu contenido "{contenido.titulo}".'
+        notificacion = Notificacion(usuario=contenido.autor, contenido=contenido, mensaje=mensaje)
+        notificacion.save()
+
+    return redirect('detalle_contenido', contenido_id=contenido_id)
+
+
+@login_required
+def agregar_comentario(request, contenido_id):
+    contenido = get_object_or_404(Contenido, pk=contenido_id)
+
+    if request.method == 'POST':
+        texto_comentario = request.POST.get('texto_comentario', '')
+        comentario = Comentario(usuario=request.user, contenido=contenido, texto=texto_comentario)
+        comentario.save()
+        messages.success(request, 'Comentario agregado con éxito.')
+
+
+        # Crear notificación de comentario
+        Notificacion.objects.create(
+            usuario=contenido.autor,
+            contenido=contenido,
+            mensaje=f"Tu contenido '{contenido.titulo}' ha recibido un nuevo comentario.",
+        )
+
+    return redirect('detalle_contenido', contenido_id=contenido_id)
+
+@login_required
+def compartir_contenido(request, contenido_id, usuario_destino_id):
+    contenido = get_object_or_404(Contenido, pk=contenido_id)
+    usuario_destino = get_object_or_404(User, pk=usuario_destino_id)
+
+    # Verificar si ya ha sido compartido
+    if Compartido.objects.filter(usuario_origen=request.user, usuario_destino=usuario_destino, contenido=contenido).exists():
+        messages.warning(request, 'Este contenido ya ha sido compartido con este usuario.')
+    else:
+        # Crear el objeto Compartido
+        compartido = Compartido(usuario_origen=request.user, usuario_destino=usuario_destino, contenido=contenido)
+        compartido.save()
+        messages.success(request, 'Contenido compartido con éxito.')
+
+        # Crear la notificación
+        mensaje = f'El usuario {request.user.username} compartió un contenido contigo: "{contenido.titulo}".'
+        notificacion = Notificacion(usuario=usuario_destino, contenido=contenido, mensaje=mensaje)
+        notificacion.save()
+
+    return redirect('detalle_contenido', contenido_id=contenido_id)
