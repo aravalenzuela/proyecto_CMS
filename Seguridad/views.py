@@ -333,6 +333,25 @@ def listar_roles(request):
 
 @login_required
 def mostrar_notificaciones(request):
+    """
+    Vista que muestra las notificaciones no leídas para el usuario actual.
+
+    Decoradores:
+        @login_required: Asegura que solo los usuarios autenticados puedan acceder a esta vista.
+
+    Parámetros:
+        request: Objeto de solicitud HTTP.
+
+    Retorna:
+        JsonResponse: Respuesta JSON con la información de las notificaciones.
+
+    Comportamiento:
+        - Obtiene las notificaciones no leídas para el usuario actual, ordenadas por fecha de creación descendente.
+        - Marca las notificaciones como leídas.
+        - Crea un diccionario con la información necesaria para mostrar en el frontend.
+        - Retorna una respuesta JSON con la información de las notificaciones.
+    """
+
     # Obtenemos las notificaciones no leídas para el usuario actual
     notificaciones = Notificacion.objects.filter(usuario=request.user, leida=False).order_by('-fecha_creacion')
 
@@ -567,6 +586,22 @@ def toggle_user_active(request, user_id):
     return JsonResponse({'success': True, 'is_active': user.is_active})
 
 def eliminar_rol(request, rol_id):
+    """
+    Vista que permite eliminar un rol.
+
+    Parámetros:
+        request: Objeto de solicitud HTTP.
+        rol_id: Identificador del rol a eliminar.
+
+    Retorna:
+        HttpResponse: Redirige a la vista 'listar_roles' después de la eliminación.
+                      Muestra la confirmación de eliminación antes de la acción.
+
+    Comportamiento:
+        - Obtiene el objeto Rol con el identificador proporcionado.
+        - Si la solicitud es de tipo POST, elimina el rol y redirige a la vista 'listar_roles'.
+        - Si la solicitud no es de tipo POST, muestra la página de confirmación de eliminación.
+    """
     rol = get_object_or_404(Rol, pk=rol_id)
     if request.method == "POST":  # Si el método es POST, significa que el usuario ha confirmado la eliminación
         rol.delete()
@@ -889,6 +924,26 @@ def cambiar_estado_contenido(request):
 
 @login_required
 def dar_like(request, contenido_id):
+    """
+    Vista que permite a un usuario dar like a un contenido.
+
+    Decoradores:
+        @login_required: Asegura que solo los usuarios autenticados puedan acceder a esta vista.
+
+    Parámetros:
+        request: Objeto de solicitud HTTP.
+        contenido_id: Identificador del contenido al cual se le dará like.
+
+    Retorna:
+        HttpResponse: Redirige a la vista 'detalle_contenido' después de dar like.
+
+    Comportamiento:
+        - Obtiene el objeto Contenido con el identificador proporcionado.
+        - Verifica si el usuario ya ha dado like al contenido.
+        - Si ya ha dado like, muestra un mensaje de advertencia.
+        - Si no ha dado like, crea un nuevo like, muestra un mensaje de éxito y crea una notificación.
+        - Redirige a la vista 'detalle_contenido'.
+    """
     contenido = get_object_or_404(Contenido, pk=contenido_id)
 
     # Verificar si el usuario ya ha dado like
@@ -910,6 +965,24 @@ def dar_like(request, contenido_id):
 
 @login_required
 def agregar_comentario(request, contenido_id):
+    """
+    Vista que permite a un usuario agregar un comentario a un contenido.
+
+    Decoradores:
+        @login_required: Asegura que solo los usuarios autenticados puedan acceder a esta vista.
+
+    Parámetros:
+        request: Objeto de solicitud HTTP.
+        contenido_id: Identificador del contenido al cual se le agregará el comentario.
+
+    Retorna:
+        HttpResponse: Redirige a la vista 'detalle_contenido' después de agregar el comentario.
+
+    Comportamiento:
+        - Obtiene el objeto Contenido con el identificador proporcionado.
+        - Si la solicitud es de tipo POST, agrega el comentario, muestra un mensaje de éxito y crea una notificación.
+        - Redirige a la vista 'detalle_contenido'.
+    """
     contenido = get_object_or_404(Contenido, pk=contenido_id)
 
     if request.method == 'POST':
@@ -930,6 +1003,27 @@ def agregar_comentario(request, contenido_id):
 
 @login_required
 def compartir_contenido(request, contenido_id, usuario_destino_id):
+    """
+    Vista que permite a un usuario compartir un contenido con otro usuario.
+
+    Decoradores:
+        @login_required: Asegura que solo los usuarios autenticados puedan acceder a esta vista.
+
+    Parámetros:
+        request: Objeto de solicitud HTTP.
+        contenido_id: Identificador del contenido que se compartirá.
+        usuario_destino_id: Identificador del usuario con el cual se compartirá el contenido.
+
+    Retorna:
+        HttpResponse: Redirige a la vista 'detalle_contenido' después de compartir el contenido.
+
+    Comportamiento:
+        - Obtiene los objetos Contenido y User con los identificadores proporcionados.
+        - Verifica si el contenido ya ha sido compartido con el usuario destino.
+        - Si ya ha sido compartido, muestra un mensaje de advertencia.
+        - Si no ha sido compartido, crea un objeto Compartido, muestra un mensaje de éxito y crea una notificación.
+        - Redirige a la vista 'detalle_contenido'.
+    """
     contenido = get_object_or_404(Contenido, pk=contenido_id)
     usuario_destino = get_object_or_404(User, pk=usuario_destino_id)
 

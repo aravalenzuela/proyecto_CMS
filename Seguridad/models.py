@@ -122,6 +122,21 @@ class Contenido(models.Model):
     ]
 
     def cambiar_estado(self, nuevo_estado):
+        """
+        Método para cambiar el estado de un contenido.
+
+        Parámetros:
+            nuevo_estado (str): Nuevo estado al que se cambiará el contenido.
+
+        Retorna:
+            N/A
+
+        Comportamiento:
+            - Verifica si el nuevo estado es válido.
+            - Crea un registro de modificación en la base de datos.
+            - Actualiza el estado del contenido al nuevo estado.
+            - Crea una notificación informando sobre el cambio de estado.
+        """    
         if nuevo_estado in dict(self.ESTADOS_CHOICES).keys():
             ModificacionContenido.objects.create(
                 contenido=self,
@@ -158,9 +173,25 @@ class Contenido(models.Model):
         return self.titulo
 
 
-# En models.py
+
 @receiver(post_save, sender=Contenido)
 def registrar_modificacion_contenido(sender, instance, created, **kwargs):
+    """
+    Función para registrar una modificación del contenido al recibir la señal post_save.
+
+    Parámetros:
+        sender: El modelo que envió la señal (Contenido en este caso).
+        instance: Instancia del objeto Contenido que se acaba de guardar.
+        created: Indica si la instancia acaba de ser creada (True) o si ya existía (False).
+        **kwargs: Argumentos adicionales.
+
+    Retorna:
+        N/A
+
+    Comportamiento:
+        - Registra una modificación solo si el contenido ya existía y su estado cambió.
+        - Crea un registro en la tabla ModificacionContenido en la base de datos.
+    """ 
     # Registra una modificación solo si el contenido ya existía y su estado cambió
     if not created and instance.estado != instance.get_estado_display():
         ModificacionContenido.objects.create(
@@ -170,6 +201,19 @@ def registrar_modificacion_contenido(sender, instance, created, **kwargs):
         )
 
 class Notificacion(models.Model):
+    """
+    Model que representa una notificación para un usuario.
+
+    Atributos:
+        usuario (ForeignKey): Usuario al cual se destina la notificación.
+        contenido (ForeignKey): Contenido asociado a la notificación (opcional).
+        mensaje (TextField): Mensaje de la notificación.
+        leida (BooleanField): Indica si la notificación ha sido leída (predeterminado: False).
+        fecha_creacion (DateTimeField): Fecha y hora de la creación de la notificación (auto-generada).
+
+    Métodos:
+        __str__(): Retorna una representación legible en forma de cadena del objeto.
+    """
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE, blank=True, null=True)
     mensaje = models.TextField()
@@ -249,6 +293,18 @@ def save_user_profile(sender, instance, **kwargs):
 
 
 class ModificacionContenido(models.Model):
+    """
+    Model que representa la modificación de un contenido.
+
+    Atributos:
+        contenido (ForeignKey): Referencia al contenido modificado.
+        fecha_modificacion (DateTimeField): Fecha y hora de la modificación (auto-generada al guardarse).
+        usuario_modificacion (ForeignKey): Usuario que realizó la modificación.
+        estado_anterior (CharField): Estado anterior del contenido antes de la modificación.
+        comentario (TextField): Comentario opcional asociado a la modificación.
+        # Otros campos para el registro de modificaciones
+
+    """
     contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE)
     fecha_modificacion = models.DateTimeField(auto_now_add=True)
     usuario_modificacion = models.ForeignKey('auth.User', on_delete=models.CASCADE)
@@ -258,6 +314,14 @@ class ModificacionContenido(models.Model):
 
 @receiver(post_save, sender=Contenido)
 def registrar_modificacion_contenido(sender, instance, **kwargs):
+    """
+    Función que se ejecuta después de guardar un objeto Contenido para registrar la modificación.
+
+    Parámetros:
+        sender: El modelo que envió la señal (Contenido en este caso).
+        instance: Instancia del objeto Contenido que se acaba de guardar.
+        **kwargs: Argumentos adicionales.
+    """
     ModificacionContenido.objects.create(
         contenido=instance,
         usuario_modificacion=instance.autor,
@@ -267,6 +331,21 @@ def registrar_modificacion_contenido(sender, instance, **kwargs):
 
 
 class Like(models.Model):
+    """
+    Model que representa un "Me gusta" dado por un usuario a un contenido.
+
+    Atributos:
+        usuario (ForeignKey): Usuario que dio el "Me gusta".
+        contenido (ForeignKey): Contenido al cual se dio el "Me gusta".
+        fecha_creacion (DateTimeField): Fecha y hora de la creación del "Me gusta" (auto-generada).
+
+    Métodos:
+        __str__(): Retorna una representación legible en forma de cadena del objeto.
+    """
+
+    def __str__(self):
+        return f"{self.usuario.username} - {self.contenido.titulo}"
+
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
@@ -277,6 +356,22 @@ class Like(models.Model):
 
 
 class Comentario(models.Model):
+    """
+    Model que representa un comentario hecho por un usuario a un contenido.
+
+    Atributos:
+        usuario (ForeignKey): Usuario que hizo el comentario.
+        contenido (ForeignKey): Contenido al cual se hizo el comentario.
+        texto (TextField): Texto del comentario.
+        fecha_creacion (DateTimeField): Fecha y hora de la creación del comentario (auto-generada).
+
+    Métodos:
+        __str__(): Retorna una representación legible en forma de cadena del objeto.
+    """
+
+    def __str__(self):
+        return f"{self.usuario.username} - {self.contenido.titulo} - {self.texto}"
+
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE, related_name='comentarios')
     texto = models.TextField()
@@ -286,6 +381,18 @@ class Comentario(models.Model):
         return f"{self.usuario.username} - {self.contenido.titulo} - {self.texto}"
 
 class Compartido(models.Model):
+    """
+    Model que representa el acto de compartir un contenido entre dos usuarios.
+
+    Atributos:
+        usuario_origen (ForeignKey): Usuario que compartió el contenido.
+        usuario_destino (ForeignKey): Usuario que recibió el contenido compartido.
+        contenido (ForeignKey): Contenido que fue compartido.
+        fecha_creacion (DateTimeField): Fecha y hora de la creación de la acción de compartir (auto-generada).
+
+    Métodos:
+        __str__(): Retorna una representación legible en forma de cadena del objeto.
+    """
     usuario_origen = models.ForeignKey(User, on_delete=models.CASCADE, related_name='compartidos_enviados')
     usuario_destino = models.ForeignKey(User, on_delete=models.CASCADE, related_name='compartidos_recibidos')
     contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE)
