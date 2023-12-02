@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 
 from Gestion_Contenido.models import PlantillaUsuario
-
+from Seguridad.models import Notificacion
 
 # En views.py
 from .models import PlantillaUsuario
@@ -118,6 +118,12 @@ def profile_view(request):
     except PlantillaUsuario.DoesNotExist:
         context['plantilla_usuario'] = None
         context['contenido_editable'] = ""
+
+    # Obtener notificaciones del usuario
+    notificaciones = Notificacion.objects.filter(usuario=request.user, leida=False)
+
+    # Pasar notificaciones al contexto
+    context['notificaciones'] = notificaciones
 
     return render(request, 'profile.html', context)
 

@@ -80,5 +80,10 @@ urlpatterns = [
     
     path('cambiar_estado/', views.cambiar_estado_contenido, name='cambiar_estado_contenido'),
 
+    path('agregar_like/<int:contenido_id>/', views.agregar_like, name='agregar_like'),
+    path('agregar_comentario/<int:contenido_id>/', views.agregar_comentario, name='agregar_comentario'),
+    path('agregar_respuesta/<int:comentario_id>/', views.agregar_respuesta, name='agregar_respuesta'),
+    path('compartir_contenido/<int:contenido_id>/', views.compartir_contenido, name='compartir_contenido'),
+
 ]
 

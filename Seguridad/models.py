@@ -144,6 +144,13 @@ class Contenido(models.Model):
 
             self.save()
 
+            # Crear notificación al cambiar el estado
+            if self.estado != nuevo_estado:
+                mensaje = f"El estado de tu contenido ha cambiado de {self.estado} a {nuevo_estado}."
+                Notificacion.objects.create(usuario=self.autor.user, mensaje=mensaje)
+
+
+
     tipo = models.ForeignKey(TipoDeContenido, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=200)
     cuerpo = models.TextField()
@@ -259,3 +266,79 @@ def registrar_modificacion_contenido(sender, instance, **kwargs):
         estado_anterior=instance.estado,
         # Otros campos para el registro de modificaciones
     )
+
+
+class Like(models.Model):
+    """
+    Modelo que representa un "like" dado por un usuario a un contenido.
+
+    Atributos:
+    - usuario: Clave foránea que conecta con el modelo Usuario.
+    - contenido: Clave foránea que conecta con el modelo Contenido.
+    - fecha_creacion: Fecha y hora de creación del "like".
+    """
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+class Comentario(models.Model):
+    """
+    Modelo que representa un comentario hecho por un usuario en un contenido.
+
+    Atributos:
+    - usuario: Clave foránea que conecta con el modelo Usuario.
+    - contenido: Clave foránea que conecta con el modelo Contenido.
+    - texto: Campo de texto que almacena el contenido del comentario.
+    - fecha_creacion: Fecha y hora de creación del comentario.
+    """
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE, related_name='comentarios')
+    texto = models.TextField(max_length=500)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+class RespuestaComentario(models.Model):
+    """
+    Modelo que representa una respuesta a un comentario.
+
+    Atributos:
+    - comentario_padre: Clave foránea que conecta con el modelo Comentario, indicando el comentario padre.
+    - usuario: Clave foránea que conecta con el modelo Usuario.
+    - texto: Campo de texto que almacena el contenido de la respuesta.
+    - fecha_creacion: Fecha y hora de creación de la respuesta.
+    """
+    comentario_padre = models.ForeignKey(Comentario, on_delete=models.CASCADE, related_name='respuestas')
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    texto = models.TextField(max_length=500)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+class Compartido(models.Model):
+    """
+    Modelo que representa un contenido compartido por un usuario.
+
+    Atributos:
+    - usuario: Clave foránea que conecta con el modelo Usuario.
+    - contenido: Clave foránea que conecta con el modelo Contenido.
+    - fecha_creacion: Fecha y hora de creación del contenido compartido.
+    """
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+class Notificacion(models.Model):
+    """
+    Modelo que representa una notificación enviada a un usuario.
+
+    Atributos:
+    - usuario: Clave foránea que conecta con el modelo User de Django.
+    - mensaje: Campo de texto que almacena el contenido del mensaje de la notificación.
+    - fecha_creacion: Fecha y hora de creación de la notificación.
+    - leida: Campo booleano que indica si la notificación ha sido leída.
+    """
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    mensaje = models.CharField(max_length=255)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    leida = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.usuario.username}: {self.mensaje}"
+

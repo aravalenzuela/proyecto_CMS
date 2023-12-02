@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'social_django',
     'django_extensions',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -79,7 +80,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
-
+ASGI_APPLICATION = 'PROYECTO_CMS.routing.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
