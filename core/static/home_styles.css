@@ -4,7 +4,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #4d5257; /* Fondo azul */
-    color: white;
+    color: rgb(107, 129, 155);
 }
 
 .container {

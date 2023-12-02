@@ -1,32 +1,21 @@
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Permiso, Usuario , Categoria, Rol , Contenido, TipoDeContenido, Subcategoria, Notificacion, Like, Comentario, Compartido
 from django.contrib import messages
-from .forms import AsignarRolForm
-from .forms import CategoriaForm
-from .models import Categoria  # Importación relativa
-from .forms import CategoriaForm, RolForm, CrearContenidoForm
-from .models import Categoria, Rol # Importación relativa
+from .forms import CategoriaForm, RolForm, CrearContenidoForm, AsignarRolForm, SubcategoriaForm, TipoDeContenidoForm
 from django.views.decorators.http import require_http_methods
-from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
-
 from Gestion_Contenido.models import Plantilla
-from .forms import SubcategoriaForm
 from django.urls import reverse
 from django.contrib import messages
-
 from core.views import get_gravatar_url
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_control
+
 #from .models import Plantilla
 #from .forms import SeleccionarPlantillaForm
 
-
-from .forms import TipoDeContenidoForm
-
-from .models import TipoDeContenido
 
 
 #Codigos para la implementacion de los requerimientos

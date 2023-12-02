@@ -2,15 +2,18 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 import hashlib
 from Seguridad.models import Usuario, Rol  # Asegúrate de que este modelo exista y tenga un campo 'role'
-
+from django.views.decorators.cache import cache_control
+from django.contrib.auth import logout
 
 def get_gravatar_url(email):
     email_hash = hashlib.md5(email.lower().encode('utf-8')).hexdigest()
     return f"https://www.gravatar.com/avatar/{email_hash}?d=identicon&s=150"
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True) #Limpia Cache para no redirigir
 def home(request):
     return render(request, 'base.html')
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def login_view(request):
     return render(request, 'login.html')
 
@@ -18,14 +21,18 @@ def login_with_google(oauth_code):
     # Supongamos que esta función usa oauth_code para obtener un token de Google
     # y luego inicia sesión al usuario en tu aplicación
     pass
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def logout(request):
     """
     Redirecciona a la pagina de cerrar sesion de google
     :param request: HttpRequest object
     :return:HttpRedirect
     """
+    logout(request)  # Cierra la sesión del usuario
     return redirect('/accounts/logout/')
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def profile_view(request):
     # Verifica si el usuario está autenticado
     if not request.user.is_authenticated:
@@ -43,11 +50,11 @@ def profile_view(request):
         # Si el usuario no tiene un perfil, crea uno y le asigna el rol de lector
         lector_role = Rol.objects.get(id=5)
         user_profile = Usuario.objects.create(user=request.user, rol=lector_role)
-        user_role = 5  # ID del rol Lector
+        user_role = 2  # ID del rol Lector
 
      # Diccionario que mapea roles a vistas
     role_to_view = {
-        4: 'profile.html',
+        1: 'profile.html',
         2: 'vista_lector.html'
     }
     # Busca la vista o función correspondiente en el diccionario
