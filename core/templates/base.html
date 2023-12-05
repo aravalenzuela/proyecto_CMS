@@ -3,25 +3,109 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Sitio Web</title>
     <link rel="stylesheet" href="{% static 'home_styles.css' %}">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
+    <!-- Personalización de CSS aquí -->
+    <style>
+        /* Colores, fuentes y otras variables */
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #6c757d;
+            --font-family: 'Arial', sans-serif;
+            /* Añade aquí más variables según sea necesario */
+        }
+
+        /* Estilos responsivos */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .feature-box img {
+            /* Añadir lazy loading para imágenes */
+            loading: lazy;
+        }
+
+        header, .cta-section, .intro-section, .features-section, footer {
+            text-align: center;
+        }
+
+        .logo {
+            width: 150px;
+        }
+
+        /* Añade aquí estilos adicionales */
+        .feature-box {
+            margin-bottom: 30px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Esto asegura que el logo y el botón estén en los extremos */
+            padding: 0 1rem; /* Agrega padding horizontal para no pegar los elementos a los bordes */
+        }
+
+        .cta-section {
+            margin-left: auto; /* Asegura que el botón se mueva hacia la derecha */
+            padding-right: 0; /* Ajusta este valor como sea necesario */
+        }
+
+/* Estilos para el botón que podrían necesitar ajuste */
+        .cta-section a {
+            margin-left: auto; /* Confirma que el botón se alinee a la derecha */
+            margin-right: 2rem; /* Aumenta el margen derecho si es necesario */
+            padding: 10px 20px; /* Ajusta el padding para cambiar el tamaño del botón */
+    /* ... otros estilos ... */
+    }
+
+/* Ajustes para dispositivos móviles */
+        @media (max-width: 768px) {
+            .header-content {
+            flex-direction: column;
+            padding: 0.5rem;
+        }
+
+        .cta-section {
+            width: 100%;
+            text-align: right;
+            padding-right: 0.5rem; /* Asegura que hay espacio en la derecha en dispositivos móviles */
+        }
+
+        .cta-section a {
+            margin-right: 0.5rem; /* Ajusta esto para dispositivos móviles si es necesario */
+            /* ... otros estilos ... */
+        }
+    }
+        
+    footer {
+        background-color: var(--secondary-color);
+        color: white;
+        padding: 10px 0;
+        margin-top: 30px;
+    }
+    </style>
 </head>
 <body>
 
     <header>
         <div class="container header-content">
             <img src="{% static 'imagenes/logo.png' %}" alt="Logo de mi sitio" class="logo">
-            <h1>PROYECTO INGENIERIA DE SOFTWARE II</h1> <section class="cta-section">
-                <div class="sso-option">
-                    <a href="{% url "social:begin" "google-oauth2" %}" class="back-button">Iniciar Sesión</a>
-               </div>
-            </section>
+            <h1>PROYECTO INGENIERIA DE SOFTWARE II</h1>
+            <div class="cta-section">
+                <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-primary">Iniciar Sesión</a>
+            </div>
         </div>
-       
     </header>
 
     <main>
@@ -34,26 +118,17 @@
                 <div class="feature-box">
                     <h3>Blog</h3>
                     <p>Mbaeteko es un tema de bloques sencillo pensado para blogs personales.</p>
-                    <div class="blog">
-                        <img src="{% static 'imagenes/blog1.png' %}" alt="Imagen de Ejemplo de Blog">
-                    <div>
+                    <img src="{% static 'imagenes/blog1.png' %}" alt="Imagen de Ejemplo de Blog">
                 </div>
                 <div class="feature-box">
                     <h3>Anuncio</h3>
-                    <p>Su diseño responsivo está optimizado para todos los dispositivos y su excelente tipografía mantiene su texto legible y 
-                    elegante. Viene con colores de acento personalizados y compatibilidad con logotipos, para que puedas modificar el diseño a tu gusto. </p>
-                    <div class="blog">
-                        <img src="{% static 'imagenes/anuncio1.png' %}" alt="Imagen de Ejemplo de Anuncio">
-                    <div>
+                    <p>Su diseño responsivo está optimizado para todos los dispositivos y su excelente tipografía mantiene su texto legible y elegante. Viene con colores de acento personalizados y compatibilidad con logotipos, para que puedas modificar el diseño a tu gusto.</p>
+                    <img src="{% static 'imagenes/anuncio1.png' %}" alt="Imagen de Ejemplo de Anuncio">
                 </div>
                 <div class="feature-box">
                     <h3>Juegos</h3>
-                    <p>Makoney es un muy buen tema para crear un sitio web de Juegos o publicaciones en línea profesional. 
-                        Viene con patrones prediseñados que te ahorran el trabajo de crear páginas avanzadas de destino, acerca de, búsqueda y contacto. Además, 
-                        te permite arrastrar y soltar los diseños basados en patrones donde quieras en cualquier página, desde el primer momento</p>
-                    <div class="blog">
-                        <img src="{% static 'imagenes/juego1.png' %}" alt="Imagen de Ejemplo de Juego">
-                    <div>
+                    <p>Makoney es un muy buen tema para crear un sitio web de Juegos o publicaciones en línea profesional.</p>
+                    <img src="{% static 'imagenes/juego1.png' %}" alt="Imagen de Ejemplo de Juego">
                 </div>
             </section>
         </div>
@@ -64,11 +139,13 @@
             <p>&copy; 2023 Mi Sitio Web. Todos los derechos reservados.</p>
         </div>
     </footer>
+    
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-     <!-- Modal para avisar al usuario de la inactividad -->
+    
+    <!-- Modal para avisar al usuario de la inactividad -->
      <div class="modal fade" id="sessionModal" tabindex="-1" role="dialog" aria-labelledby="sessionModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -88,9 +165,9 @@
             </div>
         </div>
     </div>
-
     <!-- Script para detectar inactividad y manejar el aviso al usuario -->
     <script>
+        /* Scripts mejorados para la interactividad del usuario */
         let sessionTimeoutWarning = (15 * 60 - 120) * 1000; // Aviso 2 minutos antes del cierre de sesión
         let sessionRenewalURL = "/ruta_para_renovar_sesion/"; // URL a la que hacer la petición AJAX para renovar la sesión
 
