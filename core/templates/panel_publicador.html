@@ -1,0 +1,38 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - CMS</title>
+    <link rel="stylesheet" href="{% static 'post_sso.css' %}">
+    <!-- Añade tus estilos aquí -->
+</head>
+
+<body>
+    <header>
+        <h1>Panel de Administración</h1>
+        <nav>
+            <ul>
+                <a href="{% url 'logout' %}">Cerrar Sesión</a>
+            </ul>
+        </nav>
+    </header>
+    <section>
+        <ul>
+            <li><a href="{% url 'listar_contenidos' %}">Listado de Contenidos</a></li>
+            <li><a href="{% url 'tablero_kanban' %}">Tablero Kanban</a></li>
+            <li><a href="{% url 'listar_tipos_de_contenido' %}">Listar Tipo de Contenido</a></li>
+            <li><a href="{% url 'listar_plantillas' %}">Listar Plantillas</a></li>
+            <li><a href="{% url 'seleccionar_plantilla' %}">Selecccionar Plantilla</a></li>
+            <li><a href="{% url 'listar_categorias' %}">Listar Categorías</a></li>
+            <li><a href="{% url 'modificar_categoria' %}">Modificar Categorias</a></li>
+            <!-- Añade aquí las opciones relacionadas con categorías y subcategorías -->
+            <li><a href="{% url 'listar_subcategorias' %}">Listar y Modificar Subcategorías</a></li>
+            <!-- Añade aquí las opciones relacionadas con contenidos -->
+        </ul>
+    </section>
+</body>
+</html>

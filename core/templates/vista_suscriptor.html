@@ -190,7 +190,7 @@
             // Ocultar la vista de lector
             toggleLectorView('none');
             // Luego cargar el panel de administración como antes
-            fetch('/panel-administracion/') // Asegúrate de usar el nombre correcto de la URL
+            fetch('/panel-suscriptor/') // Asegúrate de usar el nombre correcto de la URL
                 .then(response => response.text())
                 .then(html => {
                     document.getElementById('contenido-dinamico').innerHTML = html;
