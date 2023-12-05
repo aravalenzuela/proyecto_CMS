@@ -53,7 +53,16 @@ urlpatterns = [
 
     path('asignar_rol/<int:usuario_id>/', views.asignar_rol_a_usuario, name='asignar_rol_a_usuario'),
 
-    path('vista_lector/', views.vista_lector, name="vista_lector"),
+    #Vista de los Roles
+    path('vista_autor/', views.vista_autor, name="vista_autor"),
+
+    path('vista_editores/', views.vista_editores, name="vista_editores"),
+
+    path('vista_publicador/', views.vista_publicador, name="vista_publicador"),
+
+    path('vista_suscriptor/', views.vista_suscriptor, name="vista_suscriptor"),
+
+    #Termina Definicio del path de roles
 
     path('dar_de_baja_o_activar/<int:user_id>/', views.toggle_user_active, name='toggle_user_active'),
 

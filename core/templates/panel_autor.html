@@ -1,8 +1,6 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,45 +8,16 @@
     <link rel="stylesheet" href="{% static 'post_sso.css' %}">
     <!-- Añade tus estilos aquí -->
 </head>
-
 <body>
     <header>
         <h1>Panel de Administración</h1>
         <nav>
             <ul>
-                <a href="{% url 'home' %}" class="back-button">Volver a Inicio</a>
                 <a href="{% url 'logout' %}">Cerrar Sesión</a>
             </ul>
         </nav>
     </header>
-
     <section>
-        <h2>Usuarios</h2>
-        <ul>
-            <li><a href="{% url 'list_users' %}">Listar Usuarios</a></li>
-        </ul>
-    </section>
-
-    <section>
-        <h2>Roles</h2>
-        <ul>
-            <li><a href="{% url 'listar_roles' %}">Listar Roles</a></li>
-            <li><a href="{% url 'crear_rol' %}">Crear Rol</a></li>
-            <li><a href="#unassign-role">Desasignar Rol</a></li>
-        </ul>
-    </section>
-
-    <section>
-        <h2>Permisos</h2>
-        <ul>
-            <li><a href="{% url 'listar_permisos' %}">Listar Permisos</a></li>
-            <li><a href="{% url 'crear_permiso' %}">Crear Permiso</a></li>
-            <li><a href="{% url 'asignar_permiso' %}">Asignar Permiso</a></li>
-        </ul>
-    </section>
-
-    <section>
-        <h2>Contenidos</h2>
         <ul>
             <li><a href="{% url 'crear_contenido' %}">Crear Contenido</a></li>
             <li><a href="{% url 'listar_contenidos' %}">Listado de Contenidos</a></li>
@@ -57,24 +26,13 @@
             <li><a href="{% url 'listar_tipos_de_contenido' %}">Listar Tipo de Contenido</a></li>
             <li><a href="{% url 'listar_plantillas' %}">Listar Plantillas</a></li>
             <li><a href="{% url 'seleccionar_plantilla' %}">Selecccionar Plantilla</a></li>
-            <!-- Añade aquí las opciones relacionadas con contenidos -->
-        </ul>
-    </section>
-
-    <section>
-        <h2>Categorías y Subcategorías</h2>
-        <ul>
             <li><a href="{% url 'crear_categoria' %}">Crear Categoría</a></li>
             <li><a href="{% url 'listar_categorias' %}">Listar Categorías</a></li>
-
-
             <li><a href="{% url 'modificar_categoria' %}">Modificar Categorias</a></li>
-            
             <!-- Añade aquí las opciones relacionadas con categorías y subcategorías -->
             <li><a href="{% url 'crear_subcategoria' %}">Crear Subcategoría</a></li>
             <li><a href="{% url 'listar_subcategorias' %}">Listar y Modificar Subcategorías</a></li>
         </ul>
     </section>
-    <!-- Puedes continuar agregando más secciones según lo necesites -->
 </body>
 </html>

@@ -50,18 +50,18 @@ def profile_view(request):
         # Si el usuario no tiene un perfil, crea uno y le asigna el rol de lector
         lector_role = Rol.objects.get(id=5)
         user_profile = Usuario.objects.create(user=request.user, rol=lector_role)
-        user_role = 2  # ID del rol Lector
+        user_role = 2  # ID del rol suscriptor
 
      # Diccionario que mapea roles a vistas
     role_to_view = {
         1: 'profile.html',
         2: 'vista_suscriptor.html',
-        3: 'vista_lector.html',
+        3: 'vista_autor.html',
         4: 'vista_editores.html',
         5: 'vista_publicador.html'
     }
     # Busca la vista o función correspondiente en el diccionario
-    view_name = role_to_view.get(user_role, 'vista_lector.html')  # Valor predeterminado es 'profile.html'
+    view_name = role_to_view.get(user_role, 'vista_suscriptor.html')  # Valor predeterminado es 'profile.html'
 
     # Si es un nombre de vista, redirige. Si es un template, renderiza.
     if view_name.endswith('.html'):
@@ -73,6 +73,19 @@ def profile_view(request):
 def renew_session(request):
     return JsonResponse({'status': 'session renewed'})
 
-def panel_administracion(request):
-    # Asumiendo que tienes un template llamado 'panel_administracion.html'
-    return render(request, 'panel_administracion.html', {}, content_type='text/html')
+#Paneles de Roles
+def panel_autor(request):
+    # Asumiendo que tienes un template llamado 'panel_autor.html'
+    return render(request, 'panel_autor.html', {}, content_type='text/html')
+
+def panel_editores(request):
+    # Asumiendo que tienes un template llamado 'panel_autor.html'
+    return render(request, 'panel_editores.html', {}, content_type='text/html')
+
+def panel_publicador(request):
+    # Asumiendo que tienes un template llamado 'panel_autor.html'
+    return render(request, 'panel_publicador.html', {}, content_type='text/html')
+
+def panel_suscriptor(request):
+    # Asumiendo que tienes un template llamado 'panel_autor.html'
+    return render(request, 'panel_suscriptor.html', {}, content_type='text/html')

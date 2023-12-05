@@ -534,12 +534,11 @@ def modificar_subcategoria(request, subcategoria_id):
 
     return render(request, 'modificar_subcategoria.html', {'subcategoria': subcategoria})
 
-
-
-def vista_lector(request):
+#Definicio de vista para los roles
+def vista_autor(request):
 
     """
-    Muestra una vista para usuarios con el rol de "lector".
+    Muestra una vista para usuarios con el rol de "Autor".
     
     Args:
         request (HttpRequest): Objeto de solicitud HTTP.
@@ -548,14 +547,77 @@ def vista_lector(request):
         HttpResponse: Renderiza la página de vista para lectores o muestra un mensaje de error si el usuario no tiene el rol adecuado.
     """
         
-    # Asegurarse de que el usuario tiene el rol de lector
-    if not request.user.usuario.rol.nombre == 'lector':
+    # Asegurarse de que el usuario tiene el rol de autor
+    if not request.user.usuario.rol.nombre == 'Autor':
         return HttpResponseForbidden("No tienes permiso para acceder a esta página")
 
     # Obtener todos los posts
     posts = Contenido.objects.all()  # Asumiendo que tienes un modelo llamado Contenido para los posts
 
-    return render(request, 'vista_lector.html', {'posts': posts})
+    return render(request, 'vista_autor.html', {'posts': posts})
+
+def vista_editores(request):
+
+    """
+    Muestra una vista para usuarios con el rol de "Editores".
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de vista para Editores o muestra un mensaje de error si el usuario no tiene el rol adecuado.
+    """
+        
+    # Asegurarse de que el usuario tiene el rol de Editor
+    if not request.user.usuario.rol.nombre == 'Editores':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página")
+
+    # Obtener todos los posts
+    posts = Contenido.objects.all()  # Asumiendo que tienes un modelo llamado Contenido para los posts
+
+    return render(request, 'vista_editores.html', {'posts': posts})
+
+def vista_publicador(request):
+
+    """
+    Muestra una vista para usuarios con el rol de "Publicador".
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de vista para Publicadores o muestra un mensaje de error si el usuario no tiene el rol adecuado.
+    """
+        
+    # Asegurarse de que el usuario tiene el rol de Publicador
+    if not request.user.usuario.rol.nombre == 'Publicadores':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página")
+
+    # Obtener todos los posts
+    posts = Contenido.objects.all()  # Asumiendo que tienes un modelo llamado Contenido para los posts
+
+    return render(request, 'vista_publicador.html', {'posts': posts})
+
+def vista_suscriptor(request):
+
+    """
+    Muestra una vista para usuarios con el rol de "Suscriptor".
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de vista para Suscriptor o muestra un mensaje de error si el usuario no tiene el rol adecuado.
+    """
+        
+    # Asegurarse de que el usuario tiene el rol de Publicador
+    if not request.user.usuario.rol.nombre == 'Suscriptor':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página")
+
+    # Obtener todos los posts
+    posts = Contenido.objects.all()  # Asumiendo que tienes un modelo llamado Contenido para los posts
+
+    return render(request, 'vista_suscriptor.html', {'posts': posts})
 
 def toggle_active_view(request, user_id):
     user = CustomUser.objects.get(id=user_id)

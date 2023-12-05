@@ -1,0 +1,32 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - CMS</title>
+    <link rel="stylesheet" href="{% static 'post_sso.css' %}">
+    <!-- Añade tus estilos aquí -->
+</head>
+
+<body>
+    <header>
+        <h1>Panel de Administración</h1>
+        <nav>
+            <ul>
+                <a href="{% url 'logout' %}">Cerrar Sesión</a>
+                
+            </ul>
+        </nav>
+    </header>
+
+    <section>
+        <ul>
+            <li><a href="{% url 'listar_contenidos' %}">Listado de Contenidos</a></li>
+            <li><a href="{% url 'tablero_kanban' %}">Tablero Kanban</a></li>
+    </section>
+
+</body>
+</html>

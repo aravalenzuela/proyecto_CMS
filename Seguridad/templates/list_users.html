@@ -94,6 +94,22 @@
         .toggle-user:hover {
             text-decoration: underline;
         }
+        .center-container {
+            display: flex;
+            justify-content: center; /* Centrar horizontalmente */
+            align-items: center; /* Centrar verticalmente si el contenedor tiene altura */
+            height: 100px; /* Ajusta esto según sea necesario */
+        }
+
+        .centered-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block; /* o puedes usar 'block' si quieres que tome todo el ancho disponible */
+        }
+
     </style>
 </head>
 <body>
@@ -119,6 +135,11 @@
         </div>
         {% endfor %}
     </div>
+    <div class="center-container">
+        <a href="{% url 'redirect_to_home' %}" class="centered-button">
+            Volver al Panel
+        </a>
+    </div>    
 </body>
 <script>
    function toggleActive(userId) {

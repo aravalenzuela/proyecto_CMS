@@ -57,7 +57,7 @@
             {% endfor %}
         </select>
         <button type="submit" name="accion" value="seleccionar" class="button-select">Seleccionar y Modificar Categoría</button>
-        <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver al Panel</a></button>
+        <a href="{% url 'redirect_to_home' %}" style="background-color: #007bff; color: white; padding: 10px 20px; border-radius: 4px; text-decoration: none; display: inline-block;">Volver al Panel</a>
     </form>
     {% if categoria %}
         <h2>Nombre: {{ categoria.nombre }}</h2>
@@ -73,7 +73,7 @@
             <br>
             <div class="button-container">
                 <button type="submit" name="accion" value="guardar" class="button button-save">Guardar Cambios</button>
-                <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver al Panel</a></button>
+                <a href="{% url 'redirect_to_home' %}" style="background-color: #007bff; color: white; padding: 10px 20px; border-radius: 4px; text-decoration: none; display: inline-block;">Volver al Panel</a>
             </div>
         </form>
     {% endif %}
