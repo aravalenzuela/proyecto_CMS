@@ -755,6 +755,8 @@ def desaprobar_contenido(request, contenido_id):
         mensaje = f"Tu contenido '{contenido.titulo}' ha sido rechazado. Comentario del revisor: {contenido.comentario}"
         Notificacion.objects.create(usuario=usuario_contenido, mensaje=mensaje)
 
+        # Notificar al usuario usando la función notificar_usuario
+        notificar_usuario(usuario_contenido.id, mensaje)
 
         return render(request, 'detalle_contenido.html', {'contenido': contenido})
     else:
@@ -777,6 +779,7 @@ def inactivar_contenido(request, contenido_id):
     contenido = get_object_or_404(Contenido, pk=contenido_id)
     contenido.estado = Contenido.ESTADO_INACTIVO
     contenido.save()
+
     # Puedes agregar lógica adicional según tus necesidades
     return render(request, 'detalle_contenido.html', {'contenido': contenido})
 
@@ -1003,11 +1006,34 @@ def notificar_usuario(usuario_id, mensaje):
     Returns:
     - None
     """
-    channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)(
-        f"usuario_{usuario_id}",
-        {
-            'type': 'notificacion_event',
-            'mensaje': mensaje
-        }
-    )
+    try:
+        channel_layer = get_channel_layer()
+        if channel_layer:
+            async_to_sync(channel_layer.group_send)(
+                f"usuario_{usuario_id}",
+                {
+                    'type': 'notificacion_event',
+                    'mensaje': mensaje
+                }
+            )
+            print(f"Notificación enviada a usuario_{usuario_id}: {mensaje}")
+        else:
+            print("Error: El channel_layer no está configurado correctamente.")
+    except Exception as e:
+        print(f"Error al enviar notificación: {e}")
+
+@login_required
+def obtener_notificaciones(request):
+    """
+    Obtiene las notificaciones del usuario autenticado.
+
+    Returns:
+        JsonResponse: Respuesta en formato JSON con las notificaciones.
+    """
+    user = request.user 
+    notificaciones = Notificacion.objects.filter(usuario=user, leida=False).values('mensaje', 'fecha_creacion')
+
+    # Obtén el número total de notificaciones no leídas
+    notificaciones_no_leidas = Notificacion.objects.filter(usuario=user, leida=False).count()
+
+    return JsonResponse({'notificaciones': list(notificaciones), 'notificaciones_no_leidas': notificaciones_no_leidas})

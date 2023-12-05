@@ -32,6 +32,8 @@ urlpatterns = [
     path('logout2/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),#Al darle salir redirige a la pantalla de login
     path('social-auth/', include('social_django.urls', namespace='social')),  # Añade 
 
+    path('notificaciones/', views.notificaciones_view, name='notificaciones'),    
+
     #Modulos 
     path('', include('Seguridad.urls')),
     path('', include('Gestion_Contenido.urls')),

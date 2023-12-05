@@ -84,6 +84,6 @@ urlpatterns = [
     path('agregar_comentario/<int:contenido_id>/', views.agregar_comentario, name='agregar_comentario'),
     path('agregar_respuesta/<int:comentario_id>/', views.agregar_respuesta, name='agregar_respuesta'),
     path('compartir_contenido/<int:contenido_id>/', views.compartir_contenido, name='compartir_contenido'),
-
+    path('obtener_notificaciones/', views.obtener_notificaciones, name='obtener_notificaciones'),
 ]
 

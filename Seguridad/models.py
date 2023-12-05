@@ -258,16 +258,6 @@ class ModificacionContenido(models.Model):
     comentario = models.TextField(blank=True, null=True)  # Ejemplo de campo de comentario
     # Otros campos para el registro de modificaciones
 
-@receiver(post_save, sender=Contenido)
-def registrar_modificacion_contenido(sender, instance, **kwargs):
-    ModificacionContenido.objects.create(
-        contenido=instance,
-        usuario_modificacion=instance.autor,
-        estado_anterior=instance.estado,
-        # Otros campos para el registro de modificaciones
-    )
-
-
 class Like(models.Model):
     """
     Modelo que representa un "like" dado por un usuario a un contenido.
