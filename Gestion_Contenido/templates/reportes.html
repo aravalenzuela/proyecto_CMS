@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            color: #ff0800;
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            width: auto;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .back-button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            width: auto;
+            text-decoration: none;
+            text-align: center;
+            margin-right: 10px;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+        /* Estilos para el contenedor del gráfico */
+        .chart-container {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Reportes</h1>
+        <form method="post" id="reporteForm" action="{% url 'generar_reporte' %}">
+            {% csrf_token %}
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <label for="informe">Seleccionar un Reporte:</label>
+            <select name="informe" id="informe">
+                <option value="subcategorias_por_categorias">Cantidad de subcategorias por Categorias</option>
+                <option value="tipo_plantillas_por_plantillas">Tipo de Plantillas por Plantillas</option>
+                <option value="estados_en_tablero">Proporción de Contenidos por Estado en el Tablero Kanban</option>
+                <option value="contenido_por_tipos_de_contenidos">Proporción de Contenido por Tipo de Contenido</option>
+                <option value="estados_de_categorias">Proporcion de Categorias por Estado</option>
+                <option value="proporcion_plantillas">Proporción de Plantillas en Tipos de Contenido</option>
+                <!-- Agrega más opciones según tus necesidades -->
+            </select>
+            <label for="otros_campos">Otros Campos:</label>
+            <!-- Agrega aquí otros campos según tus necesidades -->
+            <button type="submit">Mostrar Reporte</button>
+            <a href="{% url 'profile_view' %}" class="back-button">Volver al Panel</a>
+        </form>
+
+        <!-- Agrega el contenedor del gráfico -->
+        <div class="chart-container">
+            <!-- Agrega una imagen con un ID para actualizarla más fácilmente -->
+            <img id="reportImage" src="" style="width: 100%;">
+        </div>
+    </div>
+
+    <!-- Agrega un script para enviar el formulario de manera asíncrona -->
+    <script>
+        $(document).ready(function(){
+            $("#reporteForm").submit(function(e) {
+                e.preventDefault();
+
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    dataType: 'json',
+                    success: function(responseData) {
+                        console.log("Respuesta exitosa:", responseData);
+
+                        if (responseData.img_src) {
+                            // Actualiza el src de la imagen utilizando el ID
+                            $("#reportImage").attr("src", responseData.img_src);
+
+                            console.log("Ruta de la imagen actualizada:", responseData.img_src);
+                        } else {
+                            console.error("La ruta de la imagen es undefined en la respuesta del servidor.");
+                        }
+
+                        console.log("Respuesta completa:", responseData);
+                    },
+
+                    error: function(data, xhr, status, errorThrown) {
+                        console.error("Error in AJAX request:", data);
+                        console.error("Error en la solicitud:", xhr.responseText);
+                        console.error("Error status:", status);
+                        console.error("Error lanzado:", errorThrown);
+                        console.log("Respuesta JSON:", data.responseJSON);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
