@@ -249,6 +249,17 @@ def ver_plantilla(request):
 
 
 def reportes_view(request):
+    
+    """
+    Muestra el formulario de reporte y procesa la solicitud para generar reportes sobre subcategorías por categorías.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+
+    Returns:
+        HttpResponse: Renderiza la página de reportes o devuelve datos JSON para actualización dinámica.
+    """
+
     form = ReporteForm()
 
     if request.method == 'POST':
@@ -335,6 +346,17 @@ def reportes_view(request):
 
 
 def reporte_tipos_plantillas(request):
+
+    """
+    Muestra el formulario de reporte y procesa la solicitud para generar reportes sobre la proporción de plantillas por tipo de plantillas.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+
+    Returns:
+        HttpResponse: Renderiza la página de reportes o devuelve datos JSON para actualización dinámica.
+    """
+     
     form = ReporteForm()  # Agrega el formulario
 
     if request.method == 'POST':
@@ -417,6 +439,17 @@ def reporte_tipos_plantillas(request):
 
 
 def reporte_estados_tablero(request):
+
+    """
+    Muestra el formulario de reportes y procesa la solicitud para generar reportes sobre la proporción de contenidos por estado en el Tablero Kanban.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+
+    Returns:
+        HttpResponse: Renderiza la página de reportes o devuelve datos JSON para actualización dinámica.
+    """
+
     form = ReporteForm()
 
     if request.method == 'POST':
@@ -508,6 +541,17 @@ def reporte_estados_tablero(request):
 
 
 def reporte_tipo_contenido(request):
+
+    """
+    Muestra el formulario de reporte y procesa la solicitud para generar reportes sobre la proporción de contenido por tipo de contenido.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+
+    Returns:
+        HttpResponse: Renderiza la página de reportes o devuelve datos JSON para actualización dinámica.
+    """
+
     form = ReporteForm()
 
     if request.method == 'POST':
@@ -604,6 +648,17 @@ def reporte_tipo_contenido(request):
 
 
 def reporte_estados_categorias(request):
+
+    """
+    Muestra el formulario de reporte y procesa la solicitud para generar reportes sobre la proporción de categorías por estado.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+
+    Returns:
+        HttpResponse: Renderiza la página de reportes o devuelve datos JSON para actualización dinámica.
+    """
+        
     form = ReporteForm()
 
     if request.method == 'POST':
@@ -694,6 +749,17 @@ def reporte_estados_categorias(request):
 
 
 def reporte_proporcion_plantillas(request):
+
+    """
+    Muestra el formulario de reporte y procesa la solicitud para generar reportes sobre la proporción de tipos de contenido por plantillas.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+
+    Returns:
+        HttpResponse: Renderiza la página de reportes o devuelve datos JSON para actualización dinámica.
+    """
+        
     form = ReporteForm()
 
     if request.method == 'POST':
@@ -789,6 +855,18 @@ def reporte_proporcion_plantillas(request):
 
 
 def generar_reporte(request):
+
+    """
+    Procesa la solicitud POST para generar reportes según el tipo de reporte seleccionado.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+
+    Returns:
+        HttpResponse: Llama a la función correspondiente para generar el reporte seleccionado.
+                      Devuelve una respuesta HTTP BadRequest si el reporte no es válido.
+    """
+        
     if request.method == 'POST':
         informe_seleccionado = request.POST.get('informe', None)
         if informe_seleccionado == 'subcategorias_por_categorias':
