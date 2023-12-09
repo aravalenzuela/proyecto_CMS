@@ -121,11 +121,11 @@ class ContenidoEditableForm(forms.ModelForm):
 class ReporteForm(forms.Form):
     informe_choices = [
         ('subcategorias_por_categorias', 'Cantidad de subcategorias por Categorias'),
-        ('tipo_plantillas_por_plantillas', 'Tipo de Plantillas por Plantillas'),
+        ('tipo_plantillas_por_plantillas', 'Cantidad de Plantillas por Tipo de Plantillas'),
         ('estados_en_tablero', 'Proporción de Contenidos por Estado en el Tablero Kanban'),
         ('contenido_por_tipos_de_contenidos', 'Proporción de Contenido por Tipo de Contenido'),
         ('estados_de_categorias', 'Proporcion de Categorias por Estado'),
-        ('proporcion_plantillas', 'Proporción de Plantillas en Tipos de Contenido'),
+        ('proporcion_plantillas', 'Cantidad de Tipos de Contenido por Plantillas'),
         # Agrega más opciones según tus necesidades
     ]
 
