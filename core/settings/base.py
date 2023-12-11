@@ -166,3 +166,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '941187616790-p5qrochbmrp5214cbi0vh27nsj00g5sb.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
+# Redirección después de iniciar sesión correctamente
+LOGIN_REDIRECT_URL = '/vista_contenido/'
