@@ -37,6 +37,8 @@ urlpatterns = [
     path('panel-editores/', views.panel_editores, name='panel_editores'),
     path('panel-publicador/', views.panel_publicador, name='panel_publicador'),
     path('panel-suscriptor/', views.panel_autor, name='panel_suscriptor'),
+    path('vista_contenido/', views.vista_contenido, name='vista_contenido'),
+
     #Modulos 
     path('', include('Seguridad.urls')),
     path('', include('Gestion_Contenido.urls')),

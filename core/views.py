@@ -89,3 +89,27 @@ def panel_publicador(request):
 def panel_suscriptor(request):
     # Asumiendo que tienes un template llamado 'panel_autor.html'
     return render(request, 'panel_suscriptor.html', {}, content_type='text/html')
+
+def vista_contenido(request):
+    """
+    Vista que muestra los contenidos organizados por estado.
+
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+
+    Returns:
+        HttpResponse: Renderiza la página de la vista de cada usuario
+    """
+    from Seguridad.models import Contenido
+    estados = [estado[0] for estado in Contenido.ESTADOS_CHOICES]
+    contenidos_por_estado = {estado: Contenido.objects.filter(estado=estado).order_by('posicion') for estado in estados}
+    print("Contenidos por estado:", contenidos_por_estado)  # Esto imprimirá el valor en la consola del servidor
+    print([estado[0] for estado in Contenido.ESTADOS_CHOICES])  # Esto te mostrará todos los estados posibles.
+     # Imprime los estados y sus contenidos asociados
+    for estado, contenidos in contenidos_por_estado.items():
+        print("Estado:", estado)
+        for contenido in contenidos:
+            print("Contenido:", contenido.titulo, contenido.estado)
+    print(contenidos_por_estado)
+    return render(request, 'vista_autor.html', {'contenidos_por_estado': contenidos_por_estado})
+

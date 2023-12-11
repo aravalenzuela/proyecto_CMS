@@ -1,5 +1,7 @@
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+
+from core.views import get_gravatar_url
 from .models import Permiso, Usuario , Categoria, Rol , Contenido, TipoDeContenido, Subcategoria, Notificacion, Like, Comentario, Compartido
 from django.contrib import messages
 from .forms import CategoriaForm, RolForm, CrearContenidoForm, AsignarRolForm, SubcategoriaForm, TipoDeContenidoForm
@@ -9,14 +11,11 @@ from django.contrib.auth import login
 from Gestion_Contenido.models import Plantilla
 from django.urls import reverse
 from django.contrib import messages
-from core.views import get_gravatar_url
 from django.contrib.auth.models import User
 from django.views.decorators.cache import cache_control
 
 #from .models import Plantilla
 #from .forms import SeleccionarPlantillaForm
-
-
 
 #Codigos para la implementacion de los requerimientos
 @login_required
@@ -171,8 +170,6 @@ def crear_usuario(request):
             messages.error(request, 'Ha ocurrido un error al crear el usuario.')
         
     return render(request, 'crear_usuario.html')
-
-
 
 def asignar_permiso(request, rol_id=None): 
     """
@@ -934,8 +931,6 @@ def tablero_kanban(request):
     contenidos_por_estado = {estado: Contenido.objects.filter(estado=estado).order_by('posicion') for estado in estados}
 
     return render(request, 'tablero_kanban.html', {'contenidos_por_estado': contenidos_por_estado})
-
-
 
 
 def cambiar_estado_contenido(request):

@@ -1,6 +1,6 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,6 +68,29 @@
         .likes-message {
             display: none;
         }
+        body {
+            background-color: #a2d5f2; /* Color de fondo similar al de la imagen */
+            font-family: 'Arial', sans-serif; /* Fuente genérica */
+        }
+        /* Botones y enlaces */
+        .button-container {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .button {
+            background-color: #0056b3;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0.5rem;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .button:hover {
+            background-color: #004a99;
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 
@@ -101,9 +124,9 @@
                 <li class="list-group-item lector-view active" id="likes-button"><i class="fas fa-star"></i> Me gusta</li>
                 <li class="list-group-item lector-view active"><i class="fas fa-comments"></i> Conversaciones</li>
                 <!-- Contenido principal del Lector -->
-                <li class="list-group-item lector-view active"><i class="fas fa-plus-circle"></i> <a href="{% url 'crear_contenido' %}" class="stretched-link">Crear Contenido</a></li>
+                <!-- <li class="list-group-item lector-view active"><i class="fas fa-plus-circle"></i> <a href="{% url 'crear_contenido' %}" class="stretched-link">Crear Contenido</a></li>
                 <li class="list-group-item lector-view active"><i class="fas fa-list-alt"></i> <a href="{% url 'listar_contenidos' %}" class="stretched-link">Listado de Contenidos</a></li>
-                
+                -->
             </ul>
         </div>
         <!-- Contenido principal -->
@@ -141,10 +164,32 @@
                         </div>
                         <span><i class="fas fa-star"></i> 15</span>
                     </div>
-                </div>
-    
+                    <!-- Sección de Contenidos -->
+                    {% for estado, contenidos in contenidos_por_estado.items %}
+                        {% for contenido in contenidos %}
+                            <!-- Tarjeta de publicación para cada contenido -->
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ contenido.titulo }}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">Estado: {{ contenido.get_estado_display }}</h6>
+                                    <p class="card-text">Creado: {{ contenido.fecha_creacion|date:"F j, Y H:i" }}</p>
+                                    <p class="card-text">Modificado: {{ contenido.fecha_modificacion|date:"F j, Y H:i" }}</p>
+                                     <!-- Añade aquí más detalles que quieras mostrar -->
+                                </div>
+                                <div class="card-footer bg-transparent border-0 d-flex justify-content-between">
+                                <!-- Botones de acción como compartir, editar, etc. -->
+                                    <div>
+                                        <a href="#" class="text-muted text-decoration-none me-3"><i class="fas fa-share"></i> Compartir</a>
+                                        <a href="#" class="text-muted text-decoration-none me-3"><i class="fas fa-redo"></i> Rebloguear</a>
+                                        <a href="#" class="text-muted text-decoration-none"><i class="fas fa-comment"></i> Comentarios</a>
+                                    </div>
+                                </div>
+                            </div>    
+                        {% empty %}
+                            <p>No hay contenidos en el estado '{{ estado }}'.</p>
+                        {% endfor %}
+                    {% endfor %}
                 <!-- Aquí puedes añadir más entradas similares -->
-    
                 <div class="mt-4">
                     <h5>Suscripciones</h5>
                     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -166,11 +211,16 @@
             </div>
         </div>
     </div>
-        
-    </div>
 
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        function handleDragOver(event) {
+            event.preventDefault();
+        }    
+        function handleDragStart(event) {
+            event.dataTransfer.setData("text/plain", event.target.id);
+        }  
         // Función para mostrar/ocultar elementos por clase
         function mostrarOcultarPorClase(clase, mostrar) {
             var elementos = document.getElementsByClassName(clase);
@@ -219,8 +269,6 @@
                 this.classList.add('active');
             });
         }); // Esta llave cierra el bloque forEach
-
     </script>
 </body>
-
 </html>

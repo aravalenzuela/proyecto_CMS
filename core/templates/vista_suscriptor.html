@@ -169,57 +169,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Función para mostrar/ocultar elementos por clase
-        function mostrarOcultarPorClase(clase, mostrar) {
-            var elementos = document.getElementsByClassName(clase);
-            for (var i = 0; i < elementos.length; i++) {
-                elementos[i].style.display = mostrar ? 'block' : 'none';
-            }
-        }
-        // Función para mostrar/ocultar elementos de la vista lector
-        function toggleLectorView(display) {
-            const lectorViewElements = document.querySelectorAll('.lector-view');
-            lectorViewElements.forEach(element => {
-                element.style.display = display;
-            });
-        }
-        // Evento de clic para el botón "Mi Sitio"
-        document.getElementById('mi-sitio').addEventListener('click', function() {
-            // Ocultar la vista de lector
-            toggleLectorView('none');
-            // Luego cargar el panel de administración como antes
-            fetch('/panel-suscriptor/') // Asegúrate de usar el nombre correcto de la URL
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('contenido-dinamico').innerHTML = html;
-                })
-                .catch(error => {
-                    console.error('Error al cargar el panel de administración:', error);
-                });
-        });
-
-        // Evento de clic para el botón "Vista Lector"
-        document.getElementById('vista-lector').addEventListener('click', function() {
-            // Mostrar la vista de lector
-            toggleLectorView('block');
-            // Limpiar el contenido dinámico
-            document.getElementById('contenido-dinamico').innerHTML = '';
-        });
-
-        // Código para cambiar el elemento activo en el sidebar
-        const listItems = document.querySelectorAll('.sidebar .list-group-item');
-
-        listItems.forEach(function(item) {
-            item.addEventListener('click', function() {
-                // Elimina la clase "active" de todos los elementos
-                listItems.forEach(i => i.classList.remove('active'));
-                // Añade la clase "active" al elemento clicado
-                this.classList.add('active');
-            });
-        }); // Esta llave cierra el bloque forEach
-
-    </script>
+    
 </body>
 
 </html>
