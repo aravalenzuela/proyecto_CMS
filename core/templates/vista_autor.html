@@ -26,16 +26,16 @@
         }
 
         .sidebar .list-group-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: #333;
         }
 
         .sidebar .list-group-item.active {
-            background-color: blue;
+            background-color: #0056b3;
             color: white;
         }
 
         .active {
-            background-color: #0e1d50;
+            background-color: #333;
         }
 
         .container {
@@ -69,7 +69,7 @@
             display: none;
         }
         body {
-            background-color: #a2d5f2; /* Color de fondo similar al de la imagen */
+            background-color: #333;
             font-family: 'Arial', sans-serif; /* Fuente genérica */
         }
         /* Botones y enlaces */
@@ -88,7 +88,7 @@
             box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
         .button:hover {
-            background-color: #004a99;
+            background-color: #333;
             box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
         }
     </style>
@@ -170,8 +170,9 @@
                         {% for contenido in contenidos_por_estado.Publicado %}
                             <div class="card mb-3">
                                 <div class="card-body">
-                                    <h5 class="card-title">{{ contenido.titulo }}</h5>
+                                    <h5 class="card-title">{{ contenido.titulo }}--{{ contenido.autor.get_full_name }}</h5>
                                         <!-- Aquí puedes seguir agregando más información sobre el contenido -->
+                                        <p class="card-text">{{ contenido.cuerpo }}</p>
                                         <p class="card-text">Creado: {{ contenido.fecha_creacion|date:"F j, Y H:i" }}</p>
                                         <p class="card-text">Modificado: {{ contenido.fecha_modificacion|date:"F j, Y H:i" }}</p>
                                 </div>

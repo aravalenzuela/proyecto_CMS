@@ -167,4 +167,4 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '941187616790-p5qrochbmrp5214cbi0vh27nsj00g5sb.a
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
 # Redirección después de iniciar sesión correctamente
-LOGIN_REDIRECT_URL = '/vista_contenido/'
+#LOGIN_REDIRECT_URL = '/vista_contenido/'
