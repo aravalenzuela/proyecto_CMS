@@ -164,31 +164,30 @@
                         </div>
                         <span><i class="fas fa-star"></i> 15</span>
                     </div>
-                    <!-- Sección de Contenidos -->
-                    {% for estado, contenidos in contenidos_por_estado.items %}
-                        {% for contenido in contenidos %}
-                            <!-- Tarjeta de publicación para cada contenido -->
+                   <!-- Verifica si hay contenidos en el estado 'Publicado' -->
+                    {% if 'Publicado' in contenidos_por_estado %}
+                    <!-- Itera a través de los contenidos con estado 'Publicado' -->
+                        {% for contenido in contenidos_por_estado.Publicado %}
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ contenido.titulo }}</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">Estado: {{ contenido.get_estado_display }}</h6>
-                                    <p class="card-text">Creado: {{ contenido.fecha_creacion|date:"F j, Y H:i" }}</p>
-                                    <p class="card-text">Modificado: {{ contenido.fecha_modificacion|date:"F j, Y H:i" }}</p>
-                                     <!-- Añade aquí más detalles que quieras mostrar -->
+                                        <!-- Aquí puedes seguir agregando más información sobre el contenido -->
+                                        <p class="card-text">Creado: {{ contenido.fecha_creacion|date:"F j, Y H:i" }}</p>
+                                        <p class="card-text">Modificado: {{ contenido.fecha_modificacion|date:"F j, Y H:i" }}</p>
                                 </div>
                                 <div class="card-footer bg-transparent border-0 d-flex justify-content-between">
-                                <!-- Botones de acción como compartir, editar, etc. -->
                                     <div>
                                         <a href="#" class="text-muted text-decoration-none me-3"><i class="fas fa-share"></i> Compartir</a>
                                         <a href="#" class="text-muted text-decoration-none me-3"><i class="fas fa-redo"></i> Rebloguear</a>
                                         <a href="#" class="text-muted text-decoration-none"><i class="fas fa-comment"></i> Comentarios</a>
                                     </div>
                                 </div>
-                            </div>    
-                        {% empty %}
-                            <p>No hay contenidos en el estado '{{ estado }}'.</p>
+                            </div>
                         {% endfor %}
-                    {% endfor %}
+                    {% else %}
+                        <!-- Si no hay contenidos publicados, muestra este mensaje -->
+                        <p>No hay contenidos publicados.</p>
+                    {% endif %}
                 <!-- Aquí puedes añadir más entradas similares -->
                 <div class="mt-4">
                     <h5>Suscripciones</h5>
