@@ -112,6 +112,7 @@
             <div class="mt-4">
                 <button id="vista-lector" class="btn btn-success mb-3">Vista Autor</button>
                 <button id= "mi-sitio" class="btn btn-primary mb-3">Mi Sitio</button> <!--Redirigir al hacer clic-->
+                <button id="mas-recientes" class="btn btn-primary mb-3">Más Recientes</button> <!--Redirigir al hacer clic-->
                 <div id="contenido-dinamico">
 
                 </div>
@@ -256,6 +257,9 @@
             toggleLectorView('block');
             // Limpiar el contenido dinámico
             document.getElementById('contenido-dinamico').innerHTML = '';
+        });
+        document.getElementById('mas-recientes').addEventListener('click', function() {
+            window.location.href = '/vista_contenido/'; // Suponiendo que esta es la ruta que muestra los contenidos más recientes
         });
 
         // Código para cambiar el elemento activo en el sidebar
