@@ -122,6 +122,22 @@ class Contenido(models.Model):
     ]
 
     def cambiar_estado(self, nuevo_estado):
+
+        """
+        Método para cambiar el estado de un contenido.
+
+        Parámetros:
+            nuevo_estado (str): Nuevo estado al que se cambiará el contenido.
+
+        Retorna:
+            N/A
+
+        Comportamiento:
+            - Verifica si el nuevo estado es válido.
+            - Crea un registro de modificación en la base de datos.
+            - Actualiza el estado del contenido al nuevo estado.
+            - Crea una notificación informando sobre el cambio de estado.
+        """ 
         if nuevo_estado in dict(self.ESTADOS_CHOICES).keys():
             ModificacionContenido.objects.create(
                 contenido=self,

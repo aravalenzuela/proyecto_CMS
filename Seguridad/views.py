@@ -1,18 +1,14 @@
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from core.views import get_gravatar_url
 from .models import Permiso, Usuario , Categoria, Rol , Contenido, TipoDeContenido, Subcategoria, Like, Comentario, RespuestaComentario, Compartido, Notificacion
 from django.contrib import messages
-from .forms import AsignarRolForm
-from .forms import CategoriaForm
-from .models import Categoria  # Importación relativa
-from .forms import CategoriaForm, RolForm, CrearContenidoForm
-from .models import Categoria, Rol # Importación relativa
-from django.views.decorators.http import require_http_methods
-from django.http import JsonResponse
+from .forms import CategoriaForm, RolForm, CrearContenidoForm, AsignarRolForm, SubcategoriaForm, TipoDeContenidoForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from django.views.decorators.http import require_http_methods
 
 from Gestion_Contenido.models import Plantilla
 from .forms import SubcategoriaForm
@@ -21,6 +17,8 @@ from django.urls import reverse
 from core.views import get_gravatar_url
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_control
+
 #from .models import Plantilla
 #from .forms import SeleccionarPlantillaForm
 
@@ -520,10 +518,12 @@ def modificar_subcategoria(request, subcategoria_id):
 
 
 
-def vista_lector(request):
+
+#Definicio de vista para los roles
+def vista_autor(request):
 
     """
-    Muestra una vista para usuarios con el rol de "lector".
+    Muestra una vista para usuarios con el rol de "Autor".
     
     Args:
         request (HttpRequest): Objeto de solicitud HTTP.
@@ -532,14 +532,77 @@ def vista_lector(request):
         HttpResponse: Renderiza la página de vista para lectores o muestra un mensaje de error si el usuario no tiene el rol adecuado.
     """
         
-    # Asegurarse de que el usuario tiene el rol de lector
-    if not request.user.usuario.rol.nombre == 'lector':
+    # Asegurarse de que el usuario tiene el rol de autor
+    if not request.user.usuario.rol.nombre == 'Autor':
         return HttpResponseForbidden("No tienes permiso para acceder a esta página")
 
     # Obtener todos los posts
     posts = Contenido.objects.all()  # Asumiendo que tienes un modelo llamado Contenido para los posts
 
-    return render(request, 'vista_lector.html', {'posts': posts})
+    return render(request, 'vista_autor.html', {'posts': posts})
+
+def vista_editores(request):
+
+    """
+    Muestra una vista para usuarios con el rol de "Editores".
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de vista para Editores o muestra un mensaje de error si el usuario no tiene el rol adecuado.
+    """
+        
+    # Asegurarse de que el usuario tiene el rol de Editor
+    if not request.user.usuario.rol.nombre == 'Editores':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página")
+
+    # Obtener todos los posts
+    posts = Contenido.objects.all()  # Asumiendo que tienes un modelo llamado Contenido para los posts
+
+    return render(request, 'vista_editores.html', {'posts': posts})
+
+def vista_publicador(request):
+
+    """
+    Muestra una vista para usuarios con el rol de "Publicador".
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de vista para Publicadores o muestra un mensaje de error si el usuario no tiene el rol adecuado.
+    """
+        
+    # Asegurarse de que el usuario tiene el rol de Publicador
+    if not request.user.usuario.rol.nombre == 'Publicadores':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página")
+
+    # Obtener todos los posts
+    posts = Contenido.objects.all()  # Asumiendo que tienes un modelo llamado Contenido para los posts
+
+    return render(request, 'vista_publicador.html', {'posts': posts})
+
+def vista_suscriptor(request):
+
+    """
+    Muestra una vista para usuarios con el rol de "Suscriptor".
+    
+    Args:
+        request (HttpRequest): Objeto de solicitud HTTP.
+        
+    Returns:
+        HttpResponse: Renderiza la página de vista para Suscriptor o muestra un mensaje de error si el usuario no tiene el rol adecuado.
+    """
+        
+    # Asegurarse de que el usuario tiene el rol de Publicador
+    if not request.user.usuario.rol.nombre == 'Suscriptor':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página")
+
+    # Obtener todos los posts
+    posts = Contenido.objects.all()  # Asumiendo que tienes un modelo llamado Contenido para los posts
+
+    return render(request, 'vista_suscriptor.html', {'posts': posts})
 
 def toggle_active_view(request, user_id):
     user = CustomUser.objects.get(id=user_id)
@@ -559,6 +622,22 @@ def toggle_user_active(request, user_id):
     return JsonResponse({'success': True, 'is_active': user.is_active})
 
 def eliminar_rol(request, rol_id):
+    """
+    Vista que permite eliminar un rol.
+
+    Parámetros:
+        request: Objeto de solicitud HTTP.
+        rol_id: Identificador del rol a eliminar.
+
+    Retorna:
+        HttpResponse: Redirige a la vista 'listar_roles' después de la eliminación.
+                      Muestra la confirmación de eliminación antes de la acción.
+
+    Comportamiento:
+        - Obtiene el objeto Rol con el identificador proporcionado.
+        - Si la solicitud es de tipo POST, elimina el rol y redirige a la vista 'listar_roles'.
+        - Si la solicitud no es de tipo POST, muestra la página de confirmación de eliminación.
+    """
     rol = get_object_or_404(Rol, pk=rol_id)
     if request.method == "POST":  # Si el método es POST, significa que el usuario ha confirmado la eliminación
         rol.delete()
