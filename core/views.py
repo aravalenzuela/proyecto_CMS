@@ -1,9 +1,10 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 import hashlib
-from Seguridad.models import Usuario, Rol  # Asegúrate de que este modelo exista y tenga un campo 'role'
+from Seguridad.models import Usuario, Rol, Notificacion  # Asegúrate de que este modelo exista y tenga un campo 'role'
 from django.views.decorators.cache import cache_control
 from django.contrib.auth import logout
+
 
 def get_gravatar_url(email):
     email_hash = hashlib.md5(email.lower().encode('utf-8')).hexdigest()
@@ -70,6 +71,24 @@ def profile_view(request):
         return redirect(view_name)
 
 
+def notificaciones_view(request):
+    """
+    Vista para mostrar las notificaciones de un usuario.
+
+    Parameters:
+    - request: Objeto HttpRequest.
+
+    Returns:
+    - HttpResponse: Renderiza la página de notificaciones.
+    """
+    if not request.user.is_authenticated:
+        return redirect('login_view')  # Redirige al usuario a la vista de inicio de sesión si no está autenticado
+
+    notificaciones = Notificacion.objects.filter(usuario=request.user).order_by('-fecha_creacion')
+    context = {'notificaciones': notificaciones}
+
+    return render(request, 'notificaciones.html', context)
+
 def renew_session(request):
     return JsonResponse({'status': 'session renewed'})
 
@@ -112,4 +131,3 @@ def vista_contenido(request):
             print("Contenido:", contenido.titulo, contenido.estado)
     print(contenidos_por_estado)
     return render(request, 'vista_autor.html', {'contenidos_por_estado': contenidos_por_estado})
-

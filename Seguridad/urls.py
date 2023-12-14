@@ -50,7 +50,7 @@ urlpatterns = [
 
     path('asignar_rol/<int:usuario_id>/', views.asignar_rol_a_usuario, name='asignar_rol_a_usuario'),
 
-    #Vista de los Roles
+ #Vista de los Roles
     path('vista_autor/', views.vista_autor, name="vista_autor"),
 
     path('vista_editores/', views.vista_editores, name="vista_editores"),
@@ -60,7 +60,6 @@ urlpatterns = [
     path('vista_suscriptor/', views.vista_suscriptor, name="vista_suscriptor"),
 
     #Termina Definicio del path de roles
-
     path('dar_de_baja_o_activar/<int:user_id>/', views.toggle_user_active, name='toggle_user_active'),
 
     path('eliminar_rol/<int:rol_id>/', views.eliminar_rol, name='eliminar_rol'),
@@ -83,5 +82,10 @@ urlpatterns = [
     path('tablero_kanban/', views.tablero_kanban, name='tablero_kanban'),
     path('cambiar_estado/', views.cambiar_estado_contenido, name='cambiar_estado_contenido'),
 
+    path('agregar_like/<int:contenido_id>/', views.agregar_like, name='agregar_like'),
+    path('agregar_comentario/<int:contenido_id>/', views.agregar_comentario, name='agregar_comentario'),
+    path('agregar_respuesta/<int:comentario_id>/', views.agregar_respuesta, name='agregar_respuesta'),
+    path('compartir_contenido/<int:contenido_id>/', views.compartir_contenido, name='compartir_contenido'),
+    path('obtener_notificaciones/', views.obtener_notificaciones, name='obtener_notificaciones'),
 ]
 

@@ -136,7 +136,7 @@ class Contenido(models.Model):
             - Crea un registro de modificación en la base de datos.
             - Actualiza el estado del contenido al nuevo estado.
             - Crea una notificación informando sobre el cambio de estado.
-        """    
+        """ 
         if nuevo_estado in dict(self.ESTADOS_CHOICES).keys():
             ModificacionContenido.objects.create(
                 contenido=self,
@@ -151,6 +151,13 @@ class Contenido(models.Model):
                 contenido=self,
                 mensaje=f"Tu contenido '{self.titulo}' ha cambiado a estado '{nuevo_estado}'.",
             )
+
+
+            # Crear notificación al cambiar el estado
+            if self.estado != nuevo_estado:
+                mensaje = f"El estado de tu contenido ha cambiado de {self.estado} a {nuevo_estado}."
+                Notificacion.objects.create(usuario=self.autor.user, mensaje=mensaje)
+
 
 
     tipo = models.ForeignKey(TipoDeContenido, on_delete=models.CASCADE)
@@ -312,91 +319,77 @@ class ModificacionContenido(models.Model):
     comentario = models.TextField(blank=True, null=True)  # Ejemplo de campo de comentario
     # Otros campos para el registro de modificaciones
 
-@receiver(post_save, sender=Contenido)
-def registrar_modificacion_contenido(sender, instance, **kwargs):
-    """
-    Función que se ejecuta después de guardar un objeto Contenido para registrar la modificación.
-
-    Parámetros:
-        sender: El modelo que envió la señal (Contenido en este caso).
-        instance: Instancia del objeto Contenido que se acaba de guardar.
-        **kwargs: Argumentos adicionales.
-    """
-    ModificacionContenido.objects.create(
-        contenido=instance,
-        usuario_modificacion=instance.autor,
-        estado_anterior=instance.estado,
-        # Otros campos para el registro de modificaciones
-    )
-
-
 class Like(models.Model):
     """
-    Model que representa un "Me gusta" dado por un usuario a un contenido.
+    Modelo que representa un "like" dado por un usuario a un contenido.
 
     Atributos:
-        usuario (ForeignKey): Usuario que dio el "Me gusta".
-        contenido (ForeignKey): Contenido al cual se dio el "Me gusta".
-        fecha_creacion (DateTimeField): Fecha y hora de la creación del "Me gusta" (auto-generada).
-
-    Métodos:
-        __str__(): Retorna una representación legible en forma de cadena del objeto.
+    - usuario: Clave foránea que conecta con el modelo Usuario.
+    - contenido: Clave foránea que conecta con el modelo Contenido.
+    - fecha_creacion: Fecha y hora de creación del "like".
     """
-
-    def __str__(self):
-        return f"{self.usuario.username} - {self.contenido.titulo}"
-
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.usuario.username} - {self.contenido.titulo}"
-    
-
 
 class Comentario(models.Model):
     """
-    Model que representa un comentario hecho por un usuario a un contenido.
+    Modelo que representa un comentario hecho por un usuario en un contenido.
 
     Atributos:
-        usuario (ForeignKey): Usuario que hizo el comentario.
-        contenido (ForeignKey): Contenido al cual se hizo el comentario.
-        texto (TextField): Texto del comentario.
-        fecha_creacion (DateTimeField): Fecha y hora de la creación del comentario (auto-generada).
-
-    Métodos:
-        __str__(): Retorna una representación legible en forma de cadena del objeto.
+    - usuario: Clave foránea que conecta con el modelo Usuario.
+    - contenido: Clave foránea que conecta con el modelo Contenido.
+    - texto: Campo de texto que almacena el contenido del comentario.
+    - fecha_creacion: Fecha y hora de creación del comentario.
     """
-
-    def __str__(self):
-        return f"{self.usuario.username} - {self.contenido.titulo} - {self.texto}"
-
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE, related_name='comentarios')
-    texto = models.TextField()
+    texto = models.TextField(max_length=500)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.usuario.username} - {self.contenido.titulo} - {self.texto}"
+class RespuestaComentario(models.Model):
+    """
+    Modelo que representa una respuesta a un comentario.
+
+    Atributos:
+    - comentario_padre: Clave foránea que conecta con el modelo Comentario, indicando el comentario padre.
+    - usuario: Clave foránea que conecta con el modelo Usuario.
+    - texto: Campo de texto que almacena el contenido de la respuesta.
+    - fecha_creacion: Fecha y hora de creación de la respuesta.
+    """
+    comentario_padre = models.ForeignKey(Comentario, on_delete=models.CASCADE, related_name='respuestas')
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    texto = models.TextField(max_length=500)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
 
 class Compartido(models.Model):
     """
-    Model que representa el acto de compartir un contenido entre dos usuarios.
+    Modelo que representa un contenido compartido por un usuario.
 
     Atributos:
-        usuario_origen (ForeignKey): Usuario que compartió el contenido.
-        usuario_destino (ForeignKey): Usuario que recibió el contenido compartido.
-        contenido (ForeignKey): Contenido que fue compartido.
-        fecha_creacion (DateTimeField): Fecha y hora de la creación de la acción de compartir (auto-generada).
-
-    Métodos:
-        __str__(): Retorna una representación legible en forma de cadena del objeto.
+    - usuario: Clave foránea que conecta con el modelo Usuario.
+    - contenido: Clave foránea que conecta con el modelo Contenido.
+    - fecha_creacion: Fecha y hora de creación del contenido compartido.
     """
-    usuario_origen = models.ForeignKey(User, on_delete=models.CASCADE, related_name='compartidos_enviados')
-    usuario_destino = models.ForeignKey(User, on_delete=models.CASCADE, related_name='compartidos_recibidos')
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 
+class Notificacion(models.Model):
+    """
+    Modelo que representa una notificación enviada a un usuario.
+
+    Atributos:
+    - usuario: Clave foránea que conecta con el modelo User de Django.
+    - mensaje: Campo de texto que almacena el contenido del mensaje de la notificación.
+    - fecha_creacion: Fecha y hora de creación de la notificación.
+    - leida: Campo booleano que indica si la notificación ha sido leída.
+    """
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    mensaje = models.CharField(max_length=255)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    leida = models.BooleanField(default=False)
+
     def __str__(self):
-        return f"{self.usuario_origen.username} compartió contenido con {self.usuario_destino.username}"
+        return f"{self.usuario.username}: {self.mensaje}"
+

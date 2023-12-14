@@ -1,15 +1,19 @@
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from core.views import get_gravatar_url
-from .models import Permiso, Usuario , Categoria, Rol , Contenido, TipoDeContenido, Subcategoria, Notificacion, Like, Comentario, Compartido
+from .models import Permiso, Usuario , Categoria, Rol , Contenido, TipoDeContenido, Subcategoria, Like, Comentario, RespuestaComentario, Compartido, Notificacion
 from django.contrib import messages
 from .forms import CategoriaForm, RolForm, CrearContenidoForm, AsignarRolForm, SubcategoriaForm, TipoDeContenidoForm
-from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+from django.views.decorators.http import require_http_methods
+
 from Gestion_Contenido.models import Plantilla
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
 
 #from .models import Plantilla
@@ -50,13 +54,18 @@ def asignar_rol_a_usuario(request, usuario_id):
             
             print(f"Rol asignado al usuario: {seguridad_usuario.rol.nombre}")
             seguridad_usuario.save()
-            
 
             # Recargar el usuario después de guardar el formulario
             # (Realmente no es necesario, se puede trabajar directamente con seguridad_usuario)
             
             if seguridad_usuario.rol:
                 print(f"Rol asignado al usuario {seguridad_usuario.user.username}: {seguridad_usuario.rol.nombre}")
+                
+                # Crear notificación
+                Notificacion.objects.create(
+                usuario=seguridad_usuario.user,
+                mensaje=f"Se te ha asignado el rol: '{seguridad_usuario.rol.nombre}'.",
+            )
             else:
                 print(f"Rol asignado al usuario {seguridad_usuario.user.username}: Sin Rol")
             
@@ -186,6 +195,9 @@ def asignar_permiso(request, rol_id=None):
         form = RolForm(request.POST, instance=rol)
         if form.is_valid():
             rol = form.save()  # Los permisos se guardarán automáticamente debido a ManyToMany
+            mensajes_notificacion = [f"Has sido asignado al rol: {rol.nombre}" for rol in form.cleaned_data['permisos']]
+            Notificacion.objects.bulk_create([Notificacion(usuario=User.user, mensaje=mensaje) for mensaje in mensajes_notificacion])
+            
             messages.success(request, 'Permisos asignados con éxito.')
             return redirect('profile_view')
         else:
@@ -812,12 +824,10 @@ def aprobar_contenido(request, contenido_id):
     contenido.estado = Contenido.ESTADO_PUBLICADO
     contenido.save()
     
-    # Crear notificación de aprobación de contenido
-    Notificacion.objects.create(
-        usuario=contenido.autor,
-        contenido=contenido,
-        mensaje=f"Tu contenido '{contenido.titulo}' ha sido aprobado y publicado.",
-    )    
+    # Generar notificación de aprobación
+    usuario_contenido = contenido.autor
+    mensaje = f"Tu contenido '{contenido.titulo}' ha sido aprobado y ahora está publicado."
+    Notificacion.objects.create(usuario=usuario_contenido, mensaje=mensaje)
 
     return render(request, 'detalle_contenido.html', {'contenido': contenido})
 
@@ -839,13 +849,15 @@ def desaprobar_contenido(request, contenido_id):
         contenido.estado = Contenido.ESTADO_RECHAZADO
         contenido.comentario = request.POST.get('comentario', '')
         contenido.save()
+        # Puedes agregar lógica adicional según tus necesidades
 
-        # Crear notificación de rechazo de contenido
-        Notificacion.objects.create(
-            usuario=contenido.autor,
-            contenido=contenido,
-            mensaje=f"Tu contenido '{contenido.titulo}' ha sido rechazado.",
-        )
+        # Generar notificación de rechazo
+        usuario_contenido = contenido.autor
+        mensaje = f"Tu contenido '{contenido.titulo}' ha sido rechazado. Comentario del revisor: {contenido.comentario}"
+        Notificacion.objects.create(usuario=usuario_contenido, mensaje=mensaje)
+
+        # Notificar al usuario usando la función notificar_usuario
+        notificar_usuario(usuario_contenido.id, mensaje)
 
         return render(request, 'detalle_contenido.html', {'contenido': contenido})
     else:
@@ -868,6 +880,7 @@ def inactivar_contenido(request, contenido_id):
     contenido = get_object_or_404(Contenido, pk=contenido_id)
     contenido.estado = Contenido.ESTADO_INACTIVO
     contenido.save()
+
     # Puedes agregar lógica adicional según tus necesidades
     return render(request, 'detalle_contenido.html', {'contenido': contenido})
 
@@ -909,8 +922,14 @@ def detalle_contenido(request, contenido_id):
     """
 
     contenido = get_object_or_404(Contenido, pk=contenido_id)
-    return render(request, 'detalle_contenido.html', {'contenido': contenido})
 
+    # Obtén las notificaciones asociadas al usuario autor del contenido
+    notificaciones = Notificacion.objects.filter(usuario=contenido.autor.user)
+
+    # Marca las notificaciones como leídas
+    notificaciones.update(leida=True)
+
+    return render(request, 'detalle_contenido.html', {'contenido': contenido, 'notificaciones': notificaciones})
 # proyecto_CMS/Seguridad/views.py
 
 # En views.py
@@ -930,3 +949,192 @@ def tablero_kanban(request):
 
     return render(request, 'tablero_kanban.html', {'contenidos_por_estado': contenidos_por_estado})
 
+
+
+
+def cambiar_estado_contenido(request):
+    """
+    Cambia el estado de un contenido según la solicitud.
+
+    Returns:
+        JsonResponse: Respuesta JSON indicando el éxito o fallo de la operación.
+    """
+        
+    if request.method == 'POST':
+        contenido_id = request.POST.get('contenido_id')
+        nuevo_estado = request.POST.get('nuevo_estado')
+
+        #print(f"Contenido ID: {contenido_id}, Nuevo Estado: {nuevo_estado}")
+
+        try:
+            contenido = Contenido.objects.get(id=contenido_id)
+            contenido.cambiar_estado(nuevo_estado)
+
+            return JsonResponse({'success': True, 'nuevo_estado': nuevo_estado})
+        except Contenido.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Contenido no encontrado'})
+        except ValueError:
+            return JsonResponse({'success': False, 'error': 'Valor no válido'})
+    
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})
+
+
+def agregar_like(request, contenido_id):
+    """
+    Agrega un "like" al contenido especificado.
+
+    Parameters:
+    - request: La solicitud HTTP recibida.
+    - contenido_id: El ID del contenido al cual se desea agregar el "like".
+
+    Returns:
+    - JsonResponse: Respuesta en formato JSON indicando el éxito o fallo de la operación.
+    """
+    if request.method == 'POST':
+        contenido = get_object_or_404(Contenido, pk=contenido_id)
+        usuario = request.user.usuario
+
+        # Verificar si el usuario ya dio like
+        if not Like.objects.filter(usuario=usuario, contenido=contenido).exists():
+            Like.objects.create(usuario=usuario, contenido=contenido)
+
+            # Crear notificación después de dar like
+            Notificacion.objects.create(
+                usuario=contenido.autor.user,
+                mensaje=f"{request.user.username} ha dado like a tu contenido: '{contenido.titulo}'.",
+            )
+
+            return JsonResponse({'success': True})
+        else:
+            # Si el usuario ya dio like, podrías manejarlo de alguna manera (opcional)
+            return JsonResponse({'success': False, 'error': 'Ya diste like a este contenido'})
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})
+
+
+def agregar_comentario(request, contenido_id):
+    """
+    Agrega un comentario al contenido especificado.
+
+    Parameters:
+    - request: La solicitud HTTP recibida.
+    - contenido_id: El ID del contenido al cual se desea agregar el comentario.
+
+    Returns:
+    - JsonResponse: Respuesta en formato JSON indicando el éxito o fallo de la operación.
+    """
+    if request.method == 'POST':
+        contenido = get_object_or_404(Contenido, pk=contenido_id)
+        usuario = request.user.usuario
+        texto = request.POST.get('texto', '')
+
+        Comentario.objects.create(usuario=usuario, contenido=contenido, texto=texto)
+
+        # Generar notificación de comentario
+        usuario_contenido = contenido.autor
+        mensaje = f"{request.user.username} ha comentado en tu contenido '{contenido.titulo}': {request.POST.get('comentario')}"
+        Notificacion.objects.create(usuario=usuario_contenido, mensaje=mensaje)
+
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})
+
+def agregar_respuesta(request, comentario_id):
+    """
+    Agrega una respuesta a un comentario especificado.
+
+    Parameters:
+    - request: La solicitud HTTP recibida.
+    - comentario_id: El ID del comentario al cual se desea agregar la respuesta.
+
+    Returns:
+    - JsonResponse: Respuesta en formato JSON indicando el éxito o fallo de la operación.
+    """    
+    if request.method == 'POST':
+        comentario_padre = get_object_or_404(Comentario, pk=comentario_id)
+        usuario = request.user.usuario
+        texto = request.POST.get('texto', '')
+
+        RespuestaComentario.objects.create(comentario_padre=comentario_padre, usuario=usuario, texto=texto)
+
+        # Crear notificación después de agregar respuesta
+        Notificacion.objects.create(
+            usuario=comentario_padre.usuario.user,
+            mensaje=f"{request.user.username} ha respondido a tu comentario en el contenido: '{comentario_padre.contenido.titulo}'.",
+        )
+
+
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})
+
+def compartir_contenido(request, contenido_id):
+    """
+    Comparte un contenido especificado.
+
+    Parameters:
+    - request: La solicitud HTTP recibida.
+    - contenido_id: El ID del contenido que se desea compartir.
+
+    Returns:
+    - JsonResponse: Respuesta en formato JSON indicando el éxito o fallo de la operación.
+    """
+    if request.method == 'POST':
+        contenido = get_object_or_404(Contenido, pk=contenido_id)
+        usuario = request.user.usuario
+
+        # Verificar si el usuario ya compartió este contenido
+        if not Compartido.objects.filter(usuario=usuario, contenido=contenido).exists():
+            Compartido.objects.create(usuario=usuario, contenido=contenido)
+
+            # Crear notificación después de compartir contenido
+            Notificacion.objects.create(
+                usuario=contenido.autor.user,
+                mensaje=f"{request.user.username} ha compartido tu contenido: '{contenido.titulo}'.",
+            )
+
+            return JsonResponse({'success': True})
+        else:
+            # Si el usuario ya compartió el contenido, podrías manejarlo de alguna manera (opcional)
+            return JsonResponse({'success': False, 'error': 'Ya compartiste este contenido'})
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})
+
+def notificar_usuario(usuario_id, mensaje):
+    """
+    Notifica a un usuario específico.
+
+    Parameters:
+    - usuario_id: El ID del usuario al cual se desea enviar la notificación.
+    - mensaje: El mensaje de la notificación.
+
+    Returns:
+    - None
+    """
+    try:
+        channel_layer = get_channel_layer()
+        if channel_layer:
+            async_to_sync(channel_layer.group_send)(
+                f"usuario_{usuario_id}",
+                {
+                    'type': 'notificacion_event',
+                    'mensaje': mensaje
+                }
+            )
+            print(f"Notificación enviada a usuario_{usuario_id}: {mensaje}")
+        else:
+            print("Error: El channel_layer no está configurado correctamente.")
+    except Exception as e:
+        print(f"Error al enviar notificación: {e}")
+
+@login_required
+def obtener_notificaciones(request):
+    """
+    Obtiene las notificaciones del usuario autenticado.
+
+    Returns:
+        JsonResponse: Respuesta en formato JSON con las notificaciones.
+    """
+    user = request.user 
+    notificaciones = Notificacion.objects.filter(usuario=user, leida=False).values('mensaje', 'fecha_creacion')
+
+    # Obtén el número total de notificaciones no leídas
+    notificaciones_no_leidas = Notificacion.objects.filter(usuario=user, leida=False).count()
+
+    return JsonResponse({'notificaciones': list(notificaciones), 'notificaciones_no_leidas': notificaciones_no_leidas})
