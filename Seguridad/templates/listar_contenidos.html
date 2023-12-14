@@ -68,14 +68,49 @@
                     <th>Título</th>
                     <th>Descripción</th>
                     <th>Autor</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 {% for contenido in contenidos %}
                 <tr>
                     <td>{{ contenido.titulo }}</td>
-                    <td>{{ contenido.descripcion }}</td>
+                    <td>{{ contenido.cuerpo }}</td>
                     <td>{{ contenido.autor }}</td>
+                    <td>{{ contenido.get_estado_display }}</td>
+                    <td>
+                        {% if contenido.estado == 'Borrador' %}
+                                <button type="submit" class="button"><a href="{% url 'revisar_contenido' contenido.id %}" style="color: white; text-decoration: none;">Enviar a Revisión</a></button>
+                                <button type="submit" class="button"><a href="{% url 'cancelar_agregar_contenido' contenido.id %}" style="color: white; text-decoration: none;">Cancelar</a></button>
+                                
+                        <!-- Lógica para mostrar acciones relacionadas con el estado de revisión -->
+                       
+                        
+
+                        {% elif contenido.estado == 'En Revisión' %}
+
+                                <button type="submit" class="button"><a href="{% url 'aprobar_contenido' contenido.id %}" style="color: white; text-decoration: none;">Aprobar</a></button>
+                                <button type="submit" class="button"><a href="{% url 'desaprobar_contenido' contenido.id %}" style="color: white; text-decoration: none;">Desaprobar</a></button>
+                                
+                        <!-- Lógica para mostrar acciones relacionadas con el estado de rechazado -->
+                        {% elif contenido.estado == 'Rechazado' %}
+                            <p>Estado: Rechazado</p>
+                            <p>Comentario de Desaprobación: {{ contenido.comentario }}</p>
+
+                        
+                        <!-- Lógica para mostrar acciones relacionadas con el estado de publicado -->
+                        {% elif contenido.estado == 'Publicado' %}
+
+                                    <button type="submit" class="button"><a href="{% url 'inactivar_contenido' contenido.id %}" style="color: white; text-decoration: none;">Inactivar</a></button>                                    
+                                
+                        <!-- Lógica para mostrar acciones relacionadas con el estado de inactivo -->
+                        {% elif contenido.estado == 'Inactivo' %}
+                        <p>Estado: Inactivo</p>
+                        
+                        {% endif %}
+
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
@@ -87,7 +122,9 @@
     </div>
     <div class="button-container">
         <button type="submit" class="button"><a href="{% url 'crear_contenido' %}" style="color: white; text-decoration: none;">Crear nuevo contenido</a></button>
-        <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver</a></button>
+        <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver al Panel</a></button>
+        <button type="submit" class="button"><a href="{% url 'tablero_kanban' %}" style="color: white; text-decoration: none;">Ver Tablero Kanban</a></button>
+        
     </div>
 </body>
 </html>

@@ -1,0 +1,144 @@
+<!-- proyecto_CMS/Seguridad/templates/tablero_kanban.html -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablero Kanban</title>
+    <style>
+        /* Agrega estilos CSS para el tablero Kanban aquí */
+        /* Puedes usar bibliotecas como Bootstrap para facilitar la maquetación */
+
+
+        h1 {
+            color: #ff0800; /* Color rojo para el título */
+            text-align: center;
+        }
+
+        .kanban-container {
+            display: flex; /* Usa flexbox para los elementos internos */
+            justify-content: space-around; /* Distribuye el espacio alrededor de los elementos */
+            margin-top: 20px; /* Ajusta el margen superior para separar el título de las columnas */
+        }
+
+        .kanban-column {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+            display: inline-block;
+            vertical-align: top;
+            background-color: #007bff; /* Cambia el color de fondo a azul */
+        }
+
+        .kanban-column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .kanban-column li {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+            padding: 5px;
+            cursor: move;
+        }
+            /* Estilo para los botones "Mover" */
+    
+        button.mover-button {
+            background-color: rgba(94, 255, 0, 0.904); /* Cambia el color de fondo a verde */
+            color: #000; /* Cambia el color del texto a negro */
+            border: 1px solid #000; /* Agrega un borde negro al botón */
+            padding: 5px; /* Ajusta el relleno del botón según sea necesario */
+            cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+        }
+
+        .button-container {
+            text-align: center; /* Centra el contenido horizontalmente */
+            margin-top: 20px; /* Espacio superior para separar el botón del contenido */
+        }
+        
+        .button {
+            background-color: #007bff; /* Azul */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Tablero Kanban</h1>
+
+    {% for estado, contenidos in contenidos_por_estado.items %}
+        <div class="kanban-column" ondragover="handleDragOver(event)" ondrop="handleDrop(event, '{{ estado }}')">
+            <h2>{{ estado }}</h2>
+            <ul>
+                {% for contenido in contenidos %}
+                    <li id="{{ contenido.id }}" draggable="true" ondragstart="handleDragStart(event)">
+                        {{ contenido.titulo }} - {{ contenido.get_estado_display }}
+
+                        <br>
+                        Creado: {{ contenido.fecha_creacion|date:"F j, Y H:i" }}
+                        Modificado: {{ contenido.fecha_modificacion|date:"F j, Y H:i" }}
+                        <br>
+                        
+
+                        {% if contenido.estado == 'Borrador' %}
+                            <button class="mover-button" onclick="moverEstado('{{ contenido.id }}', 'En Revisión')">Mover a En Revisión</button>
+                        {% elif contenido.estado == 'En Revisión' %}
+                            <button class="mover-button" onclick="moverEstado('{{ contenido.id }}', 'Rechazado')">Mover a Rechazado</button>
+                            <button class="mover-button" onclick="moverEstado('{{ contenido.id }}', 'Publicado')">Mover a Publicado</button>
+                        {% elif contenido.estado == 'Rechazado' or contenido.estado == 'Publicado' %}
+                            <button class="mover-button" onclick="moverEstado('{{ contenido.id }}', 'Inactivo')">Mover a Inactivo</button>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+    
+    <!-- Botón "Volver" -->
+    <div class="button-container">
+        <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: rgb(255, 255, 255); text-decoration: none;">Volver al Panel</a></button>
+        <button type="submit" class="button"><a href="{% url 'listar_contenidos' %}" style="color: white; text-decoration: none;">Ver Listado de Contenidos</a></button>
+    </div>
+    
+    <script>
+        
+        function moverEstado(contenidoId, nuevoEstado) {
+            //console.log(`Mover contenido ${contenidoId} a ${nuevoEstado}`);
+            const formData = new FormData();
+            formData.append('contenido_id', contenidoId);
+            formData.append('nuevo_estado', nuevoEstado);
+
+            fetch('/cambiar_estado/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                //console.log('Respuesta de la solicitud:', data);
+                if (data.success) {
+                    const element = document.getElementById(contenidoId);
+                    element.innerHTML = `${element.innerHTML.split(' - ')[0]} - ${data.nuevo_estado}`;
+                    // Recarga la página después de cambiar el estado
+                    location.reload();
+                } else {
+                    alert('Error al cambiar el estado: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+
+</body>
+</html>

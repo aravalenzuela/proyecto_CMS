@@ -20,8 +20,8 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
-            color: #333;
-            font-size: 24px;
+            color: #ff0800; /* Color rojo para el título */
+            text-align: center;
         }
         table {
             border-collapse: collapse;
@@ -107,7 +107,11 @@
         </table>
     </div>
     <div class="button-container">
-        <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver</a></button>
+        
+        <button type="submit" class="button"><a href="{% url 'crear_categoria' %}" style="color: white; text-decoration: none;">Crear Nueva Categoria</a></button>
+        <button type="submit" class="button"><a href="{% url 'crear_subcategoria' %}" style="color: white; text-decoration: none;">Crear Subcategorias</a></button>
+        <button type="submit" class="button"><a href="{% url 'listar_subcategorias' %}" style="color: white; text-decoration: none;">Ver Listado de Subcategorias</a></button>
+        <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver al Panel</a></button>
     </div>
 
     <!-- Agrega el script jQuery aquí -->

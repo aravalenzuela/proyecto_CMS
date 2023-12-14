@@ -3,6 +3,10 @@
 <head>
     <style>
         /* Estilo para el botón de "Seleccionar y Modificar Categoría" */
+        h1 {
+            color: #ff0800; /* Color rojo para el título */
+            text-align: center;
+        }
         .button-select {
             background-color: #007bff; /* Azul */
             color: #fff;
@@ -53,6 +57,7 @@
             {% endfor %}
         </select>
         <button type="submit" name="accion" value="seleccionar" class="button-select">Seleccionar y Modificar Categoría</button>
+        <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver al Panel</a></button>
     </form>
     {% if categoria %}
         <h2>Nombre: {{ categoria.nombre }}</h2>
@@ -67,8 +72,8 @@
             <textarea name="descripcion">{{ categoria.descripcion }}</textarea>
             <br>
             <div class="button-container">
-                <button type="submit" name="accion" value="guardar" class="button button-select">Guardar Cambios</button>
-                <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver</a></button>
+                <button type="submit" name="accion" value="guardar" class="button button-save">Guardar Cambios</button>
+                <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver al Panel</a></button>
             </div>
         </form>
     {% endif %}

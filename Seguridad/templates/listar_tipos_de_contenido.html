@@ -20,8 +20,8 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
-            color: #333;
-            font-size: 24px;
+            color: #ff0800; /* Color rojo para el título */
+            text-align: center;
         }
         table {
             border-collapse: collapse;
@@ -83,7 +83,8 @@
             </tbody>
         </table>
         <div class="button-container">
-            <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver</a></button>
+            <button type="submit" class="button"><a href="{% url 'crear_tipo_de_contenido' %}" style="color: white; text-decoration: none;">Crear Nuevo Tipo de Contenido</a></button>
+            <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver al Panel</a></button>
         </div>
     </div>
 </body>

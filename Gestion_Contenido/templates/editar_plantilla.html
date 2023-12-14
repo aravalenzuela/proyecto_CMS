@@ -66,7 +66,7 @@
             {% csrf_token %}
             <div>{{ form.nombre.label_tag }} {{ form.nombre }}
             <div></div>{{ form.tipo.label_tag }} {{ form.tipo }}
-            <div></div>{{ form.contenido.label_tag }}<div></div> {{ form.contenido }}
+            <div></div>{{ form.contenido.label_tag }}<div></div> {{ form.contenidoDePlantilla }}
             
             {% if form.tipo.value != "blog" %}
                 <div>
@@ -81,6 +81,7 @@
         </form>
         
         <a href="{% url 'ver_plantilla' %}" class="btn btn-primary">Ver plantilla</a>
+        <button type="submit" class="button"><a href="{% url 'seleccionar_plantilla' %}" style="color: white; text-decoration: none;">Atras</a></button>
     </div>
 </body>
 </html>

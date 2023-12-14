@@ -1,15 +1,16 @@
 from django.test import TestCase
 import pytest
 from django.urls import reverse
-from Seguridad.models import Categoria, Rol, Permiso, Subcategoria  # Asegúrate de que la importación sea correcta
+from Seguridad.models import Categoria, Rol, Permiso, Subcategoria, TipoDeContenido, Contenido # Asegúrate de que la importación sea correcta
 from django.shortcuts import redirect
-
+from django.db.utils import IntegrityError
 
 from django.shortcuts import get_object_or_404
-
+from Seguridad.views import listar_tipos_de_contenido, modificar_estado_categoria
 from django.contrib.auth.models import User
 
 from .models import Contenido, TipoDeContenido, Plantilla
+
 
 
 # Prueba la creación de una categoría
@@ -466,53 +467,295 @@ class ModificarCategoriaViewTest(TestCase):
         self.assertContains(response, f'Nombre: {updated_name}')
         self.assertContains(response, f'Descripción: {updated_description}')
 
+@pytest.mark.django_db
+def test_modificar_estado_categoria_view(client):
 
-# Pruebas para el models Contenido
-class ContenidoModelTest(TestCase):
+    """
+    Prueba unitaria para la vista que modifica el estado de una categoría.
+
+    Parameters:
+        client (Client): Un cliente de prueba para realizar solicitudes HTTP.
+
+    Returns:
+        None
+
+    """
+
+    # Crear una instancia de la categoría
+    categoria = Categoria.objects.create(nombre="Categoría de prueba", activo=True)
+
+    # Realizar una solicitud POST a la vista con el ID de la categoría
+    response = client.post(reverse('modificar_estado_categoria', args=[categoria.pk]))
+
+    # Verificar que la solicitud fue exitosa (código de respuesta HTTP 302 para la redirección)
+    assert response.status_code == 302
+
+    # Verificar que la categoría cambió su estado a inactivo (activo=False)
+    categoria_actualizada = Categoria.objects.get(pk=categoria.pk)
+    assert not categoria_actualizada.activo
+
+@pytest.mark.django_db
+def test_modificar_estado_categoria_view_category_not_found(client):
+
+    """
+    Prueba unitaria para la vista que intenta modificar el estado de una categoría que no existe.
+
+    Parameters:
+        client (Client): Un cliente de prueba para realizar solicitudes HTTP.
+
+    Returns:
+        None
+
+    """
+
+    # Intentar modificar el estado de una categoría que no existe
+    response = client.post(reverse('modificar_estado_categoria', args=[999]))  # ID no existente
+
+    # Verificar que la categoría no se encontró y se devuelve una respuesta JSON con un código de estado 404
+    assert response.status_code == 404
+    assert response.json() == {'mensaje': 'Categoría no encontrada'}
+
+
+@pytest.mark.django_db
+def test_listar_tipos_de_contenido_view(client):
+
+    """
+    Prueba unitaria para la vista que lista los tipos de contenido.
+
+    Parameters:
+        client (Client): Un cliente de prueba para realizar solicitudes HTTP.
+
+    Returns:
+        None
+
+    """
+    # Crear instancias de TipoDeContenido (puedes ajustar esto según tus necesidades)
+    tipo1 = TipoDeContenido.objects.create(nombre="Tipo 1")
+    tipo2 = TipoDeContenido.objects.create(nombre="Tipo 2")
+
+    # Realizar una solicitud GET a la vista
+    response = client.get(reverse('listar_tipos_de_contenido'))  # Ajusta el nombre de la URL según tu proyecto
+
+    # Verificar que la solicitud fue exitosa (código de respuesta HTTP 200)
+    assert response.status_code == 200
+
+    # Verificar que los objetos TipoDeContenido se muestran en la respuesta
+    assert tipo1.nombre.encode() in response.content
+    assert tipo2.nombre.encode() in response.content
+
+    # También puedes verificar otros aspectos de la respuesta, como la plantilla utilizada
+
+    # Por ejemplo, verifica que se está utilizando la plantilla 'listar_tipos_de_contenido.html'
+    assert 'listar_tipos_de_contenido.html' in [template.name for template in response.templates]
+
+    # También puedes verificar que el contexto de la vista es correcto
+    assert 'tipos_de_contenido' in response.context
+
+    # Verificar que el contexto contiene los objetos TipoDeContenido
+    assert tipo1 in response.context['tipos_de_contenido']
+    assert tipo2 in response.context['tipos_de_contenido']
+
+@pytest.mark.django_db
+def test_contenido_creation():
+
+    """
+    Prueba unitaria para la creación de una instancia de Contenido.
+
+    Returns:
+        None
+
+    """
+    # Crear instancias de TipoDeContenido y User para usar en la prueba
+    tipo_de_contenido = TipoDeContenido.objects.create(nombre="Ejemplo")
+    user = User.objects.create_user(username="usuario", password="contraseña")
+
+    # Crear una instancia de Contenido
+    contenido = Contenido(
+        tipo=tipo_de_contenido,
+        titulo="Título de ejemplo",
+        cuerpo="Cuerpo de ejemplo",
+        autor=user,
+    )
+    contenido.save()
+
+    # Comprobar que la instancia se ha guardado correctamente en la base de datos
+    assert Contenido.objects.count() == 1
+
+    # Comprobar que los atributos se han guardado correctamente
+    contenido_guardado = Contenido.objects.first()
+    assert contenido_guardado.tipo == tipo_de_contenido
+    assert contenido_guardado.titulo == "Título de ejemplo"
+    assert contenido_guardado.cuerpo == "Cuerpo de ejemplo"
+    assert contenido_guardado.autor == user
+
+@pytest.mark.django_db
+def test_contenido_str_method():
+    """
+    Prueba unitaria para el método __str__ de la clase Contenido.
+
+    Returns:
+        None
+
+    """
+
+    tipo_de_contenido = TipoDeContenido.objects.create(nombre="Ejemplo")
+    user = User.objects.create_user(username="usuario", password="contraseña")
+    contenido = Contenido(
+        tipo=tipo_de_contenido,
+        titulo="Título de ejemplo",
+        cuerpo="Cuerpo de ejemplo",
+        autor=user,
+    )
+
+    # Comprobar que el método __str__ devuelve el título del contenido
+    assert str(contenido) == "Título de ejemplo"
+
+
+@pytest.mark.django_db
+def test_tipo_de_contenido_creation():
+    """
+    Prueba unitaria para la creación de una instancia de TipoDeContenido.
+
+    Returns:
+        None
+
+    """
+
+    # Crear una instancia de TipoDeContenido
+    tipo_de_contenido = TipoDeContenido(
+        nombre="Ejemplo",
+        descripcion="Descripción de ejemplo",
+    )
+    tipo_de_contenido.save()
+
+    # Comprobar que la instancia se ha guardado correctamente en la base de datos
+    assert TipoDeContenido.objects.count() == 1
+
+    # Comprobar que los atributos se han guardado correctamente
+    tipo_guardado = TipoDeContenido.objects.first()
+    assert tipo_guardado.nombre == "Ejemplo"
+    assert tipo_guardado.descripcion == "Descripción de ejemplo"
+
+@pytest.mark.django_db
+def test_tipo_de_contenido_str_method():
+    """
+    Prueba unitaria para el método __str__ de la clase TipoDeContenido.
+
+    Returns:
+        None
+
+    """
+    tipo_de_contenido = TipoDeContenido(
+        nombre="Ejemplo",
+        descripcion="Descripción de ejemplo",
+    )
+
+    # Comprobar que el método __str__ devuelve el nombre del tipo de contenido
+    assert str(tipo_de_contenido) == "Ejemplo"
+
+
+
+# Seguridad/tests.py
+
+class ContenidoViewsTest(TestCase):
+
+    """
+    Conjunto de pruebas para las vistas relacionadas con Contenido.
+
+    Métodos de configuración:
+        - setUp: Configura los datos de prueba para cada prueba.
+
+    Pruebas:
+        - test_revisar_contenido: Verifica que el contenido se pueda enviar a revisión correctamente.
+        - test_aprobar_contenido: Verifica que el contenido se pueda aprobar y cambiar a estado publicado.
+        - test_desaprobar_contenido: Verifica que el contenido se pueda desaprobar con un comentario asociado.
+        - test_inactivar_contenido: Verifica que el contenido se pueda inactivar correctamente.
+
+    """
 
     def setUp(self):
-        # Crear instancias para las FK y el usuario.
-        tipo = TipoDeContenido.objects.create(nombre="Tipo Test")
-        plantilla = Plantilla.objects.create(nombre="Plantilla Test")
-        user = User.objects.create_user('testuser', 'test@example.com', 'testpassword')
+        """
+        Configura los datos de prueba para cada prueba.
 
-        # Crear un objeto Contenido.
+        Configuración:
+            - Crea un usuario de prueba.
+            - Crea un tipo de contenido o utiliza uno existente.
+            - Crea un contenido de prueba asociado al usuario y tipo de contenido.
+        """
+                
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        
+        # Crea un tipo de contenido o utiliza uno existente
+        tipo_de_contenido = TipoDeContenido.objects.create(nombre="Tipo de Contenido Ejemplo")
+
         self.contenido = Contenido.objects.create(
-            tipo=tipo,
-            titulo="Test Título",
-            cuerpo="Test Cuerpo",
-            autor=user,
-            plantilla=plantilla
+            tipo=tipo_de_contenido,
+            titulo="Contenido de prueba",
+            cuerpo="Cuerpo de prueba",
+            autor=self.user
         )
 
-    def test_contenido_creation(self):
-        """ Testear que el Contenido se crea correctamente """
-        self.assertEqual(self.contenido.titulo, "Test Título")
-        self.assertEqual(self.contenido.cuerpo, "Test Cuerpo")
+    def test_revisar_contenido(self):
+        """
+        Verifica que el contenido se pueda enviar a revisión correctamente.
 
-    def test_str_representation(self):
-        """ Testear la representación string del modelo """
-        self.assertEqual(str(self.contenido), "Test Título")
+        Resultados:
+            - Se espera que la página se cargue correctamente.
+            - Se verifica que el estado del contenido cambie a 'En Revisión'.
+        """
+                
+        url = reverse('revisar_contenido', args=[self.contenido.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)  # Verifica que la página se carga correctamente
+        self.contenido.refresh_from_db()  # Actualiza la instancia desde la base de datos
+        self.assertEqual(self.contenido.estado, Contenido.ESTADO_EN_REVISION)
 
-    def test_fecha_creacion(self):
-        """ Testear que la fecha de creación se añade automáticamente """
-        self.assertIsNotNone(self.contenido.fecha_creacion)
+    def test_aprobar_contenido(self):
+        """
+        Verifica que el contenido se pueda aprobar y cambiar a estado publicado.
 
-    def test_fecha_modificacion(self):
-        """ Testear que la fecha de modificación se actualiza automáticamente """
-        self.assertIsNotNone(self.contenido.fecha_modificacion)
-
-# Pruebas para el views de Contenido
-class CrearContenidoViewTests(TestCase):
-
-    def setUp(self):
-        # Crear un usuario de prueba
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.client.login(username='testuser', password='testpassword')
-    
-    def test_view_uses_correct_template(self):
-        response = self.client.get(reverse('crear_contenido'))
+        Resultados:
+            - Se espera que la página se cargue correctamente.
+            - Se verifica que el estado del contenido cambie a 'Publicado'.
+        """
+                
+        url = reverse('aprobar_contenido', args=[self.contenido.id])
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'crear_contenido.html')
+        self.contenido.refresh_from_db()
+        self.assertEqual(self.contenido.estado, Contenido.ESTADO_PUBLICADO)
+
+    def test_desaprobar_contenido(self):
+        """
+        Verifica que el contenido se pueda desaprobar con un comentario asociado.
+
+        Resultados:
+            - Se espera que la página se cargue correctamente.
+            - Se verifica que el estado del contenido cambie a 'Rechazado'.
+            - Se verifica que el comentario asociado se almacene correctamente en el contenido.
+        """
+                
+        url = reverse('desaprobar_contenido', args=[self.contenido.id])
+        response = self.client.post(url, {'comentario': 'No es adecuado'})
+        self.assertEqual(response.status_code, 200)
+        self.contenido.refresh_from_db()
+        self.assertEqual(self.contenido.estado, Contenido.ESTADO_RECHAZADO)
+        self.assertEqual(self.contenido.comentario, 'No es adecuado')
+
+    def test_inactivar_contenido(self):
+        """
+        Verifica que el contenido se pueda inactivar correctamente.
+
+        Resultados:
+            - Se espera que la página se cargue correctamente.
+            - Se verifica que el estado del contenido cambie a 'Inactivo'.
+        """
+
+        url = reverse('inactivar_contenido', args=[self.contenido.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.contenido.refresh_from_db()
+        self.assertEqual(self.contenido.estado, Contenido.ESTADO_INACTIVO)
 
     
+
