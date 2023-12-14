@@ -7,113 +7,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Sitio Web</title>
     <link rel="stylesheet" href="{% static 'home_styles.css' %}">
-
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Personalización de CSS aquí -->
     <style>
-        /* Colores, fuentes y otras variables */
-        :root {
-            --primary-color: #0056b3;
-            --secondary-color: #6c757d;
-            --font-family: 'Arial', sans-serif;
-            /* Añade aquí más variables según sea necesario */
-        }
+     :root {
+    --primary-color: #2c3e50; /* Un azul oscuro, casi gris */
+    --secondary-color: #34495e; /* Un azul más oscuro para el fondo */
+    --text-color: #ecf0f1; /* Un color claro para el texto */
+    --cta-color: #e74c3c; /* Un color rojo oscuro para los botones de llamada a la acción */
+    --font-family: 'Arial', sans-serif;
+}
 
-        /* Estilos responsivos */
-        img {
-            max-width: 100%;
-            height: auto;
-        }
+body {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+}
 
-        .feature-box img {
-            /* Añadir lazy loading para imágenes */
-            loading: lazy;
-        }
+header, .cta-section, .intro-section, .features-section, footer {
+    text-align: center;
+    background-color: var(--primary-color);
+}
 
-        header, .cta-section, .intro-section, .features-section, footer {
-            text-align: center;
-        }
+.feature-box {
+    background-color: #2c3e50;
+    border: 1px solid #7f8c8d;
+}
 
-        .logo {
-            width: 150px;
-        }
+.feature-box:hover {
+    transform: translateY(-5px);
+    border-color: var(--cta-color);
+}
 
-        /* Añade aquí estilos adicionales */
-        .feature-box {
-            margin-bottom: 30px;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease-in-out;
-        }
+img {
+    max-width: 100%;
+    height: auto;
+}
 
-        .feature-box:hover {
-            transform: translateY(-5px);
-        }
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between; /* Esto asegura que el logo y el botón estén en los extremos */
-            padding: 0 1rem; /* Agrega padding horizontal para no pegar los elementos a los bordes */
-        }
+.logo {
+    width: 150px;
+}
 
-        .cta-section {
-            margin-left: auto; /* Asegura que el botón se mueva hacia la derecha */
-            padding-right: 0; /* Ajusta este valor como sea necesario */
-        }
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+}
 
-/* Estilos para el botón que podrían necesitar ajuste */
-        .cta-section a {
-            margin-left: auto; /* Confirma que el botón se alinee a la derecha */
-            margin-right: 2rem; /* Aumenta el margen derecho si es necesario */
-            padding: 10px 20px; /* Ajusta el padding para cambiar el tamaño del botón */
-    /* ... otros estilos ... */
+.cta-section {
+    margin-left: auto;
+}
+
+.cta-section a {
+    background-color: var(--cta-color);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-left: 2rem; /* Ajusta este valor según tus necesidades */
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
-/* Ajustes para dispositivos móviles */
-        @media (max-width: 768px) {
-            .header-content {
-            flex-direction: column;
-            padding: 0.5rem;
-        }
-
-        .cta-section {
-            width: 100%;
-            text-align: right;
-            padding-right: 0.5rem; /* Asegura que hay espacio en la derecha en dispositivos móviles */
-        }
-
-        .cta-section a {
-            margin-right: 0.5rem; /* Ajusta esto para dispositivos móviles si es necesario */
-            /* ... otros estilos ... */
-        }
+    .cta-section {
+        width: 100%;
+        text-align: right;
+        padding-top: 0.5rem;
     }
-        
-    footer {
-        background-color: var(--secondary-color);
-        color: rgb(17, 15, 15);
-        padding: 10px 0;
-        margin-top: 30px;
-    }
+}
+
+footer {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 10px 0;
+    margin-top: 30px;
+}
+
     </style>
 
 </head>
 <body>
-
     <header>
         <div class="container header-content">
             <img src="{% static 'imagenes/logo.png' %}" alt="Logo de mi sitio" class="logo">
-            <h1>PROYECTO INGENIERIA DE SOFTWARE II</h1> <section class="cta-section">
-                <div class="sso-option">
-                    <a href="{% url "social:begin" "google-oauth2" %}" class="back-button">Iniciar Sesión</a>
-
-
-               </div>
+            <h1 class="header-title">PROYECTO INGENIERIA DE SOFTWARE II</h1>
+            <div class="cta-section">
+                    <a href="{% url "social:begin" "google-oauth2" %}" class="btn btn-primary">Iniciar Sesión</a>
             </section>
         </div>
-       
     </header>
-
     <main>
         <div class="container">
             <section class="intro-section">
