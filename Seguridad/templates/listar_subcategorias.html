@@ -88,7 +88,7 @@
     <div class="button-container">
         <button type="submit" class="button"><a href="{% url 'crear_subcategoria' %}" style="color: white; text-decoration: none;">Crear Nueva Subcategoria</a></button>
         <button type="submit" class="button"><a href="{% url 'listar_categorias' %}" style="color: white; text-decoration: none;">Ver Listado de Categorias</a></button>
-        <button type="submit" class="button"><a href="{% url 'profile_view' %}" style="color: white; text-decoration: none;">Volver al Panel</a></button>
+        <a href="{% url 'redirect_to_home' %}" style="background-color: #007bff; color: white; padding: 10px 20px; border-radius: 4px; text-decoration: none; display: inline-block;">Volver al Panel</a>
     </div>
 </body>
 </html>

@@ -328,7 +328,9 @@
             function mostrarNotificaciones(notificaciones) {
                 const notificacionesBody = document.getElementById('notificacionesBody');
                 notificacionesBody.innerHTML = ''; // Limpiar contenido anterior
-
+                // Invertir el orden de las notificaciones
+                notificaciones.reverse();
+                
                 notificaciones.forEach(notificacion => {
                     const notificacionElement = document.createElement('p');
                     notificacionElement.textContent = notificacion.mensaje;
