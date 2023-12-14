@@ -161,9 +161,9 @@ class Contenido(models.Model):
             self.save()
 
             # Crear notificación al cambiar el estado
-            if self.estado != nuevo_estado:
-                mensaje = f"El estado de tu contenido ha cambiado de {self.estado} a {nuevo_estado}."
-                Notificacion.objects.create(usuario=self.autor.user, mensaje=mensaje)
+            mensaje = f"El estado de tu contenido '{self.titulo}' esta en estado {self.estado}."
+            Notificacion.objects.create(usuario=self.autor, mensaje=mensaje)
+
 
 
 
