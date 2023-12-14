@@ -6,7 +6,7 @@ from decouple import config
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgres://bd_proyecto_cms_is2_user:SyG6Zn5uyiHIZ8MHN9tQs9UJxr8lZkYg@dpg-ck0g7ve3ktkc73e4eukg-a.oregon-postgres.render.com/bd_proyecto_cms_is2'
+        default='postgres://bd_bk_proyecto_cms_is2_user:CRPeU5wtxwfXbzg4R1YglSPgDcP0OnkD@dpg-clt1mbqpmc4c73dv3gkg-a.oregon-postgres.render.com/bd_bk_proyecto_cms_is2'
     )
 }
 
