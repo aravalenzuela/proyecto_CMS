@@ -204,7 +204,7 @@ def asignar_permiso(request, rol_id=None):
     rol = get_object_or_404(Rol, pk=rol_id) if rol_id else None
     
     if request.method == 'POST':
-        form = RolForm(request.POST, instance=rol)
+        form = AsignarRolForm(request.POST, instance=rol)
         if form.is_valid():
             rol = form.save()  # Los permisos se guardarán automáticamente debido a ManyToMany
             mensajes_notificacion = [f"Has sido asignado al rol: {rol.nombre}" for rol in form.cleaned_data['permisos']]
@@ -216,7 +216,7 @@ def asignar_permiso(request, rol_id=None):
             print(form.errors)  # Agregar esta línea para imprimir los errores
             messages.error(request, 'Ha ocurrido un error al asignar los permisos.')
     else:
-        form = RolForm(instance=rol)
+        form = AsignarRolForm(instance=rol)
     
     context = {
         'form': form

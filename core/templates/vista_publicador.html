@@ -182,6 +182,10 @@
                                     <h5 class="card-title">{{ contenido.titulo }}--{{ contenido.autor.get_full_name }}</h5>
                                         <!-- Aquí puedes seguir agregando más información sobre el contenido -->
                                         <p class="card-text">{{ contenido.cuerpo }}</p>
+                                        <!-- Asegúrate de usar .url para acceder a la URL del archivo de imagen -->
+                                        {% if contenido.imagen.url or None %}
+                                        <img class="card-img" src="{{ contenido.imagen.url }}">
+                                        {% endif %}
                                         <p class="card-text">Creado: {{ contenido.fecha_creacion|date:"F j, Y H:i" }}</p>
                                         <p class="card-text">Modificado: {{ contenido.fecha_modificacion|date:"F j, Y H:i" }}</p>
                                 </div>
