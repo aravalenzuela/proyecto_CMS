@@ -21,6 +21,7 @@ from django.views.generic.base import RedirectView
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import profile_view
 
 urlpatterns = [
     path('', views.home, name='home'), #Inicio del Home - http://127.0.0.1:8000/
@@ -31,21 +32,18 @@ urlpatterns = [
     path('logout/', views.logout, name='logout_custom'),
     path('logout2/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),#Al darle salir redirige a la pantalla de login
     path('social-auth/', include('social_django.urls', namespace='social')),  # Añade 
-
     path('notificaciones/', views.notificaciones_view, name='notificaciones'),    
-
-
     path('ruta_para_renovar_sesion/', views.renew_session, name='renew_session'),
     #Paneles
     path('panel-autor/', views.panel_autor, name='panel_autor'),
     path('panel-editores/', views.panel_editores, name='panel_editores'),
     path('panel-publicador/', views.panel_publicador, name='panel_publicador'),
-    path('panel-suscriptor/', views.panel_autor, name='panel_suscriptor'),
+    path('panel-suscriptor/', views.panel_suscriptor, name='panel_suscriptor'),
     path('vista_contenido/', views.vista_contenido, name='vista_contenido'),
-    
     #Modulos 
     path('', include('Seguridad.urls')),
     path('', include('Gestion_Contenido.urls')),
+    path('profile/', profile_view, name='profile'),
 ]
 
 if settings.DEBUG:
