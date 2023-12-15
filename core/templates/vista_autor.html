@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
     <title>Mi Diseño con Bootstrap</title>
     <style>
         .sidebar {
@@ -179,9 +180,26 @@
                                 </div>
                                 <div class="card-footer bg-transparent border-0 d-flex justify-content-between">
                                     <div>
-                                        <a href="#" class="text-muted text-decoration-none me-3"><i class="fas fa-share"></i> Compartir</a>
-                                        <a href="#" class="text-muted text-decoration-none me-3"><i class="fas fa-redo"></i> Rebloguear</a>
-                                        <a href="#" class="text-muted text-decoration-none"><i class="fas fa-comment"></i> Comentarios</a>
+                                         <!-- Botón Like -->
+                                        <button onclick="agregarLike('{{ post.id }}')" class="btn btn-outline-primary">
+                                            <i class="bi bi-hand-thumbs-up"></i> Like <span id="like-count-{{ post.id }}">{{ post.num_likes }}</span>
+                                        </button>
+
+                                        <!-- Botón Comentar -->
+                                        <button onclick="toggleComentarios('{{ post.id }}')" class="btn btn-outline-secondary">
+                                            <i class="bi bi-chat-left-text"></i> Comentar <span id="comment-count-{{ post.id }}">{{ post.num_comentarios }}</span>
+                                        </button>
+
+                                        <!-- Botón Compartir -->
+                                        <button onclick="agregarCompartir('{{ post.id }}')" class="btn btn-outline-success">
+                                            <i class="bi bi-share"></i> Compartir <span id="share-count-{{ post.id }}">{{ post.num_compartidos }}</span>
+                                        </button>
+
+                                        <!-- Sección de Comentarios -->
+                                        <div id="comentarios-{{ post.id }}" style="display:none;">
+                                            <!-- Aquí irían los comentarios y el formulario para agregar nuevos -->
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -274,5 +292,66 @@
             });
         }); // Esta llave cierra el bloque forEach
     </script>
+
+    <script>
+        // Función para agregar un like
+        function agregarLike(postId) {
+            fetch('/agregar_like/' + postId, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'), // Asegúrate de tener una función para obtener el CSRF token
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('like-count-' + postId).innerText = data.num_likes;
+                } else {
+                    alert(data.error);
+                }
+            });
+        }
+        
+        // Función para toggle de comentarios
+        function toggleComentarios(postId) {
+            var seccionComentarios = document.getElementById('comentarios-' + postId);
+            seccionComentarios.style.display = seccionComentarios.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Función para agregar un compartido
+        function agregarCompartir(postId) {
+            fetch('/agregar_compartir/' + postId, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('share-count-' + postId).innerText = data.num_compartidos;
+                } else {
+                    alert(data.error);
+                }
+            });
+        }
+        
+        // Función para obtener el valor de una cookie por su nombre (necesario para CSRF token)
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        </script>
+    
 </body>
 </html>

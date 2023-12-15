@@ -181,6 +181,10 @@ class Contenido(models.Model):
 
     comentario = models.TextField(blank=True)
 
+    num_likes = models.IntegerField(default=0)
+    num_comentarios = models.IntegerField(default=0)
+    num_compartidos = models.IntegerField(default=0)
+    
     #identificador = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     def __str__(self):
