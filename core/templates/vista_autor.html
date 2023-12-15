@@ -182,10 +182,14 @@
                                     <h5 class="card-title">{{ contenido.titulo }}--{{ contenido.autor.get_full_name }}</h5>
                                         <!-- Aquí puedes seguir agregando más información sobre el contenido -->
                                         <p class="card-text">{{ contenido.cuerpo }}</p>
+                                        <!-- Asegúrate de usar .url para acceder a la URL del archivo de imagen -->
+                                        {% if contenido.imagen.url or None %}
+                                        <img class="card-img" src="{{ contenido.imagen.url }}">
+                                        {% endif %}                                      
                                         <p class="card-text">Creado: {{ contenido.fecha_creacion|date:"F j, Y H:i" }}</p>
                                         <p class="card-text">Modificado: {{ contenido.fecha_modificacion|date:"F j, Y H:i" }}</p>
                                 </div>
-                                <div class="card-footer bg-transparent border-0 d-flex justify-content-between">
+                                <div class="card-footer bg-transparent border-0 d-f                                    lex justify-content-between">
                                     <div>
                                         <a href="#" class="text-muted text-decoration-none me-3"><i class="fas fa-share"></i> Compartir</a>
                                         <a href="#" class="text-muted text-decoration-none me-3"><i class="fas fa-redo"></i> Rebloguear</a>

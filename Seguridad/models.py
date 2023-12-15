@@ -135,7 +135,7 @@ class Contenido(models.Model):
         Comportamiento:
             - Verifica si el nuevo estado es válido.
             - Crea un registro de modificación en la base de datos.
-            - Actualiza el estado del contenido al nuevo estado.
+            - AModificadoctualiza el estado del contenido al nuevo estado.
             - Crea una notificación informando sobre el cambio de estado.
         """ 
         if nuevo_estado in dict(self.ESTADOS_CHOICES).keys():
@@ -177,7 +177,7 @@ class Contenido(models.Model):
     comentario = models.TextField(blank=True)
     #identificador = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     # Nuevo campo para la carga de imágenes
-    imagen = models.ImageField(upload_to='imagenes_contenido/', blank=True, null=True)
+    imagen = models.ImageField(upload_to='imagenes/', blank=True, null=True)
 
     def __str__(self):
         return self.titulo
