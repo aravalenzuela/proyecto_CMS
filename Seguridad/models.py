@@ -164,9 +164,6 @@ class Contenido(models.Model):
             mensaje = f"El estado de tu contenido '{self.titulo}' esta en estado {self.estado}."
             Notificacion.objects.create(usuario=self.autor, mensaje=mensaje)
 
-
-
-
     tipo = models.ForeignKey(TipoDeContenido, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=200)
     cuerpo = models.TextField()
@@ -175,13 +172,12 @@ class Contenido(models.Model):
     autor = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     plantilla = models.ForeignKey(Plantilla, on_delete=models.CASCADE, null=True)
     estado = models.CharField(max_length=20, choices=ESTADOS_CHOICES, default=ESTADO_BORRADOR)
-
     # Nuevo campo para la posición en el tablero Kanban
     posicion = models.IntegerField(default=0)
-
     comentario = models.TextField(blank=True)
-
     #identificador = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    # Nuevo campo para la carga de imágenes
+    imagen = models.ImageField(upload_to='imagenes_contenido/', blank=True, null=True)
 
     def __str__(self):
         return self.titulo

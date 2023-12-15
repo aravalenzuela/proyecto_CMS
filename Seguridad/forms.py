@@ -65,6 +65,27 @@ class RolForm(forms.ModelForm):
         queryset=Permiso.objects.all(),
         widget=forms.CheckboxSelectMultiple,  # Usamos casillas de verificación para seleccionar múltiples permisos
     )
+from django import forms
+from .models import Contenido, TipoDeContenido, Plantilla
+
+class CrearContenidoForm(forms.ModelForm):
+    class Meta:
+        model = Contenido
+        fields = ['titulo', 'cuerpo']  # Eliminamos 'tipo' y 'plantilla' de aquí
+
+    def __init__(self, *args, **kwargs):
+        super(CrearContenidoForm, self).__init__(*args, **kwargs)
+
+        # Inicializa la plantilla solo si 'tipo_de_contenido' está presente
+        tipo_de_contenido_id = self.data.get('tipo_de_contenido') if 'tipo_de_contenido' in self.data else None
+        if tipo_de_contenido_id:
+            try:
+                tipo_id = int(tipo_de_contenido_id)
+                tipo_de_contenido = TipoDeContenido.objects.get(id=tipo_id)
+                # Aquí podrías establecer la plantilla inicial o realizar otras acciones basadas en el tipo de contenido
+                # Por ejemplo, ajustar los campos del formulario según la plantilla
+            except (ValueError, TypeError, TipoDeContenido.DoesNotExist):
+                pass  # Manejar el error o realizar alguna acción por defecto
 
     class Meta:
         model = Rol
@@ -117,14 +138,17 @@ class TipoDeContenidoForm(forms.ModelForm):
 class CrearContenidoForm(forms.ModelForm):
     class Meta:
         model = Contenido
-        fields = ['titulo', 'cuerpo', 'tipo', 'plantilla']
+        fields = ['titulo', 'cuerpo', 'imagen']  # Asegúrate de incluir 'imagen'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if 'tipo' in self.data:
+        super(CrearContenidoForm, self).__init__(*args, **kwargs)
+
+        # Inicialización condicional basada en 'tipo_de_contenido'
+        tipo_de_contenido_id = self.data.get('tipo_de_contenido') if 'tipo_de_contenido' in self.data else None
+        if tipo_de_contenido_id:
             try:
-                tipo_id = int(self.data.get('tipo'))
+                tipo_id = int(tipo_de_contenido_id)
                 tipo_de_contenido = TipoDeContenido.objects.get(id=tipo_id)
-                self.fields['plantilla'].queryset = Plantilla.objects.filter(id=tipo_de_contenido.plantilla.id)
+                # Aquí podrías realizar ajustes adicionales en el formulario basados en el tipo de contenido
             except (ValueError, TypeError, TipoDeContenido.DoesNotExist):
-                pass
+                pass  # Manejar el error o realizar alguna acción por defecto
