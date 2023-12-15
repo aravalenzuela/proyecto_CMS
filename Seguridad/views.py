@@ -726,28 +726,25 @@ def listar_tipos_de_contenido(request):
 
 
 def crear_contenido(request):
-    """
-    Vista para crear un nuevo contenido. Si se accede mediante POST y el formulario es válido, 
-    se guarda el contenido con el usuario actual como autor y se redirige al listado de contenidos.
-    Si se accede mediante GET o el formulario POST no es válido, se muestra el formulario de creación.
-    
-    Parameters:
-    - request (HttpRequest): Objeto HttpRequest con los detalles de la petición.
-    
-    Returns:
-    - HttpResponse: Respuesta HTTP con el formulario de creación o redirección al listado de contenidos.
-    """
     if request.method == "POST":
-        form = CrearContenidoForm(request.POST)
+        tipo_de_contenido_id = request.POST.get('tipo_de_contenido')
+        tipo_de_contenido = get_object_or_404(TipoDeContenido, pk=tipo_de_contenido_id)
+        
+        form = CrearContenidoForm(request.POST, request.FILES)  # Añade request.FILES aquí
         if form.is_valid():
             contenido = form.save(commit=False)
             contenido.autor = request.user
+            contenido.tipo = tipo_de_contenido
+            contenido.plantilla = tipo_de_contenido.plantilla
+            # Si tu modelo 'Contenido' tiene un campo para imagen, se guardará aquí
             contenido.save()
+            form.save_m2m()  # Si tu modelo tiene relaciones ManyToMany que necesiten guardarse
             return redirect('listar_contenidos')
     else:
+        tipos = TipoDeContenido.objects.all()
         form = CrearContenidoForm()
 
-    return render(request, 'crear_contenido.html', {'form': form})
+    return render(request, 'crear_contenido.html', {'form': form, 'tipos': tipos})
 
 
 def vista_de_formulario(request):
@@ -765,6 +762,21 @@ def vista_de_formulario(request):
     form = CrearContenidoForm()
     return render(request, 'crear_contenido.html', {'form': form, 'plantillas': plantillas})
 
+
+
+def get_plantilla_por_tipo(request, tipo_id):
+    try:
+        tipo = TipoDeContenido.objects.get(pk=tipo_id)
+        if tipo.plantilla:
+            nombre_plantilla = tipo.plantilla.tipo
+            soporte_multimedia = 'multimedia' in nombre_plantilla.lower()  # Verifica si es multimedia
+        else:
+            nombre_plantilla = 'No hay plantilla asociada'
+            soporte_multimedia = False
+
+        return JsonResponse({'plantilla': nombre_plantilla, 'soporte_multimedia': soporte_multimedia})
+    except TipoDeContenido.DoesNotExist:
+        return JsonResponse({'error': 'Tipo de contenido no encontrado'}, status=404)
 
 
 def revisar_contenido(request, contenido_id):

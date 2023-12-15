@@ -96,7 +96,7 @@ class ContenidoEditable(models.Model):
     Attributes:
         usuario (ForeignKey a User): El usuario al que pertenece el contenido editable.
         plantilla (ForeignKey a Plantilla): La plantilla asociada al contenido editable.
-        contenido (TextField): El contenido editable por el usuario.
+        contenidoDePlantilla (TextField): El contenido editable por el usuario.
 
     Methods:
         __str__(): Devuelve una representación en cadena que indica el usuario y la plantilla asociada.

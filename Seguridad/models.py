@@ -135,7 +135,7 @@ class Contenido(models.Model):
         Comportamiento:
             - Verifica si el nuevo estado es válido.
             - Crea un registro de modificación en la base de datos.
-            - Actualiza el estado del contenido al nuevo estado.
+            - AModificadoctualiza el estado del contenido al nuevo estado.
             - Crea una notificación informando sobre el cambio de estado.
         """ 
         if nuevo_estado in dict(self.ESTADOS_CHOICES).keys():
@@ -161,11 +161,8 @@ class Contenido(models.Model):
             self.save()
 
             # Crear notificación al cambiar el estado
-            if self.estado != nuevo_estado:
-                mensaje = f"El estado de tu contenido ha cambiado de {self.estado} a {nuevo_estado}."
-                Notificacion.objects.create(usuario=self.autor.user, mensaje=mensaje)
-
-
+            mensaje = f"El estado de tu contenido '{self.titulo}' esta en estado {self.estado}."
+            Notificacion.objects.create(usuario=self.autor, mensaje=mensaje)
 
     tipo = models.ForeignKey(TipoDeContenido, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=200)
@@ -175,13 +172,12 @@ class Contenido(models.Model):
     autor = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     plantilla = models.ForeignKey(Plantilla, on_delete=models.CASCADE, null=True)
     estado = models.CharField(max_length=20, choices=ESTADOS_CHOICES, default=ESTADO_BORRADOR)
-
     # Nuevo campo para la posición en el tablero Kanban
     posicion = models.IntegerField(default=0)
-
     comentario = models.TextField(blank=True)
-
     #identificador = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    # Nuevo campo para la carga de imágenes
+    imagen = models.ImageField(upload_to='imagenes/', blank=True, null=True)
 
     def __str__(self):
         return self.titulo

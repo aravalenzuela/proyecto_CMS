@@ -55,7 +55,7 @@ def profile_view(request):
 
      # Diccionario que mapea roles a vistas
     role_to_view = {
-        1: 'profile.html',
+        1: 'profile.html', #Admin
         2: 'vista_suscriptor.html',
         3: 'vista_autor.html',
         4: 'vista_editores.html',

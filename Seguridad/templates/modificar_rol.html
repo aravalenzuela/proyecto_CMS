@@ -4,6 +4,6 @@
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Guardar cambios</button>
-    <a href="{% url 'profile_view' %}">Volver al perfil</a>
+    <a href="{% url 'redirect_to_home' %}" style="background-color: #007bff; color: white; padding: 10px 20px; border-radius: 4px; text-decoration: none; display: inline-block;">Volver al Panel</a>
 </form>
 {% endblock %}

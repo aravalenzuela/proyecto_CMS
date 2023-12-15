@@ -1,12 +1,12 @@
 from django.test import TestCase
 import pytest
 from django.urls import reverse
-from Seguridad.models import Categoria, Rol, Permiso, Subcategoria, TipoDeContenido, Contenido # Asegúrate de que la importación sea correcta
+from Seguridad.models import Categoria, Rol, Permiso, Subcategoria, TipoDeContenido, Contenido, Notificacion
 from django.shortcuts import redirect
 from django.db.utils import IntegrityError
 
 from django.shortcuts import get_object_or_404
-from Seguridad.views import listar_tipos_de_contenido, modificar_estado_categoria
+from Seguridad.views import listar_tipos_de_contenido, modificar_estado_categoria, notificar_usuario, obtener_notificaciones
 from django.contrib.auth.models import User
 
 from .models import Contenido, TipoDeContenido, Plantilla
@@ -756,6 +756,45 @@ class ContenidoViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.contenido.refresh_from_db()
         self.assertEqual(self.contenido.estado, Contenido.ESTADO_INACTIVO)
+
+class NotificacionTestCase(TestCase):
+    def setUp(self):
+        # Configuración inicial para el test
+        self.usuario_prueba = User.objects.create_user(username='prueba', password='contraseña')
+
+    def test_creacion_notificacion(self):
+        # Crear una notificación y verificar que se haya guardado correctamente
+        mensaje_prueba = "Este es un mensaje de prueba."
+        notificacion = Notificacion.objects.create(usuario=self.usuario_prueba, mensaje=mensaje_prueba)
+
+        # Verificar que la notificación se haya guardado correctamente
+        self.assertEqual(notificacion.usuario, self.usuario_prueba)
+        self.assertEqual(notificacion.mensaje, mensaje_prueba)
+        self.assertFalse(notificacion.leida)  # La notificación debería estar marcada como no leída por defecto
+
+    def test_str_method(self):
+        # Verificar que el método __str__ devuelva el formato esperado
+        mensaje_prueba = "Mensaje de prueba para __str__."
+        notificacion = Notificacion.objects.create(usuario=self.usuario_prueba, mensaje=mensaje_prueba)
+
+        # Verificar que __str__ devuelve el formato esperado
+        expected_str = f"{self.usuario_prueba.username}: {mensaje_prueba}"
+        self.assertEqual(str(notificacion), expected_str)
+
+    def test_marcar_leida(self):
+        # Verificar que se pueda marcar una notificación como leída
+        notificacion = Notificacion.objects.create(usuario=self.usuario_prueba, mensaje="Mensaje de prueba")
+        
+        # La notificación debería estar inicialmente marcada como no leída
+        self.assertFalse(notificacion.leida)
+
+        # Marcar la notificación como leída
+        notificacion.leida = True
+        notificacion.save()
+
+        # Verificar que la notificación ahora esté marcada como leída
+        notificacion_actualizada = Notificacion.objects.get(pk=notificacion.pk)
+        self.assertTrue(notificacion_actualizada.leida)
 
     
 
