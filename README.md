@@ -50,10 +50,3 @@
 
    Abre tu navegador y ve a [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
-- Para desactivar el entorno virtual, simplemente ejecuta:
-
-  bash
-  deactivate
-  
-
-- Asegúrate de mantener el archivo requirements.txt actualizado con cualquier nueva dependencia que agregues al proyecto.
